@@ -184,7 +184,7 @@ MIT License © 2026 Amr Fathy Elsherif
 
 [![GitHub](https://img.shields.io/badge/GitHub-amrelsherif--eng-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/amrelsherif-eng)
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-amrelsherif--eng-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/amrelsherif-eng)
-[![Portfolio](https://img.shields.io/badge/Portfolio-amrelsherif--eng.vercel.app-00f0ff?style=for-the-badge&logo=vercel&logoColor=white)](https://amrelsherif-eng.vercel.app)
+[![Portfolio](https://img.shields.io/badge/Portfolio-amrelsherif--eng.vercel.app-0e7490?style=for-the-badge&logo=vercel&logoColor=white)](https://amrelsherif-eng.vercel.app)
 
 *If this template helped you, a ⭐ on the repo helps others find it.*
 
