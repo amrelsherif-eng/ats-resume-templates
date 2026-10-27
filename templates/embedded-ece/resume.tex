@@ -1,0 +1,166 @@
+%-------------------------
+% Embedded & ECE Resume Template (one page, ATS-friendly)
+% For: Embedded, IoT and Instrumentation & Control roles
+% Author: Amr Fathy Elsherif
+% LinkedIn: https://www.linkedin.com/in/amrelsherif-eng
+% GitHub: https://github.com/amrelsherif-eng
+% GitHub Repository: https://github.com/amrelsherif-eng/ats-resume-templates
+% Original base template by: https://github.com/sb2nov/resume (MIT License)
+%-------------------------
+
+%-------------------------
+% HOW TO USE & EDIT THIS TEMPLATE:
+% 1. AI-assisted (fastest): copy this whole file into ChatGPT/Gemini/Claude and say:
+%    "Fill this LaTeX resume template with my info: [paste your CV data]. Keep it to one page."
+% 2. Manual editing: scroll down to \begin{document}. Each section is marked with a
+%    %----------- SECTION ----------- comment. Replace the text inside the curly braces {}.
+% 3. Do not edit the preamble (everything before \begin{document}) unless you know LaTeX.
+% 4. All data below is FICTIONAL sample data (Your Name, example.com).
+%-------------------------
+
+\documentclass[letterpaper,11pt]{article}
+
+\usepackage{latexsym}
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage{marvosym}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{verbatim}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage[english]{babel}
+\usepackage{tabularx}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{textcomp}
+\input{glyphtounicode}
+
+\pagestyle{fancy}
+\fancyhf{} % clear all header and footer fields
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% Adjust margins
+\addtolength{\oddsidemargin}{-0.5in}
+\addtolength{\evensidemargin}{-0.5in}
+\addtolength{\textwidth}{1in}
+\addtolength{\topmargin}{-.5in}
+\addtolength{\textheight}{1.0in}
+
+\urlstyle{same}
+
+\raggedbottom
+\raggedright
+\setlength{\tabcolsep}{0in}
+
+% Sections formatting
+\titleformat{\section}{
+  \vspace{-4pt}\scshape\raggedright\large
+}{}{0em}{}[\color{black}\titlerule \vspace{-5pt}]
+
+% Ensure that generate pdf is machine-readable/ATS parsable
+\pdfgentounicode=1
+
+%-------------------------
+% Custom commands
+\newcommand{\resumeItem}[1]{
+  \item\small{
+    {#1 \vspace{-2pt}}
+  }
+}
+
+\newcommand{\resumeSubheading}[4]{
+  \vspace{-2pt}\item
+    \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{#1} & #2 \\
+      \textit{\small#3} & \textit{\small #4} \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeProjectHeading}[2]{
+    \item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \small#1 & #2 \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.15in, label={}]}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+\newcommand{\resumeItemListStart}{\begin{itemize}}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
+
+%-------------------------------------------
+%%%%%%  RESUME STARTS HERE  %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\hypersetup{pdftitle={Your Name - Resume}, pdfauthor={Your Name}, pdfsubject={Resume}}
+\begin{document}
+
+%----------- HEADING (name, role line, contacts) -----------
+\begin{center}
+  \textbf{\Huge \scshape Your Name} \\ \vspace{2pt}
+  \small \textbf{Embedded Systems \& ECE \textbar{} IoT $\cdot$ Instrumentation \& Control} \\ \vspace{4pt}
+  \small Your City, Country $|$ \href{tel:+15550000000}{+1 555 000 0000} $|$ \href{mailto:you@example.com}{you@example.com} \\ \vspace{1pt}
+  \small \href{https://linkedin.com/in/yourname}{linkedin.com/in/yourname} $|$ \href{https://github.com/yourname}{github.com/yourname} $|$ \href{https://yourname.dev}{yourname.dev}
+\end{center}
+
+%----------- EDUCATION (newest first; degree, GPA, relevant coursework) -----------
+\section{Education}
+\resumeSubHeadingListStart
+\resumeSubheading{Example University}{May 2027 expected}{Bachelor of Science in Electrical and Computer Engineering $|$ GPA: 3.85/4.00}{City, Country}
+\resumeItemListStart
+\resumeItem{\textbf{Relevant Coursework:} Embedded Systems Design, Digital Signal Processing, Control Systems, Microcontroller Architecture, Real-Time Operating Systems (RTOS), PCB Layout.}
+\resumeItemListEnd
+\resumeSubHeadingListEnd
+
+%----------- EXPERIENCE (newest first; 2-3 bullets each) -----------
+\section{Experience}
+\resumeSubHeadingListStart
+\resumeSubheading{Embedded Systems Intern}{Jun 2026 -- Aug 2026}{Example Telecom}{City, Country}
+\resumeItemListStart
+\resumeItem{Developed bare-metal C firmware on STM32 for 5 Modbus RTU sensors over RS-485 at 115200 baud.}
+\resumeItem{Optimized SPI DMA transfers, reducing telemetry latency by 35\% and preventing dropped packets.}
+\resumeItemListEnd
+\resumeSubheading{Instrumentation \& Control Intern}{Jan 2026 -- May 2026}{Example Dynamics}{City, Country}
+\resumeItemListStart
+\resumeItem{Programmed an ESP32 PID loop regulating chamber temperature within $\pm$0.5\,\textdegree C across 20--80\,\textdegree C.}
+\resumeItem{Integrated 4--20 mA current-loop transmitters and calibrated RTDs, improving accuracy by 15\%.}
+\resumeItemListEnd
+\resumeSubheading{IoT Firmware Intern}{May 2025 -- Aug 2025}{Acme Cloud Technologies}{City, Country}
+\resumeItemListStart
+\resumeItem{Implemented deep-sleep modes for nRF52 BLE beacons, extending battery life from 8 to 22 months.}
+\resumeItem{Debugged hardware timing faults using logic analyzers and oscilloscopes to resolve intermittent I2C bus lockups.}
+\resumeItemListEnd
+\resumeSubHeadingListEnd
+
+%----------- PROJECTS (notable projects; 2-3 bullets each) -----------
+\section{Projects}
+\resumeSubHeadingListStart
+\resumeProjectHeading{\textbf{Autonomous Balancing Robot} $|$ \emph{C++, FreeRTOS, STM32} $|$ \href{https://github.com/yourname/autonomous-balancing-robot}{GitHub}}{Sep -- Dec 2025}
+\resumeItemListStart
+\resumeItem{Architected a FreeRTOS app with 4 tasks to process MPU-6050 IMU telemetry via I2C at 200 Hz.}
+\resumeItem{Implemented a PID controller stabilizing dual BLDC motors against tilt impulses up to 15 degrees.}
+\resumeItemListEnd
+\resumeProjectHeading{\textbf{LoRaWAN Industrial Sensor Node} $|$ \emph{C, Zephyr RTOS, LoRaWAN} $|$ \href{https://github.com/yourname/lorawan-sensor-node}{GitHub}}{Feb -- May 2025}
+\resumeItemListStart
+\resumeItem{Engineered Zephyr RTOS firmware transmitting pressure and vibration data over LoRaWAN up to 3 km.}
+\resumeItem{Configured sleep states, achieving an 18 uA quiescent current draw during telemetry intervals.}
+\resumeItemListEnd
+\resumeSubHeadingListEnd
+
+%----------- SKILLS (categorized list of tools and technologies) -----------
+\section{Skills}
+\begin{itemize}[leftmargin=0.15in,label={}]
+\small\item{
+\textbf{Languages \& Systems:} Embedded C, C++, Python, Assembly (ARM Cortex-M), FreeRTOS, Zephyr RTOS, Linux \\
+\textbf{Protocols \& Busses:} UART, USART, SPI, I2C, CAN bus, Modbus RTU, RS-485, BLE, LoRaWAN, MQTT \\
+\textbf{Hardware \& Tools:} KiCad, Altium, Multilayer PCB Design, Oscilloscopes, Logic Analyzers, JTAG/SWD, Soldering \\
+\textbf{Instrumentation \& Control:} PID Control, Feedback Systems, 4--20 mA Loops, MATLAB/Simulink
+}
+\end{itemize}
+
+%----------- CERTIFICATIONS (certifications, licenses, and honors) -----------
+\section{Certifications}
+\small Certified LabVIEW Associate Developer (CLAD) $|$ IPC-A-610 Electronics Assembly and Soldering Certified
+
+\end{document}

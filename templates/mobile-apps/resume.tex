@@ -1,0 +1,155 @@
+%-------------------------
+% Mobile Apps Resume Template (one page, ATS-friendly)
+% For: Flutter / mobile developer and team-lead roles
+% Author: Amr Fathy Elsherif
+% LinkedIn: https://www.linkedin.com/in/amrelsherif-eng
+% GitHub: https://github.com/amrelsherif-eng
+% GitHub Repository: https://github.com/amrelsherif-eng/ats-resume-templates
+% Original base template by: https://github.com/sb2nov/resume (MIT License)
+%-------------------------
+
+%-------------------------
+% HOW TO USE & EDIT THIS TEMPLATE:
+% 1. AI-assisted (fastest): copy this whole file into ChatGPT/Gemini/Claude and say:
+%    "Fill this LaTeX resume template with my info: [paste your CV data]. Keep it to one page."
+% 2. Manual editing: scroll down to \begin{document}. Each section is marked with a
+%    %----------- SECTION ----------- comment. Replace the text inside the curly braces {}.
+% 3. Do not edit the preamble (everything before \begin{document}) unless you know LaTeX.
+% 4. All data below is FICTIONAL sample data (Your Name, example.com).
+%-------------------------
+
+\documentclass[letterpaper,11pt]{article}
+
+\usepackage{latexsym}
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage{marvosym}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{verbatim}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage[english]{babel}
+\usepackage{tabularx}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{textcomp}
+\input{glyphtounicode}
+
+\pagestyle{fancy}
+\fancyhf{} % clear all header and footer fields
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% Adjust margins
+\addtolength{\oddsidemargin}{-0.5in}
+\addtolength{\evensidemargin}{-0.5in}
+\addtolength{\textwidth}{1in}
+\addtolength{\topmargin}{-.5in}
+\addtolength{\textheight}{1.0in}
+
+\urlstyle{same}
+
+\raggedbottom
+\raggedright
+\setlength{\tabcolsep}{0in}
+
+% Sections formatting
+\titleformat{\section}{
+  \vspace{-4pt}\scshape\raggedright\large
+}{}{0em}{}[\color{black}\titlerule \vspace{-5pt}]
+
+% Ensure that generate pdf is machine-readable/ATS parsable
+\pdfgentounicode=1
+
+%-------------------------
+% Custom commands
+\newcommand{\resumeItem}[1]{
+  \item\small{
+    {#1 \vspace{-2pt}}
+  }
+}
+
+\newcommand{\resumeSubheading}[4]{
+  \vspace{-2pt}\item
+    \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{#1} & #2 \\
+      \textit{\small#3} & \textit{\small #4} \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeProjectHeading}[2]{
+    \item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \small#1 & #2 \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.15in, label={}]}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+\newcommand{\resumeItemListStart}{\begin{itemize}}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
+
+%-------------------------------------------
+%%%%%%  RESUME STARTS HERE  %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\hypersetup{pdftitle={Your Name - Resume}, pdfauthor={Your Name}, pdfsubject={Resume}}
+\begin{document}
+%----------- HEADING (name, role line, contacts) -----------
+\begin{center}
+  \textbf{\Huge \scshape Your Name} \\ \vspace{2pt}  \small \textbf{Mobile App Developer $\cdot$ Flutter $\cdot$ Dart} \\ \vspace{4pt}
+  \small Your City, Country $|$ \href{tel:+15550000000}{+1 555 000 0000} $|$ \href{mailto:you@example.com}{you@example.com} \\ \vspace{1pt}
+  \small \href{https://linkedin.com/in/yourname}{linkedin.com/in/yourname} $|$ \href{https://github.com/yourname}{github.com/yourname} $|$ \href{https://yourname.dev}{yourname.dev}
+\end{center}
+%----------- EDUCATION (degree, dates, location) -----------
+\section{Education}
+\resumeSubHeadingListStart
+\resumeSubheading{Example University}{Expected May 2026}{B.S. in Computer Science $|$ GPA: 3.8/4.0}{Your City, Country}
+\resumeItemListStart
+\resumeItem{Relevant Coursework: Data Structures, Mobile Computing, Software Engineering, Databases.}
+\resumeItemListEnd
+\resumeSubHeadingListEnd
+%----------- EXPERIENCE (newest first; 2-3 bullets each) -----------
+\section{Experience}
+\resumeSubHeadingListStart
+\resumeSubheading{Lead Mobile Developer}{Sep 2024 -- Present}{Example University Mobile Lab}{Your City, Country}
+\resumeItemListStart
+\resumeItem{Led 6 student developers building a Flutter campus services app that reached 4,200 active users.}
+\resumeItem{Added BLoC and SQLite caching, reducing cold starts by 35\% on low-end Android devices.}
+\resumeItem{Mentored 4 contributors on Dart patterns, widget performance, and Git via weekly reviews.}
+\resumeItemListEnd
+\resumeSubheading{Mobile Engineering Intern}{Jun 2024 -- Aug 2024}{Acme Cloud}{Your City, Country}
+\resumeItemListStart
+\resumeItem{Developed 8 reusable Flutter and Material 3 components adopted by 2 customer-facing apps.}
+\resumeItem{Integrated REST telemetry services, cutting network payload size by 28\% via efficient parsing.}
+\resumeItem{Wrote 45+ unit and widget tests with 88\% branch coverage, eliminating 15 regression bugs.}
+\resumeItemListEnd
+\resumeSubheading{Flutter Developer Intern}{Jun 2023 -- Aug 2023}{Example Telecom}{Your City, Country}
+\resumeItemListStart
+\resumeItem{Built Flutter billing screens, streamlining self-service payments for 50,000 monthly users.}
+\resumeItem{Automated builds and tests with GitHub Actions and Fastlane, cutting staging release time by 40\%.}
+\resumeItemListEnd
+\resumeSubHeadingListEnd
+%----------- PROJECTS (select 2; include stack and outcome) -----------
+\section{Projects}
+\resumeSubHeadingListStart
+\resumeProjectHeading{\textbf{Campus Shuttle Tracker} $|$ \emph{Flutter, Dart, Firebase, Google Maps API} $|$ \href{https://github.com/yourname/campus-shuttle-tracker}{GitHub}}{}
+\resumeItemListStart
+\resumeItem{Built a transit app syncing shuttle locations every 3 seconds with sub-150 ms WebSocket latency.}
+\resumeItem{Created interactive map overlays and route renderers that sustained 60 FPS during peak hours.}
+\resumeItemListEnd
+\resumeProjectHeading{\textbf{OpenStudy Task Planner} $|$ \emph{Flutter, Riverpod, SQLite, REST API} $|$ \href{https://github.com/yourname/openstudy-task-planner}{GitHub}}{}
+\resumeItemListStart
+\resumeItem{Built a study planner with offline notes, course reminders, and cloud sync for 1,200 peers.}
+\resumeItem{Configured background tasks and WorkManager notifications, achieving 99.4\% on-time delivery.}
+\resumeItemListEnd
+\resumeSubHeadingListEnd
+%----------- SKILLS (group relevant tools and strengths) -----------
+\section{Skills}
+\begin{itemize}[leftmargin=0.15in,label={}]
+\small\item{\textbf{Languages:} Dart, Kotlin, Java, Python, C++, SQL \\ \textbf{Frameworks \& Libraries:} Flutter, Riverpod, BLoC, Android SDK, Material Design \\ \textbf{Developer Tools:} Git, GitHub Actions, Fastlane, Firebase, Postman, Figma \\ \textbf{Core Competencies:} Mobile App Architecture, REST APIs, State Management, CI/CD}
+\end{itemize}
+%----------- CERTIFICATIONS (plain paragraph; list relevant credentials) -----------
+\section{Certifications}
+\small Example Certified Mobile Application Developer -- Example Software Association (2024).
+\end{document}
