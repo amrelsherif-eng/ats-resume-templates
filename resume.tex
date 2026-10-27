@@ -1,23 +1,22 @@
 %-------------------------
-% Custom Latex Resume Template
+% Network & Cloud Resume Template (one page, ATS-friendly)
+% For: Network, NOC, Cloud, SysAdmin and Junior DevOps roles
 % Author: Amr Fathy Elsherif
 % LinkedIn: https://www.linkedin.com/in/amrelsherif-eng
 % GitHub: https://github.com/amrelsherif-eng
-% 
-% Heavily customized and optimized by Amr Fathy Elsherif.
-% GitHub Repository: https://github.com/amrelsherif-eng/software-engineer-resume-template
+% GitHub Repository: https://github.com/amrelsherif-eng/ats-resume-templates
 % Original base template by: https://github.com/sb2nov/resume (MIT License)
-%------------------------
+%-------------------------
 
-%------------------------
-% 💡 HOW TO USE & EDIT THIS TEMPLATE:
-% 1. AI-Assisted (Fastest): Copy this entire code, paste it into ChatGPT/Gemini, and say:
-%    "Fill this LaTeX resume template with my following info: [Paste your CV data]".
-% 2. Manual Editing: Scroll down to the '\begin{document}' section. You will find clearly 
-%    marked sections (e.g., %-----------HEADING-----------). Just replace the text inside 
-%    the curly braces {} with your own details.
-% 3. DO NOT edit the preamble (lines before \begin{document}) unless you know LaTeX well.
-%------------------------
+%-------------------------
+% HOW TO USE & EDIT THIS TEMPLATE:
+% 1. AI-assisted (fastest): copy this whole file into ChatGPT/Gemini/Claude and say:
+%    "Fill this LaTeX resume template with my info: [paste your CV data]. Keep it to one page."
+% 2. Manual editing: scroll down to \begin{document}. Each section is marked with a
+%    %----------- SECTION ----------- comment. Replace the text inside the curly braces {}.
+% 3. Do not edit the preamble (everything before \begin{document}) unless you know LaTeX.
+% 4. All data below is FICTIONAL sample data (Your Name, example.com).
+%-------------------------
 
 \documentclass[letterpaper,11pt]{article}
 
@@ -32,6 +31,9 @@
 \usepackage{fancyhdr}
 \usepackage[english]{babel}
 \usepackage{tabularx}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{textcomp}
 \input{glyphtounicode}
 
 \pagestyle{fancy}
@@ -91,113 +93,92 @@
 
 %-------------------------------------------
 %%%%%%  RESUME STARTS HERE  %%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+\hypersetup{pdftitle={Your Name - Resume}, pdfauthor={Your Name}, pdfsubject={Resume}}
 \begin{document}
+%==========================================================================
+% QUICK GUIDE (read once, then delete this box if you like)
+%  \resumeSubheading{Title}{Dates}{Organization}{Location}  -> one job / degree
+%  \resumeProjectHeading{\textbf{Name} $|$ \emph{Tech, Tech} $|$ \href{https://...}{GitHub}}{Dates}
+%  \resumeItem{...}  -> one bullet. Copy the line to add a bullet, delete it to remove one.
+%  Bullets sit between \resumeItemListStart and \resumeItemListEnd.
+%  Entries sit between \resumeSubHeadingListStart and \resumeSubHeadingListEnd.
+%  Remove a whole section: delete from its %----- marker to the next one.
+%  Escape special characters: \%  \&  \$  \#  \_
+%  Dates: "Jun 2025 -- Aug 2025" (two hyphens make a dash), "Sep 2025 -- Present".
+%  Keep it to ONE page: if it spills over, shorten bullets before shrinking anything.
+%==========================================================================
 
-%----------HEADING----------
+%----------- HEADING: name, target role, contact links -----------
 \begin{center}
-  \textbf{\Huge \scshape Your Name} \\ \vspace{2pt}
-  \small \textbf{Software Engineer} \\ \vspace{4pt}
-  \small City, Country $|$ \href{tel:+15550000000}{\underline{+1 555 000 0000}} $|$ \href{mailto:you@example.com}{\underline{you@example.com}} \\ \vspace{2pt}
-  \small \href{https://linkedin.com/in/your-profile}{\underline{linkedin.com/in/your-profile}} $|$ \href{https://github.com/your-username}{\underline{github.com/your-username}} $|$ \href{https://your-portfolio.dev}{\underline{your-portfolio.dev}}
+  \textbf{\Huge \scshape Your Name} \\ \vspace{2pt}  \small \textbf{Cloud Infrastructure \& Network Engineer} \\ \vspace{4pt}
+  \small Your City, Country $|$ \href{tel:+15550000000}{+1 555 000 0000} $|$ \href{mailto:you@example.com}{you@example.com} \\ \vspace{1pt}
+  \small \href{https://linkedin.com/in/yourname}{linkedin.com/in/yourname} $|$ \href{https://github.com/yourname}{github.com/yourname} $|$ \href{https://yourname.dev}{yourname.dev}
 \end{center}
-
-%-----------SUMMARY-----------
-\section{Professional Summary}
-\small{Results-driven \textbf{Software Engineer} with a strong foundation in developing scalable web applications and backend services. Proficient in \textbf{clean architecture}, \textbf{REST APIs}, database design, and cloud technologies. Collaborative team player experienced in building reliable software solutions and following modern development best practices.}
-
-%-----------TECHNICAL SKILLS-----------
-\section{Technical Skills}
-\begin{itemize}[leftmargin=0.15in, label={}]
-  \small{\item{
-          \textbf{Languages}{: Python, JavaScript, TypeScript, Go, SQL, HTML/CSS.} \\
-          \textbf{Frameworks \& Libraries}{: React, Node.js, Express, Next.js, Django.} \\
-          \textbf{Backend \& Databases}{: PostgreSQL, MySQL, Redis, MongoDB.} \\
-          \textbf{Developer Tools \& Cloud}{: Git, GitHub, Docker, AWS, Linux, CI/CD.}
-        }}
-\end{itemize}
-
-%-----------PROJECTS-----------
-\section{Projects}
-\resumeSubHeadingListStart
-\resumeProjectHeading
-{\textbf{Task Manager App} $|$ \emph{React, Node.js, PostgreSQL} $|$ \href{https://github.com/your-username/task-manager-app}{\underline{[GitHub]}}}{}
-\resumeItemListStart
-\resumeItem{Built a REST API with Node.js and PostgreSQL for task management and authentication.}
-\resumeItem{Developed an interactive user interface using React and Tailwind CSS for workflow tracking.}
-\resumeItemListEnd
-
-\resumeProjectHeading
-{\textbf{E-Commerce Platform} $|$ \emph{Python, Django, PostgreSQL, Redis} $|$ \href{https://github.com/your-username/ecommerce-platform}{\underline{[GitHub]}}}{}
-\resumeItemListStart
-\resumeItem{Architected backend services with Django and PostgreSQL for order processing and inventory management.}
-\resumeItem{Implemented data caching with Redis to optimize product catalog retrieval speeds.}
-\resumeItem{Containerized application services using Docker and Docker Compose for streamlined local deployment.}
-\resumeItemListEnd
-
-\resumeProjectHeading
-{\textbf{Analytics Dashboard} $|$ \emph{TypeScript, Next.js, Tailwind CSS} $|$ \href{https://github.com/your-username/analytics-dashboard}{\underline{[GitHub]}} $|$ \href{https://example.com}{\underline{[Live]}}}{}
-\resumeItemListStart
-\resumeItem{Engineered a real-time data dashboard using Next.js and TypeScript for metrics reporting.}
-\resumeItem{Integrated external charting services with REST APIs for interactive visual analytics.}
-\resumeItemListEnd
-
-\resumeProjectHeading
-{\textbf{Developer Tooling CLI} $|$ \emph{Go, CLI, GitHub Actions} $|$ \href{https://github.com/your-username/developer-tooling}{\underline{[GitHub]}}}{}
-\resumeItemListStart
-\resumeItem{Created a command-line tool with Go and GitHub Actions to automate project setup and testing.}
-\resumeItemListEnd
-\resumeSubHeadingListEnd
-
-%-----------WORK EXPERIENCE-----------
-\section{Work Experience}
-\resumeSubHeadingListStart
-\resumeSubheading
-{Software Engineer Intern}{Jun. 2024 -- Aug. 2024}
-{Example Tech Company}{City, Country}
-\resumeItemListStart
-\resumeItem{Developed backend services with Node.js and PostgreSQL to support client-facing applications.}
-\resumeItem{Implemented automated testing pipelines using Jest and GitHub Actions for continuous delivery.}
-\resumeItem{Collaborated with engineering teams using Git to conduct code reviews and improve code quality.}
-\resumeItemListEnd
-\resumeSubHeadingListEnd
-
-%-----------EDUCATION-----------
+%----------- EDUCATION: degree, GPA (if 3.0+), relevant coursework -----------
 \section{Education}
 \resumeSubHeadingListStart
-\resumeSubheading
-{Your University}{2021 -- 2025}
-{B.Sc. in Computer Engineering}{City, Country}
+\resumeSubheading{Example University}{Expected May 2027}{B.S. in Network and Cloud Systems $|$ GPA: 3.6/4.0}{Your City, Country}
+\resumeItemListStart
+\resumeItem{Coursework: Routing and Switching, Linux Administration, Cloud Computing, Network Security.}
+\resumeItemListEnd
 \resumeSubHeadingListEnd
-
-%-----------CERTIFICATIONS-----------
-\section{Certifications}
+%----------- EXPERIENCE: newest first, 2-3 bullets each (action verb + task + result) -----------
+\section{Experience}
 \resumeSubHeadingListStart
-\resumeProjectHeading
-{\textbf{Cloud Solutions Architect Certificate} $|$ \emph{Example Cloud Academy}}{2024}
-\resumeProjectHeading
-{\textbf{Full Stack Web Development Certification} $|$ \emph{Example Learning Platform}}{2023}
-\resumeProjectHeading
-{\textbf{Software Engineering Fundamentals} $|$ \emph{Example Online Institute}}{2022}
+% To add a job: copy from \resumeSubheading to \resumeItemListEnd and paste it below.
+\resumeSubheading{Cloud Operations Intern}{Jun 2026 -- Aug 2026}{Acme Cloud Services}{Remote}
+\resumeItemListStart
+\resumeItem{Provisioned 12 AWS test environments with Terraform, reducing setup from 45 minutes to 12.}
+\resumeItem{Built Grafana dashboards for 18 Linux hosts, helping the team spot disk issues a day earlier.}
+\resumeItem{Documented 9 deployment checks, cutting repeat setup questions during intern handoffs.}
+\resumeItemListEnd
+\resumeSubheading{Network Support Intern}{Jan 2026 -- May 2026}{Example Telecom}{Your City, Country}
+\resumeItemListStart
+\resumeItem{Tracked 45 branch links in Zabbix and escalated outages within the team's 20-minute target.}
+\resumeItem{Inspected packet captures to isolate 6 DNS and DHCP faults, restoring service with senior staff.}
+\resumeItemListEnd
+\resumeSubheading{Campus IT Assistant}{Sep 2025 -- Dec 2025}{Example University IT Services}{Your City, Country}
+\resumeItemListStart
+\resumeItem{Prepared 24 lab PCs with Linux images and account checks before each weekly class session.}
+\resumeItem{Resolved 30+ student tickets and wrote a setup guide that reduced repeat login requests.}
+\resumeItemListEnd
 \resumeSubHeadingListEnd
-
-%-----------LEADERSHIP & VOLUNTEERING-----------
-\section{Leadership \& Volunteering}
+%----------- PROJECTS: 2 projects, tech stack in the heading, link to the code -----------
+\section{Projects}
 \resumeSubHeadingListStart
-\resumeProjectHeading
-{\textbf{Student Tech Club Lead} $|$ \emph{Your University Tech Community}}{2023 -- 2024}
-\resumeProjectHeading
-{\textbf{Open Source Contributor} $|$ \emph{Developer Community}}{2022 -- 2023}
-\resumeProjectHeading
-{\textbf{Volunteer Mentor} $|$ \emph{Local STEM Youth Initiative}}{2021 -- 2022}
+% To add a project: copy from \resumeProjectHeading to \resumeItemListEnd and paste it below.
+\resumeProjectHeading{\textbf{Hybrid Cloud Network Lab} $|$ \emph{Terraform, AWS VPC, WireGuard, FRRouting} $|$ \href{https://github.com/yourname/hybrid-cloud-lab}{GitHub}}{Feb 2026 -- May 2026}
+\resumeItemListStart
+\resumeItem{Connected a local router lab to an AWS VPC with WireGuard and tested routes across 4 virtual nodes.}
+\resumeItem{Added Terraform modules for subnets and security rules, rebuilding the lab in under 8 minutes.}
+\resumeItemListEnd
+\resumeProjectHeading{\textbf{Home Lab Monitoring Stack} $|$ \emph{Debian, Docker, Prometheus, Grafana, Ansible} $|$ \href{https://github.com/yourname/home-lab-monitoring}{GitHub}}{Oct 2025 -- Jan 2026}
+\resumeItemListStart
+\resumeItem{Collected CPU, memory, and disk metrics from 3 Debian hosts and displayed them in Grafana.}
+\resumeItem{Used Ansible to deploy exporters and configure 8 alerts, validating each with test thresholds.}
+\resumeItemListEnd
 \resumeSubHeadingListEnd
-
-%-----------SOFT SKILLS & LANGUAGES-----------
-\section{Soft Skills \& Languages}
-\begin{itemize}[leftmargin=0.15in, label={}]
-  \small{\item{
-          \textbf{Soft Skills}{: Problem Solving, Team Leadership, Communication, Adaptability, Time Management.} \\
-          \textbf{Languages}{: English (Fluent), Spanish (Conversational).}
-        }}
+%----------- LEADERSHIP & ACTIVITIES: clubs, teaching, volunteering, competitions -----------
+\section{Leadership \& Activities}
+\resumeSubHeadingListStart
+\resumeSubheading{Network Lab Club Coordinator}{Sep 2025 -- Present}{Example University}{Your City, Country}
+\resumeItemListStart
+\resumeItem{Organized 4 peer lab sessions on VLANs and routing for 18 students using shared practice topologies.}
+\resumeItemListEnd
+\resumeSubheading{Cloud Study Group Volunteer}{Feb 2025 -- Nov 2025}{Example University Computing Society}{Your City, Country}
+\resumeItemListStart
+\resumeItem{Guided 6 beginners through Linux and AWS exercises, helping each publish a small practice project.}
+\resumeItemListEnd
+\resumeSubHeadingListEnd
+%----------- SKILLS: 4 grouped lines, most relevant first -----------
+\section{Skills}
+\begin{itemize}[leftmargin=0.15in,label={}]
+\small\item{\textbf{Networking \& Protocols:} TCP/IP, BGP, OSPF, VLANs, DNS, DHCP, VPN, SNMP, Wireshark \\
+\textbf{Cloud \& Infrastructure:} AWS (VPC, EC2, ECS), Linux, Docker, Terraform, Ansible \\
+\textbf{Automation \& Scripting:} Python, Bash, Git, GitHub Actions, REST APIs, CI/CD \\
+\textbf{Monitoring \& Security:} Prometheus, Grafana, Zabbix, Syslog, pfSense, PKI/TLS}
 \end{itemize}
+%----------- CERTIFICATIONS: one line, separated by semicolons -----------
+\section{Certifications}
+\small AWS Certified Cloud Practitioner (Expected 2027); Cisco CCNA (In Progress, Expected 2027).
 \end{document}
