@@ -20,8 +20,8 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-cyan?style=for-the-badge&logo=opensourceinitiative&logoColor=black)](https://opensource.org/licenses/MIT)
 [![Language: LaTeX](https://img.shields.io/badge/Language-LaTeX-blueviolet?style=for-the-badge&logo=latex&logoColor=white)](https://www.latex-project.org/)
-[![ATS Friendly](https://img.shields.io/badge/ATS-Friendly%20✓-00ffcc?style=for-the-badge&logo=checkmarx&logoColor=black)](https://github.com/dev-amr-elsherif/software-engineer-resume-template)
-[![One Page](https://img.shields.io/badge/Layout-One--Page-ff79c6?style=for-the-badge&logo=readthedocs&logoColor=black)](https://github.com/dev-amr-elsherif/software-engineer-resume-template)
+[![ATS Friendly](https://img.shields.io/badge/ATS-Friendly%20✓-00ffcc?style=for-the-badge&logo=checkmarx&logoColor=black)](https://github.com/amrelsherif-eng/software-engineer-resume-template)
+[![One Page](https://img.shields.io/badge/Layout-One--Page-ff79c6?style=for-the-badge&logo=readthedocs&logoColor=black)](https://github.com/amrelsherif-eng/software-engineer-resume-template)
 
 </div>
 
@@ -125,7 +125,7 @@ For offline editing with full IDE features (IntelliSense, SyncTeX, live PDF prev
 
 ```bash
 # 1. Clone the repo
-git clone https://github.com/dev-amr-elsherif/software-engineer-resume-template.git
+git clone https://github.com/amrelsherif-eng/software-engineer-resume-template.git
 cd software-engineer-resume-template
 
 # 2. Open in VS Code
@@ -171,7 +171,7 @@ software-engineer-resume-template/
 Released under the **MIT License** — free to use, modify, and distribute.
 
 ```
-MIT License © 2025 Amr Fathy Elsherif
+MIT License © 2026 Amr Fathy Elsherif
 ```
 
 > This template is **heavily customized and optimized** by **Amr Fathy Elsherif**, built upon the original open-source base by [**sb2nov**](https://github.com/sb2nov/resume) (MIT License).
@@ -180,11 +180,12 @@ MIT License © 2025 Amr Fathy Elsherif
 
 <div align="center">
 
-**Amr Fathy Elsherif** · Mobile Software Engineer
+**Amr Fathy Elsherif** · Network & Cloud Infrastructure
 
-[![GitHub](https://img.shields.io/badge/GitHub-dev--amr--elsherif-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/dev-amr-elsherif)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-dev--amr--elsherif-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/dev-amr-elsherif/)
+[![GitHub](https://img.shields.io/badge/GitHub-amrelsherif--eng-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/amrelsherif-eng)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-amrelsherif--eng-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/amrelsherif-eng)
+[![Portfolio](https://img.shields.io/badge/Portfolio-amrelsherif--eng.vercel.app-00f0ff?style=for-the-badge&logo=vercel&logoColor=white)](https://amrelsherif-eng.vercel.app)
 
-*If this template helped you land an interview — drop a ⭐ on the repo.*
+*If this template helped you, a ⭐ on the repo helps others find it.*
 
 </div>
