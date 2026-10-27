@@ -96,6 +96,8 @@ A two-minute walkthrough of the three ways to edit a template: with AI, on Overl
 
 **[▶ Watch on LinkedIn](https://www.linkedin.com/feed/update/urn:li:ugcPost:7500210253041508354)** · [Download the MP4](docs/video-tutorial.mp4)
 
+> 📣 First released on LinkedIn, where the launch post reached **12K+ impressions**. [Read the release post](https://www.linkedin.com/feed/update/urn:li:share:7463276669491937281) and share it with anyone preparing for internships or their first job.
+
 ---
 
 ## ☁️ Option A — Online Setup · `Zero-Config` · *Recommended*
