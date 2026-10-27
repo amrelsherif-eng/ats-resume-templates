@@ -278,7 +278,7 @@ Strong resume bullets focus on clear actions and verifiable results.
 
 An ATS-friendly resume ensures automated applicant screening software can extract your text without errors.
 
-Applicant Tracking Systems (ATS) parse uploaded PDF documents into plain text to index candidates. When resumes use multi-column layouts, tables for positioning, floating text boxes, graphics, or custom non-standard fonts, the parser extracts scrambled text, misplaced contact info, or blank fields. These templates use a single-column layout, standard T1 fonts, and `\pdfgentounicode=1` to guarantee clean Unicode text extraction.
+Applicant Tracking Systems (ATS) parse uploaded PDF documents into plain text to index candidates. When resumes use multi-column layouts, tables for positioning, floating text boxes, graphics, or custom non-standard fonts, the parser extracts scrambled text, misplaced contact info, or blank fields. These templates use a single-column layout, standard T1 fonts, and `\pdfgentounicode=1` to produce clean, extractable Unicode text.
 
 ### How it is verified
 Every push compiles all three templates automatically in GitHub Actions CI. The automated test pipeline fails if:
