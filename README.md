@@ -171,14 +171,24 @@ Paste the result back into Overleaf and click **Recompile**. Read every line bef
 - **`[04]` Easy Customization** — Content lives in clearly labelled blocks. Swap your info without touching the structure.
 - **`[05]` Three Role-Focused Versions** — Same layout, different section emphasis and sample content per career track.
 
+Every template opens with a **Quick Guide** comment box that explains each command, then uses the same labelled sections:
+
 ```
-%----------- HEADING -----------        <- Name, role line, contacts
-%----------- EDUCATION -----------      <- Degree, GPA, coursework
-%----------- EXPERIENCE -----------     <- Newest first, 2-3 bullets each
-%----------- PROJECTS -----------       <- Name | tech | GitHub link
-%----------- SKILLS -----------         <- 4 grouped lines
-%----------- CERTIFICATIONS -----------  <- One compact line
+%----------- HEADING: name, target role, contact links
+%----------- EDUCATION: degree, GPA (if 3.0+), relevant coursework
+%----------- EXPERIENCE: newest first, 2-3 bullets each (action verb + task + result)
+%----------- PROJECTS: 2 projects, tech stack in the heading, link to the code
+%----------- LEADERSHIP & ACTIVITIES: clubs, teaching, volunteering, competitions
+%----------- SKILLS: 4 grouped lines, most relevant first
+%----------- CERTIFICATIONS: one line, separated by semicolons
 ```
+
+| To do this | Use |
+|:---|:---|
+| Add a job, degree or activity | `\resumeSubheading{Title}{Dates}{Organization}{Location}` |
+| Add a project | `\resumeProjectHeading{\textbf{Name} $\|$ \emph{Tech} $\|$ \href{URL}{GitHub}}{Dates}` |
+| Add a bullet | `\resumeItem{Action verb + what you did + result}` |
+| Remove a section | Delete from its `%-----------` marker to the next one |
 
 ---
 
