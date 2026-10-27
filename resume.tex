@@ -95,54 +95,82 @@
 %%%%%%  RESUME STARTS HERE  %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \hypersetup{pdftitle={Your Name - Resume}, pdfauthor={Your Name}, pdfsubject={Resume}}
 \begin{document}
-%----------- HEADING (name, role line, contacts) -----------
+%==========================================================================
+% QUICK GUIDE (read once, then delete this box if you like)
+%  \resumeSubheading{Title}{Dates}{Organization}{Location}  -> one job / degree
+%  \resumeProjectHeading{\textbf{Name} $|$ \emph{Tech, Tech} $|$ \href{https://...}{GitHub}}{Dates}
+%  \resumeItem{...}  -> one bullet. Copy the line to add a bullet, delete it to remove one.
+%  Bullets sit between \resumeItemListStart and \resumeItemListEnd.
+%  Entries sit between \resumeSubHeadingListStart and \resumeSubHeadingListEnd.
+%  Remove a whole section: delete from its %----- marker to the next one.
+%  Escape special characters: \%  \&  \$  \#  \_
+%  Dates: "Jun 2025 -- Aug 2025" (two hyphens make a dash), "Sep 2025 -- Present".
+%  Keep it to ONE page: if it spills over, shorten bullets before shrinking anything.
+%==========================================================================
+
+%----------- HEADING: name, target role, contact links -----------
 \begin{center}
   \textbf{\Huge \scshape Your Name} \\ \vspace{2pt}  \small \textbf{Cloud Infrastructure \& Network Engineer} \\ \vspace{4pt}
   \small Your City, Country $|$ \href{tel:+15550000000}{+1 555 000 0000} $|$ \href{mailto:you@example.com}{you@example.com} \\ \vspace{1pt}
   \small \href{https://linkedin.com/in/yourname}{linkedin.com/in/yourname} $|$ \href{https://github.com/yourname}{github.com/yourname} $|$ \href{https://yourname.dev}{yourname.dev}
 \end{center}
-%----------- EDUCATION (degree, dates, GPA, and relevant coursework) -----------
+%----------- EDUCATION: degree, GPA (if 3.0+), relevant coursework -----------
 \section{Education}
 \resumeSubHeadingListStart
-\resumeSubheading{Example University}{Expected May 2026}{B.S. in Computer Networks and Cybersecurity $|$ GPA: 3.8/4.0}{Your City, Country}
+\resumeSubheading{Example University}{Expected May 2027}{B.S. in Network and Cloud Systems $|$ GPA: 3.6/4.0}{Your City, Country}
 \resumeItemListStart
-\resumeItem{Coursework: Routing, Cloud Architecture, Linux, Network Security, Operating Systems, Distributed Systems.}
+\resumeItem{Coursework: Routing and Switching, Linux Administration, Cloud Computing, Network Security.}
 \resumeItemListEnd
 \resumeSubHeadingListEnd
-%----------- EXPERIENCE (newest first; 2-3 bullets each) -----------
+%----------- EXPERIENCE: newest first, 2-3 bullets each (action verb + task + result) -----------
 \section{Experience}
 \resumeSubHeadingListStart
-\resumeSubheading{Cloud Infrastructure \& DevOps Intern}{Jun 2025 -- Aug 2025}{Acme Cloud}{Remote}
+% To add a job: copy from \resumeSubheading to \resumeItemListEnd and paste it below.
+\resumeSubheading{Cloud Operations Intern}{Jun 2026 -- Aug 2026}{Acme Cloud Services}{Remote}
 \resumeItemListStart
-\resumeItem{Automated Terraform and ECS deployment for 15+ staging services, cutting provisioning time by 60\%.}
-\resumeItem{Added Prometheus and Grafana alerts to 40+ Linux instances, cutting issue detection time by 25\%.}
+\resumeItem{Provisioned 12 AWS test environments with Terraform, reducing setup from 45 minutes to 12.}
+\resumeItem{Built Grafana dashboards for 18 Linux hosts, helping the team spot disk issues a day earlier.}
+\resumeItem{Documented 9 deployment checks, cutting repeat setup questions during intern handoffs.}
 \resumeItemListEnd
-\resumeSubheading{NOC Technician Intern}{Jan 2025 -- May 2025}{Example Telecom}{Your City, Country}
+\resumeSubheading{Network Support Intern}{Jan 2026 -- May 2026}{Example Telecom}{Your City, Country}
 \resumeItemListStart
-\resumeItem{Monitored 200+ WAN links with SNMP and Zabbix; escalated Layer 1-3 faults within a 15-minute SLA.}
-\resumeItem{Analyzed Wireshark captures to isolate and resolve recurring BGP route flapping incidents.}
+\resumeItem{Tracked 45 branch links in Zabbix and escalated outages within the team's 20-minute target.}
+\resumeItem{Inspected packet captures to isolate 6 DNS and DHCP faults, restoring service with senior staff.}
 \resumeItemListEnd
-\resumeSubheading{Student Systems Administrator}{Sep 2024 -- Dec 2024}{Example University IT Services}{Your City, Country}
+\resumeSubheading{Campus IT Assistant}{Sep 2025 -- Dec 2025}{Example University IT Services}{Your City, Country}
 \resumeItemListStart
-\resumeItem{Managed identity access and group policies for 1,200+ lab accounts across Active Directory and OpenLDAP.}
-\resumeItem{Provisioned 60 lab workstations with PXE and Ansible, cutting setup time from 4h to 30m.}
+\resumeItem{Prepared 24 lab PCs with Linux images and account checks before each weekly class session.}
+\resumeItem{Resolved 30+ student tickets and wrote a setup guide that reduced repeat login requests.}
 \resumeItemListEnd
 \resumeSubHeadingListEnd
-%----------- PROJECTS (selected work; include links and core technologies) -----------
+%----------- PROJECTS: 2 projects, tech stack in the heading, link to the code -----------
 \section{Projects}
 \resumeSubHeadingListStart
-\resumeProjectHeading{\textbf{Hybrid Cloud Network Lab} $|$ \emph{Terraform, AWS VPC, WireGuard, pfSense, BGP} $|$ \href{https://github.com/yourname/project}{GitHub}}{}
+% To add a project: copy from \resumeProjectHeading to \resumeItemListEnd and paste it below.
+\resumeProjectHeading{\textbf{Hybrid Cloud Network Lab} $|$ \emph{Terraform, AWS VPC, WireGuard, FRRouting} $|$ \href{https://github.com/yourname/hybrid-cloud-lab}{GitHub}}{Feb 2026 -- May 2026}
 \resumeItemListStart
-\resumeItem{Built an automated site-to-site VPN linking an on-premises pfSense lab with AWS VPC infrastructure.}
-\resumeItem{Configured BGP with FRRouting across 4 virtual nodes and validated failover convergence in under 3 seconds.}
+\resumeItem{Connected a local router lab to an AWS VPC with WireGuard and tested routes across 4 virtual nodes.}
+\resumeItem{Added Terraform modules for subnets and security rules, rebuilding the lab in under 8 minutes.}
 \resumeItemListEnd
-\resumeProjectHeading{\textbf{Self-Hosted Container Infrastructure \& Monitoring} $|$ \emph{Linux, Docker, Traefik, Grafana, Ansible} $|$ \href{https://github.com/yourname/project}{GitHub}}{}
+\resumeProjectHeading{\textbf{Home Lab Monitoring Stack} $|$ \emph{Debian, Docker, Prometheus, Grafana, Ansible} $|$ \href{https://github.com/yourname/home-lab-monitoring}{GitHub}}{Oct 2025 -- Jan 2026}
 \resumeItemListStart
-\resumeItem{Deployed a 3-node Debian cluster hosting 12 containerized services behind Traefik with Let's Encrypt TLS.}
-\resumeItem{Automated node configuration and security patching with Ansible, sustaining 99.9\% uptime over 6 months.}
+\resumeItem{Collected CPU, memory, and disk metrics from 3 Debian hosts and displayed them in Grafana.}
+\resumeItem{Used Ansible to deploy exporters and configure 8 alerts, validating each with test thresholds.}
 \resumeItemListEnd
 \resumeSubHeadingListEnd
-%----------- SKILLS (group relevant tools and technologies) -----------
+%----------- LEADERSHIP & ACTIVITIES: clubs, teaching, volunteering, competitions -----------
+\section{Leadership \& Activities}
+\resumeSubHeadingListStart
+\resumeSubheading{Network Lab Club Coordinator}{Sep 2025 -- Present}{Example University}{Your City, Country}
+\resumeItemListStart
+\resumeItem{Organized 4 peer lab sessions on VLANs and routing for 18 students using shared practice topologies.}
+\resumeItemListEnd
+\resumeSubheading{Cloud Study Group Volunteer}{Feb 2025 -- Nov 2025}{Example University Computing Society}{Your City, Country}
+\resumeItemListStart
+\resumeItem{Guided 6 beginners through Linux and AWS exercises, helping each publish a small practice project.}
+\resumeItemListEnd
+\resumeSubHeadingListEnd
+%----------- SKILLS: 4 grouped lines, most relevant first -----------
 \section{Skills}
 \begin{itemize}[leftmargin=0.15in,label={}]
 \small\item{\textbf{Networking \& Protocols:} TCP/IP, BGP, OSPF, VLANs, DNS, DHCP, VPN, SNMP, Wireshark \\
@@ -150,7 +178,7 @@
 \textbf{Automation \& Scripting:} Python, Bash, Git, GitHub Actions, REST APIs, CI/CD \\
 \textbf{Monitoring \& Security:} Prometheus, Grafana, Zabbix, Syslog, pfSense, PKI/TLS}
 \end{itemize}
-%----------- CERTIFICATIONS (plain text; list earned or expected credentials) -----------
+%----------- CERTIFICATIONS: one line, separated by semicolons -----------
 \section{Certifications}
-\small AWS Certified Solutions Architect - Associate (2025); Cisco Certified Network Associate (CCNA) (Expected 2026).
+\small AWS Certified Cloud Practitioner (Expected 2027); Cisco CCNA (In Progress, Expected 2027).
 \end{document}

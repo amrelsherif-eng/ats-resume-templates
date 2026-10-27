@@ -95,8 +95,27 @@
 %%%%%%  RESUME STARTS HERE  %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \hypersetup{pdftitle={Your Name - Resume}, pdfauthor={Your Name}, pdfsubject={Resume}}
 \begin{document}
+%==========================================================================
+% QUICK GUIDE (read once, then delete this box if you like)
+%  \resumeSubheading{Title}{Dates}{Organization}{Location}  -> one job / degree
+%  \resumeProjectHeading{\textbf{Name} $|$ \emph{Tech, Tech} $|$ \href{https://...}{GitHub}}{Dates}
+%  \resumeItem{...}  -> one bullet. Copy the line to add a bullet, delete it to remove one.
+%  Bullets sit between \resumeItemListStart and \resumeItemListEnd.
+%  Entries sit between \resumeSubHeadingListStart and \resumeSubHeadingListEnd.
+%  Remove a whole section: delete from its %----- marker to the next one.
+%  Escape special characters: \%  \&  \$  \#  \_
+%  Dates: "Jun 2025 -- Aug 2025" (two hyphens make a dash), "Sep 2025 -- Present".
+%  Keep it to ONE page: if it spills over, shorten bullets before shrinking anything.
+%==========================================================================
 
-%----------- HEADING (name, role line, contacts) -----------
+%----------- HEADING: name, target role, contact links -----------
+%----------- EDUCATION: degree, GPA (if 3.0+), relevant coursework -----------
+%----------- EXPERIENCE: newest first, 2-3 bullets each (action verb + task + result) -----------
+%----------- PROJECTS: 2 projects, tech stack in the heading, link to the code -----------
+%----------- LEADERSHIP & ACTIVITIES: clubs, teaching, volunteering, competitions -----------
+%----------- SKILLS: 4 grouped lines, most relevant first -----------
+%----------- CERTIFICATIONS: one line, separated by semicolons -----------
+
 \begin{center}
   \textbf{\Huge \scshape Your Name} \\ \vspace{2pt}
   \small \textbf{Embedded Systems \& ECE \textbar{} IoT $\cdot$ Instrumentation \& Control} \\ \vspace{4pt}
@@ -104,63 +123,79 @@
   \small \href{https://linkedin.com/in/yourname}{linkedin.com/in/yourname} $|$ \href{https://github.com/yourname}{github.com/yourname} $|$ \href{https://yourname.dev}{yourname.dev}
 \end{center}
 
-%----------- EDUCATION (newest first; degree, GPA, relevant coursework) -----------
+%----------- EDUCATION: degree, GPA (if 3.0+), relevant coursework -----------
 \section{Education}
 \resumeSubHeadingListStart
-\resumeSubheading{Example University}{May 2027 expected}{Bachelor of Science in Electrical and Computer Engineering $|$ GPA: 3.85/4.00}{City, Country}
+\resumeSubheading{Example University}{Expected May 2027}{B.S. in Electrical and Computer Engineering $|$ GPA: 3.8/4.0}{Your City, Country}
 \resumeItemListStart
-\resumeItem{\textbf{Relevant Coursework:} Embedded Systems Design, Digital Signal Processing, Control Systems, Microcontroller Architecture, Real-Time Operating Systems (RTOS), PCB Layout.}
+\resumeItem{\textbf{Relevant Coursework:} Embedded Systems, Digital Logic, Control Systems, Signals, Microcontrollers.}
 \resumeItemListEnd
 \resumeSubHeadingListEnd
 
-%----------- EXPERIENCE (newest first; 2-3 bullets each) -----------
+%----------- EXPERIENCE: newest first, 2-3 bullets each (action verb + task + result) -----------
 \section{Experience}
 \resumeSubHeadingListStart
-\resumeSubheading{Embedded Systems Intern}{Jun 2026 -- Aug 2026}{Example Telecom}{City, Country}
+% To add a job: copy from \resumeSubheading to \resumeItemListEnd and paste it below.
+\resumeSubheading{Embedded Systems Intern}{Jun 2026 -- Aug 2026}{Example Devices Lab}{Your City, Country}
 \resumeItemListStart
-\resumeItem{Developed bare-metal C firmware on STM32 for 5 Modbus RTU sensors over RS-485 at 115200 baud.}
-\resumeItem{Optimized SPI DMA transfers, reducing telemetry latency by 35\% and preventing dropped packets.}
+\resumeItem{Built STM32 C firmware to poll 5 Modbus sensors over RS-485 at 115200 baud.}
+\resumeItem{Cut SPI telemetry latency 30\% with DMA transfers, eliminating packet loss in 2-hour bench runs.}
+\resumeItem{Documented 12 fault cases and added recovery checks, reducing repeat lab debugging by 4 hours weekly.}
 \resumeItemListEnd
-\resumeSubheading{Instrumentation \& Control Intern}{Jan 2026 -- May 2026}{Example Dynamics}{City, Country}
+\resumeSubheading{Instrumentation Intern}{Jan 2026 -- May 2026}{Acme Controls Group}{Your City, Country}
 \resumeItemListStart
-\resumeItem{Programmed an ESP32 PID loop regulating chamber temperature within $\pm$0.5\,\textdegree C across 20--80\,\textdegree C.}
-\resumeItem{Integrated 4--20 mA current-loop transmitters and calibrated RTDs, improving accuracy by 15\%.}
+\resumeItem{Tuned an ESP32 PID loop to hold a test chamber within $\pm$1\,\textdegree C from 20--60\,\textdegree C.}
+\resumeItem{Calibrated 3 RTDs against a reference probe, lowering average temperature error from 2.1 to 0.8\,\textdegree C.}
 \resumeItemListEnd
-\resumeSubheading{IoT Firmware Intern}{May 2025 -- Aug 2025}{Acme Cloud Technologies}{City, Country}
+\resumeSubheading{Firmware Intern}{May 2025 -- Aug 2025}{Example Sensor Works}{Remote}
 \resumeItemListStart
-\resumeItem{Implemented deep-sleep modes for nRF52 BLE beacons, extending battery life from 8 to 22 months.}
-\resumeItem{Debugged hardware timing faults using logic analyzers and oscilloscopes to resolve intermittent I2C bus lockups.}
+\resumeItem{Added nRF52 sleep scheduling to a BLE sensor, extending estimated battery life from 8 to 14 months.}
+\resumeItem{Traced intermittent I2C lockups with a logic analyzer and fixed the bus recovery sequence.}
 \resumeItemListEnd
 \resumeSubHeadingListEnd
 
-%----------- PROJECTS (notable projects; 2-3 bullets each) -----------
+%----------- PROJECTS: 2 projects, tech stack in the heading, link to the code -----------
 \section{Projects}
 \resumeSubHeadingListStart
-\resumeProjectHeading{\textbf{Autonomous Balancing Robot} $|$ \emph{C++, FreeRTOS, STM32} $|$ \href{https://github.com/yourname/autonomous-balancing-robot}{GitHub}}{Sep -- Dec 2025}
+% To add a project: copy from \resumeProjectHeading through \resumeItemListEnd below.
+\resumeProjectHeading{\textbf{Balancing Robot} $|$ \emph{C++, FreeRTOS, STM32} $|$ \href{https://github.com/yourname/balancing-robot}{GitHub}}{Sep 2025 -- Dec 2025}
 \resumeItemListStart
-\resumeItem{Architected a FreeRTOS app with 4 tasks to process MPU-6050 IMU telemetry via I2C at 200 Hz.}
-\resumeItem{Implemented a PID controller stabilizing dual BLDC motors against tilt impulses up to 15 degrees.}
+\resumeItem{Separated IMU sampling, control, and logging into 3 FreeRTOS tasks at a 100 Hz loop rate.}
+\resumeItem{Stabilized a two-wheel prototype with a tuned PID controller, recovering from 10\textdegree{} tilt tests.}
 \resumeItemListEnd
-\resumeProjectHeading{\textbf{LoRaWAN Industrial Sensor Node} $|$ \emph{C, Zephyr RTOS, LoRaWAN} $|$ \href{https://github.com/yourname/lorawan-sensor-node}{GitHub}}{Feb -- May 2025}
+\resumeProjectHeading{\textbf{LoRa Sensor Node} $|$ \emph{C, Zephyr RTOS, LoRaWAN} $|$ \href{https://github.com/yourname/lora-sensor-node}{GitHub}}{Feb 2025 -- May 2025}
 \resumeItemListStart
-\resumeItem{Engineered Zephyr RTOS firmware transmitting pressure and vibration data over LoRaWAN up to 3 km.}
-\resumeItem{Configured sleep states, achieving an 18 uA quiescent current draw during telemetry intervals.}
+\resumeItem{Sent pressure readings over LoRaWAN at 1 km across campus with acknowledgements in 9 of 10 trials.}
+\resumeItem{Measured 22 uA sleep current on a bench supply after tuning sensor and radio duty cycles.}
 \resumeItemListEnd
 \resumeSubHeadingListEnd
 
-%----------- SKILLS (categorized list of tools and technologies) -----------
+%----------- LEADERSHIP & ACTIVITIES: clubs, teaching, volunteering, competitions -----------
+\section{Leadership \& Activities}
+\resumeSubHeadingListStart
+\resumeSubheading{Student Lab Mentor}{Sep 2025 -- Present}{Example University ECE Club}{Your City, Country}
+\resumeItemListStart
+\resumeItem{Guided 8 first-year students through soldering and sensor labs, helping each complete a working demo.}
+\resumeItemListEnd
+\resumeSubheading{Robotics Club Member}{Sep 2024 -- May 2025}{Example University}{Your City, Country}
+\resumeItemListStart
+\resumeItem{Assembled a line-following robot for a 6-team campus challenge and finished in the top 3.}
+\resumeItemListEnd
+\resumeSubHeadingListEnd
+
+%----------- SKILLS: 4 grouped lines, most relevant first -----------
 \section{Skills}
 \begin{itemize}[leftmargin=0.15in,label={}]
 \small\item{
-\textbf{Languages \& Systems:} Embedded C, C++, Python, Assembly (ARM Cortex-M), FreeRTOS, Zephyr RTOS, Linux \\
-\textbf{Protocols \& Busses:} UART, USART, SPI, I2C, CAN bus, Modbus RTU, RS-485, BLE, LoRaWAN, MQTT \\
-\textbf{Hardware \& Tools:} KiCad, Altium, Multilayer PCB Design, Oscilloscopes, Logic Analyzers, JTAG/SWD, Soldering \\
-\textbf{Instrumentation \& Control:} PID Control, Feedback Systems, 4--20 mA Loops, MATLAB/Simulink
+\textbf{Languages \& Systems:} C, C++, Python, ARM Cortex-M, FreeRTOS, Zephyr, Linux \\
+\textbf{Protocols \& Buses:} UART, SPI, I2C, CAN, Modbus RTU, RS-485, BLE, LoRaWAN \\
+\textbf{Hardware \& Tools:} KiCad, oscilloscope, logic analyzer, JTAG/SWD, soldering, Git \\
+\textbf{Instrumentation \& Control:} PID tuning, RTDs, 4--20 mA loops, MATLAB/Simulink
 }
 \end{itemize}
 
-%----------- CERTIFICATIONS (certifications, licenses, and honors) -----------
+%----------- CERTIFICATIONS: one line, separated by semicolons -----------
 \section{Certifications}
-\small Certified LabVIEW Associate Developer (CLAD) $|$ IPC-A-610 Electronics Assembly and Soldering Certified
+\small Example Embedded C Course Certificate; Example University PCB Design Workshop
 
 \end{document}
