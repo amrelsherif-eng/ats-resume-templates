@@ -1,0 +1,45 @@
+name: Build templates
+
+on:
+  push:
+    branches: [main]
+    paths: ["templates/**", "resume.tex", ".github/workflows/build.yml"]
+  pull_request:
+    paths: ["templates/**", "resume.tex", ".github/workflows/build.yml"]
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: ${{ matrix.template }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        template: [network-cloud, embedded-ece, mobile-apps]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Compile with LaTeX
+        uses: xu-cheng/latex-action@v3
+        with:
+          working_directory: templates/${{ matrix.template }}
+          root_file: resume.tex
+
+      - name: Check one page and readable text (ATS)
+        working-directory: templates/${{ matrix.template }}
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq poppler-utils
+          pages=$(pdfinfo resume.pdf | awk '/^Pages:/ {print $2}')
+          echo "Pages: $pages"
+          test "$pages" -eq 1
+          pdftotext -layout resume.pdf resume.txt
+          words=$(wc -w < resume.txt)
+          echo "Extracted words: $words"
+          test "$words" -gt 200
+          grep -q "Your Name" resume.txt
+          grep -qi "experience" resume.txt
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.template }}-pdf
+          path: templates/${{ matrix.template }}/resume.pdf
