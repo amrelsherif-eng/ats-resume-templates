@@ -1,0 +1,39 @@
+name: Site tests
+
+on:
+  push:
+    branches: [main]
+    paths: ["site/**", "templates/**", ".github/workflows/site.yml"]
+  pull_request:
+    paths: ["site/**", "templates/**", ".github/workflows/site.yml"]
+  workflow_dispatch:
+
+jobs:
+  site:
+    name: site-tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: |
+          pip install -r site/tests/requirements.txt
+          npm ci --prefix site --no-audit --no-fund
+          python -m playwright install --with-deps chromium
+
+      - name: Build site
+        run: python site/build.py _site
+
+      - name: Run tests (layout, links, checker, accessibility, CSP)
+        env:
+          SITE_DIR: _site
+          AXE_PATH: site/node_modules/axe-core/axe.min.js
+        run: python -m pytest site/tests -q

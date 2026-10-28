@@ -21,7 +21,7 @@ def main():
     if OUT.exists():
         shutil.rmtree(OUT)
     shutil.copytree(SITE, OUT, ignore=shutil.ignore_patterns(
-        "node_modules", "tests", "build.py", "package*.json", "__pycache__"))
+        "node_modules", "tests", "build.py", "package*.json", "__pycache__", ".gitignore"))
     for t in TEMPLATES:
         src, dst = ROOT / "templates" / t, OUT / "templates" / t
         dst.mkdir(parents=True)
