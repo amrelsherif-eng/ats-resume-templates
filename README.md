@@ -11,7 +11,7 @@
   <a href="#-start-in-3-steps"><img src="assets/btn-overleaf.svg" height="44" alt="Start in 3 Steps"></a>
   <a href="https://www.linkedin.com/feed/update/urn:li:ugcPost:7500210253041508354"><img src="assets/btn-video.svg" height="44" alt="Watch Video Tutorial"></a>
   <a href="#-pick-your-template"><img src="assets/btn-pdf.svg" height="44" alt="Pick Your Template"></a>
-  <a href="https://github.com/amrelsherif-eng/ats-resume-templates/stargazers"><img src="assets/btn-star.svg" height="44" alt="Star on GitHub"></a>
+  <a href="https://github.com/amrelsherif-eng/ats-resume-templates"><img src="assets/btn-star.svg" height="44" alt="Star on GitHub"></a>
 </p>
 
 [![Build templates](https://github.com/amrelsherif-eng/ats-resume-templates/actions/workflows/build.yml/badge.svg)](https://github.com/amrelsherif-eng/ats-resume-templates/actions/workflows/build.yml)
