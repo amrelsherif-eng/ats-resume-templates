@@ -23,6 +23,8 @@
 
 <p align="center">
 Free, one-page, ATS-friendly resumes for students and early-career engineers, developers, and business graduates. Pick a template, copy it on Overleaf, replace the sample text, download your PDF.
+<br><br>
+🌐 <b><a href="https://amrelsherif-eng.github.io/ats-resume-templates/">Open the website</a></b>: browse the templates and check your own CV in the browser (nothing is uploaded). Available in English and Arabic.
 </p>
 
 </div>
@@ -318,7 +320,9 @@ Every push compiles all five templates automatically in GitHub Actions CI. The a
 2. The document text cannot be extracted cleanly or has fewer than 200 readable words (verified using `pdftotext`).
 
 ### How you can check your own PDF
-Run this command in your terminal to see the exact text an ATS parser reads:
+**Easiest:** drop your PDF into the [ATS check on the website](https://amrelsherif-eng.github.io/ats-resume-templates/#check). It runs in your browser, never uploads the file, and shows a score, what to fix first, and the exact text an ATS reads.
+
+**From a terminal:** this command shows the exact text an ATS parser reads:
 
 ```bash
 pdftotext -layout resume.pdf - | less
@@ -495,6 +499,7 @@ If you commit your resume to a public GitHub repository, replace your phone numb
 
 Release history and template improvements across versions.
 
+- **v2.2 (Oct 2026):** Website with a template gallery, an in-browser ATS check (scored report, fixes, experience-aware page rules), English and Arabic, and automated site tests.
 - **v2.1 (Oct 2026):** Two new templates: Software Engineering (Web & Backend) and Business & Finance for Faculty of Commerce students. Overleaf links for both. Mobile Apps sample filled to a full page.
 - **v2.0 (Oct 2026):** Three role-focused templates, inline quick-guide comments, Leadership & Activities section, GitHub Actions CI build checks, and rewritten documentation.
 - **v1.0 (May 2026):** First public release of the single template with Overleaf integration, GitHub repository, and AI prompt.

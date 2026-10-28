@@ -305,3 +305,4 @@ footer .wrap.foot{display:grid}
 /* footer navs are not the sticky top bar */
 footer nav{position:static;backdrop-filter:none;background:none;border:0;z-index:auto}
 @media (max-width:520px){.tab{padding:0 12px;font-size:14px}.tabs{gap:2px}}
+img.avatar{width:96px;height:96px;object-fit:cover;background:var(--card);border:2px solid var(--line2);box-shadow:0 0 0 4px rgba(0,240,255,.08)}
