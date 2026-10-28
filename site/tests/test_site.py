@@ -55,6 +55,8 @@ def browser():
 @pytest.fixture
 def page(browser, site_url):
     page = browser.new_page()
+    if LIVE_URL:  # real networks are slower than the local server
+        page.set_default_timeout(20_000)
     errors = []
     blocked_hosts = []
 
@@ -75,7 +77,7 @@ def page(browser, site_url):
             route.continue_()
 
     page.route("**/*", restrict)
-    page.goto(site_url, wait_until="networkidle")
+    page.goto(site_url, wait_until="networkidle", timeout=60_000 if LIVE_URL else 30_000)
     page._site_errors = errors
     page._blocked_hosts = blocked_hosts
     yield page
@@ -304,7 +306,7 @@ def test_accessibility_axe(browser, site_url, lang):
     # axe is injected inline, so this check runs in its own context with CSP bypassed.
     context = browser.new_context(bypass_csp=True)
     page = context.new_page()
-    page.goto(site_url, wait_until="networkidle")
+    page.goto(site_url, wait_until="networkidle", timeout=60_000 if LIVE_URL else 30_000)
     if lang == "ar":
         page.locator("#lang").click()
     page.add_script_tag(path=axe_path)
