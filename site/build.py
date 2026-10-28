@@ -2,7 +2,10 @@
 
 Copies the static site, the five templates (PDF, .tex, previews), creates WebP
 previews, and vendors pdf.js from node_modules (npm ci in site/ first).
-Usage: python site/build.py [out_dir]
+Usage: python site/build.py [out_dir] [base_path]
+base_path is where the site is served from: "/" on Cloudflare Pages (default),
+"/ats-resume-templates/" on GitHub Pages. It is used by 404.html, which can be
+served from any URL depth and so needs absolute paths.
 """
 import shutil
 import sys
@@ -13,6 +16,7 @@ from PIL import Image
 ROOT = Path(__file__).resolve().parent.parent
 SITE = ROOT / "site"
 OUT = Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / "_site"
+BASE = sys.argv[2] if len(sys.argv) > 2 else "/"
 TEMPLATES = ["software-web", "business-finance", "network-cloud", "embedded-ece", "mobile-apps"]
 PDFJS = SITE / "node_modules" / "pdfjs-dist" / "build"
 
@@ -35,6 +39,8 @@ def main():
     vendor.mkdir(parents=True)
     for name in ("pdf.min.mjs", "pdf.worker.min.mjs"):
         shutil.copy2(PDFJS / name, vendor / name)
+    page = OUT / "404.html"
+    page.write_text(page.read_text(encoding="utf-8").replace("{{BASE}}", BASE), encoding="utf-8")
     (OUT / ".nojekyll").write_text("")
     print(f"built {OUT}")
 
