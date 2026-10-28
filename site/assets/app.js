@@ -147,7 +147,7 @@ function applyLang() {
 function buildFan() {
   const fan = document.getElementById('fan');
   ['network-cloud', 'embedded-ece', 'software-web', 'mobile-apps', 'business-finance'].forEach((id, i) => {
-    const page = el('div', { class: 'page' }, preview(id, '', i === 2));
+    const page = el('div', { class: 'page' }, preview(id, '', true)); // above the fold: load eagerly (LCP)
     if (i === 2) page.append(el('div', { class: 'scan' }));
     fan.append(page);
   });
