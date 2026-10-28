@@ -344,6 +344,13 @@ def test_security_headers_meta(page):
 @pytest.mark.skipif(not LIVE_URL, reason="only meaningful against the deployed site")
 def test_live_security_headers(page):
     headers = page.request.get(LIVE_URL + "/").headers
+    if ".github.io" in LIVE_URL:
+        # GitHub Pages ignores _headers: it sends HSTS itself, and CSP/referrer come from <meta> tags.
+        assert "strict-transport-security" in headers
+        page.goto(LIVE_URL + "/")
+        expect(page.locator('meta[http-equiv="Content-Security-Policy"]')).to_have_count(1)
+        expect(page.locator('meta[name="referrer"]')).to_have_count(1)
+        return
     for name in ["content-security-policy", "x-content-type-options", "x-frame-options",
                  "strict-transport-security", "referrer-policy", "permissions-policy"]:
         assert name in headers, f"missing header {name}"
