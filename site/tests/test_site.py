@@ -12,10 +12,17 @@ from playwright.sync_api import expect, sync_playwright
 ROOT = Path(__file__).resolve().parents[2]
 TEMPLATE_IDS = ["software-web", "business-finance", "network-cloud", "embedded-ece", "mobile-apps"]
 ALLOWED_HOSTS = {"127.0.0.1", "localhost", "fonts.googleapis.com", "fonts.gstatic.com"}
+# Set SITE_URL (e.g. https://ats-resume-templates.pages.dev) to run the same suite against the live site.
+LIVE_URL = os.environ.get("SITE_URL", "").rstrip("/")
+if LIVE_URL:
+    ALLOWED_HOSTS.add(urlparse(LIVE_URL).hostname)
 
 
 @pytest.fixture(scope="session")
 def site_url():
+    if LIVE_URL:
+        yield LIVE_URL
+        return
     mimetypes.add_type("text/javascript", ".mjs")
     site_dir = Path(os.environ.get("SITE_DIR", "_site"))
     if not site_dir.is_absolute():
@@ -150,15 +157,17 @@ def test_tabs_keyboard(page):
 
 def test_copy_prompt(page):
     page.context.grant_permissions(["clipboard-read", "clipboard-write"])
+    page.evaluate("navigator.clipboard.writeText('')")  # the clipboard is shared between tests
     page.locator('#p-ai [data-copy="prompt"]').click()
-    page.wait_for_function("navigator.clipboard.readText().then(t => t.length > 0)")
+    page.wait_for_function("navigator.clipboard.readText().then(t => t.startsWith('Fill this'))")
     assert page.evaluate("navigator.clipboard.readText()").startswith("Fill this LaTeX resume template")
 
 
 def test_copy_for_ai(page):
     page.context.grant_permissions(["clipboard-read", "clipboard-write"])
+    page.evaluate("navigator.clipboard.writeText('')")  # the clipboard is shared between tests
     page.locator('[data-ai="software-web"]').click()
-    page.wait_for_function("navigator.clipboard.readText().then(t => t.length > 0)")
+    page.wait_for_function("navigator.clipboard.readText().then(t => t.includes('documentclass'))", timeout=15000)
     copied = page.evaluate("navigator.clipboard.readText()")
     assert "Fill this LaTeX resume template" in copied
     assert "\\documentclass" in copied
@@ -168,8 +177,11 @@ def upload(page, file_path):
     page.locator("#chk-file").set_input_files(str(file_path))
 
 
+CHECK_TIMEOUT = 30_000  # the first check downloads pdf.js; allow for real networks
+
+
 def score_of(page):
-    expect(page.locator("#chk-out .ring-n")).to_be_visible()
+    expect(page.locator("#chk-out .ring-n")).to_be_visible(timeout=CHECK_TIMEOUT)
     return int(page.locator("#chk-out .ring-n").text_content())
 
 
@@ -271,6 +283,7 @@ def test_checker_ai_prompt(page):
     page.context.grant_permissions(["clipboard-read", "clipboard-write"])
     upload(page, ROOT / "templates/mobile-apps/resume.pdf")
     score_of(page)
+    page.evaluate("navigator.clipboard.writeText('')")
     page.locator("#chk-out .chk-tools button").click()
     page.wait_for_function("navigator.clipboard.readText().then(t => t.includes('MY RESUME'))")
 
@@ -279,7 +292,7 @@ def test_checker_not_pdf(page, tmp_path):
     path = tmp_path / "not-really.pdf"
     path.write_text("this is plain text, not a PDF", encoding="utf-8")
     upload(page, path)
-    expect(page.locator("#chk-out .chk-error")).to_be_visible()
+    expect(page.locator("#chk-out .chk-error")).to_be_visible(timeout=CHECK_TIMEOUT)
     assert not [e for e in page._site_errors if "Invalid PDF" not in e], page._site_errors
 
 
@@ -314,3 +327,17 @@ def test_security_headers_meta(page):
     for link in page.locator('a[target="_blank"]').all():
         assert "noopener" in (link.get_attribute("rel") or "").split()
 
+
+
+@pytest.mark.skipif(not LIVE_URL, reason="only meaningful against the deployed site")
+def test_live_security_headers(page):
+    headers = page.request.get(LIVE_URL + "/").headers
+    for name in ["content-security-policy", "x-content-type-options", "x-frame-options",
+                 "strict-transport-security", "referrer-policy", "permissions-policy"]:
+        assert name in headers, f"missing header {name}"
+    assert "frame-ancestors 'none'" in headers["content-security-policy"]
+
+
+def test_unknown_path_is_404(page, site_url):
+    response = page.request.get(site_url + "/no-such-page-xyz")
+    assert response.status == 404

@@ -271,3 +271,6 @@ Object.assign(AR, {
   'vid.title': 'شاهدها في دقيقة واحدة',
   'vid.sub': 'اختر نموذجاً، عدّله بثلاث طرق، وافحص النتيجة.'
 });
+
+Object.assign(EN, { 'chk.toFix1': '1 thing to improve', 'chk.passed1': '1 check passed' });
+Object.assign(AR, { 'chk.toFix1': 'نقطة واحدة للتحسين', 'chk.passed1': 'نجح فحص واحد' });

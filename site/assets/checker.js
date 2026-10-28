@@ -157,11 +157,11 @@ function render() {
   const problems = issues.filter(i => i.level !== 'ok');
   const passed = issues.filter(i => i.level === 'ok');
   const list = el('div', 'issues');
-  list.append(el('h3', 'issues-h', problems.length ? ui('chk.toFix', { n: problems.length }) : ui('chk.allGood')));
+  list.append(el('h3', 'issues-h', problems.length ? ui(problems.length === 1 ? 'chk.toFix1' : 'chk.toFix', { n: problems.length }) : ui('chk.allGood')));
   for (const i of problems) list.append(issueRow(i));
 
   const ok = el('details', 'passed');
-  ok.append(el('summary', '', ui('chk.passed', { n: passed.length })));
+  ok.append(el('summary', '', ui(passed.length === 1 ? 'chk.passed1' : 'chk.passed', { n: passed.length })));
   for (const i of passed) ok.append(issueRow(i));
 
   const tools = el('div', 'chk-tools');
@@ -229,6 +229,21 @@ function init() {
   window.addEventListener('dragover', e => e.preventDefault());
   window.addEventListener('drop', e => { if (!drop.contains(e.target)) e.preventDefault(); });
   document.addEventListener('langchange', render);
+
+  // Warm up pdf.js (about 1.4 MB) in the background once the checker scrolls into view,
+  // so the first check feels instant. The worker file is fetched too so it is cached.
+  const warm = () => {
+    loadPdfJs().catch(() => { /* retried on first check */ });
+    fetch(new URL('./vendor/pdfjs/pdf.worker.min.mjs', import.meta.url)).catch(() => {});
+  };
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver(entries => {
+      if (entries.some(e => e.isIntersecting)) { io.disconnect(); warm(); }
+    }, { rootMargin: '600px 0px' });
+    io.observe(drop);
+  } else {
+    warm();
+  }
 }
 
 init();
