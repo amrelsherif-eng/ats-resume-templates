@@ -47,9 +47,9 @@ function overleafOpen(id) {
   return 'https://www.overleaf.com/docs?snip_uri=' + encodeURIComponent(`${RAW}/${id}/resume.tex`);
 }
 
-function preview(id, alt, eager) {
+function preview(id, alt, eager, sizes = '(max-width: 600px) 92vw, 360px') {
   return el('picture', {}, [
-    el('source', { type: 'image/webp', srcset: `templates/${id}/preview-640.webp 640w, templates/${id}/preview.webp 850w`, sizes: '(max-width: 600px) 92vw, 360px' }),
+    el('source', { type: 'image/webp', srcset: `templates/${id}/preview-640.webp 640w, templates/${id}/preview.webp 850w`, sizes }),
     el('img', { src: `templates/${id}/preview.png`, alt, width: '850', height: '1100', loading: eager ? 'eager' : 'lazy', decoding: 'async' })
   ]);
 }
@@ -147,7 +147,7 @@ function applyLang() {
 function buildFan() {
   const fan = document.getElementById('fan');
   ['network-cloud', 'embedded-ece', 'software-web', 'mobile-apps', 'business-finance'].forEach((id, i) => {
-    const page = el('div', { class: 'page' }, preview(id, '', true)); // above the fold: load eagerly (LCP)
+    const page = el('div', { class: 'page' }, preview(id, '', true, '(max-width: 900px) 200px, 260px')); // above the fold: load eagerly (LCP)
     if (i === 2) page.append(el('div', { class: 'scan' }));
     fan.append(page);
   });
