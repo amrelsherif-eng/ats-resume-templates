@@ -15,7 +15,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        template: [network-cloud, embedded-ece, mobile-apps]
+        template: [network-cloud, embedded-ece, mobile-apps, software-web, business-finance]
     steps:
       - uses: actions/checkout@v4
 
