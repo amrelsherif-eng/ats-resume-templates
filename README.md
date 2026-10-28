@@ -4,7 +4,7 @@
   <source media="(max-width: 767px) and (prefers-color-scheme: dark)" srcset="assets/banner-mobile-dark.svg">
   <source media="(max-width: 767px)" srcset="assets/banner-mobile-light.svg">
   <source media="(prefers-color-scheme: dark)" srcset="assets/banner-dark.svg">
-  <img src="assets/banner-light.svg" width="100%" alt="ATS Resume Templates: three one-page LaTeX templates, Overleaf-ready and ATS-checked">
+  <img src="assets/banner-light.svg" width="100%" alt="ATS Resume Templates: five one-page LaTeX templates, Overleaf-ready and ATS-checked">
 </picture>
 
 <p align="center">
@@ -22,7 +22,7 @@
 [![ATS Friendly](https://img.shields.io/badge/ATS-Friendly%20✓-00ffcc?style=for-the-badge&logo=checkmarx&logoColor=black)](#-is-it-really-ats-friendly)
 
 <p align="center">
-Free, one-page, ATS-friendly resumes for students and early-career engineers. Pick a template, copy it on Overleaf, replace the sample text, download your PDF.
+Free, one-page, ATS-friendly resumes for students and early-career engineers, developers, and business graduates. Pick a template, copy it on Overleaf, replace the sample text, download your PDF.
 </p>
 
 </div>
@@ -33,7 +33,7 @@ Free, one-page, ATS-friendly resumes for students and early-career engineers. Pi
 <a id="pick-your-template"></a>
 ## 🗂️ Pick Your Template
 
-Choose the template tailored to your engineering path and career goals.
+Choose the template that matches the job you want: three engineering tracks, software, and business.
 
 <table>
   <tr>
@@ -71,6 +71,36 @@ Choose the template tailored to your engineering path and career goals.
 
 </td>
   </tr>
+  <tr>
+    <td align="center" valign="top" width="33%">
+
+**Software Engineering**  
+**Best for:** Backend, full-stack and web developers, CS students  
+**Sample highlights:** NestJS, PostgreSQL, Redis, k6
+
+<img src="templates/software-web/preview.png" width="260" alt="Software Engineering template preview">
+
+[.tex](templates/software-web/resume.tex) · [PDF](templates/software-web/resume.pdf) · [Open in Overleaf](https://www.overleaf.com/docs?snip_uri=https://raw.githubusercontent.com/amrelsherif-eng/ats-resume-templates/main/templates/software-web/resume.tex)
+
+</td>
+    <td align="center" valign="top" width="33%">
+
+**Business & Finance**  
+**Best for:** Accounting, finance, audit, banking, Faculty of Commerce students  
+**Sample highlights:** Reconciliations, Power BI, DCF
+
+<img src="templates/business-finance/preview.png" width="260" alt="Business & Finance template preview">
+
+[.tex](templates/business-finance/resume.tex) · [PDF](templates/business-finance/resume.pdf) · [Open in Overleaf](https://www.overleaf.com/docs?snip_uri=https://raw.githubusercontent.com/amrelsherif-eng/ats-resume-templates/main/templates/business-finance/resume.tex)
+
+</td>
+    <td align="center" valign="top" width="33%">
+
+**Your field next?**  
+Missing your track? [Open an issue](https://github.com/amrelsherif-eng/ats-resume-templates/issues/new) and tell us which one.
+
+</td>
+  </tr>
 </table>
 
 ---
@@ -82,10 +112,10 @@ Choose the template tailored to your engineering path and career goals.
 You can create an editable copy and download your finished PDF directly in your web browser.
 
 1. **Pick** the template that matches the job you want ([see above](#-pick-your-template)).
-2. **Open it in Overleaf** and click **`File` → `Make a copy`** (free account required).
+2. **Open it in Overleaf** (free account required). Read-only links: click **`File` → `Make a copy`**. "Open in Overleaf" links: the copy is created for you.
 3. **Replace the sample text** with your own details, or let an AI fill it for you ([prompt below](#-let-ai-fill-it-in)), then click **Recompile** and download your PDF.
 
-> All three templates contain **fictional sample data** ("Your Name", example.com). Nothing in them is a real person's CV.
+> All five templates contain **fictional sample data** ("Your Name", example.com). Nothing in them is a real person's CV.
 
 <details>
 <summary>Show the Overleaf steps with screenshots-free instructions</summary>
@@ -102,6 +132,8 @@ You can create an editable copy and download your finished PDF directly in your 
    - [Network & Cloud on Overleaf](https://www.overleaf.com/read/wxvvcdjzxnng#d23995)
    - [Embedded & ECE on Overleaf](https://www.overleaf.com/read/rjnzhhzrhffz#dd0591)
    - [Mobile Apps on Overleaf](https://www.overleaf.com/read/ytqxjshntmfb#335363)
+   - [Software Engineering in Overleaf](https://www.overleaf.com/docs?snip_uri=https://raw.githubusercontent.com/amrelsherif-eng/ats-resume-templates/main/templates/software-web/resume.tex) (opens as your own copy, skip to step 5)
+   - [Business & Finance in Overleaf](https://www.overleaf.com/docs?snip_uri=https://raw.githubusercontent.com/amrelsherif-eng/ats-resume-templates/main/templates/business-finance/resume.tex) (opens as your own copy, skip to step 5)
 2. In the **top-left menu bar**, click **`File`**.
 3. Select **`Make a copy`** from the dropdown.
 4. A **"Copy project"** dialog will appear — rename the project if you like, then click the green **`Copy`** button.
@@ -184,11 +216,11 @@ Recruiters skim a resume in seconds, and companies frequently run submissions th
 
 | Key Feature | Challenge | How These Templates Handle It |
 |:---|:---|:---|
-| **`[01]` One-Page Layout** | Resume too long | Margins, spacing, and line heights are strictly tuned so an early-career engineer's full background fits on exactly one page. |
+| **`[01]` One-Page Layout** | Resume too long | Margins, spacing, and line heights are strictly tuned so an early-career candidate's full background fits on exactly one page. |
 | **`[02]` ATS-Readable PDF** | ATS cannot read it | Uses `\pdfgentounicode=1`, standard T1 fonts, and single-column text. No tables for layout, text boxes, images, or icons. Each template was verified with text extraction before release. |
 | **`[03]` Clean Code Architecture** | Overdesigned layouts | Built with reusable macros (`\resumeItem`, `\resumeSubheading`, `\resumeProjectHeading`), labelled section markers, and no unused packages. Clean typographic hierarchy with no columns or visual noise. |
 | **`[04]` Easy Customization** | Hard to customize | Content lives in clearly labelled blocks. You swap your info without touching the underlying structural code. |
-| **`[05]` Three Role-Focused Versions** | Wrong things stand out | Three distinct tracks order and emphasize relevant technical sections, projects, and coursework for specific career paths. |
+| **`[05]` Five Role-Focused Versions** | Wrong things stand out | Five tracks (Network & Cloud, Embedded & ECE, Mobile Apps, Software Engineering, Business & Finance) each order and emphasize the sections, projects, and coursework that matter for that path. |
 
 ---
 
@@ -281,7 +313,7 @@ An ATS-friendly resume ensures automated applicant screening software can extrac
 Applicant Tracking Systems (ATS) parse uploaded PDF documents into plain text to index candidates. When resumes use multi-column layouts, tables for positioning, floating text boxes, graphics, or custom non-standard fonts, the parser extracts scrambled text, misplaced contact info, or blank fields. These templates use a single-column layout, standard T1 fonts, and `\pdfgentounicode=1` to produce clean, extractable Unicode text.
 
 ### How it is verified
-Every push compiles all three templates automatically in GitHub Actions CI. The automated test pipeline fails if:
+Every push compiles all five templates automatically in GitHub Actions CI. The automated test pipeline fails if:
 1. The output PDF is not **exactly one page** (verified using `pdfinfo`).
 2. The document text cannot be extracted cleanly or has fewer than 200 readable words (verified using `pdftotext`).
 
@@ -296,7 +328,7 @@ If your output displays clean text in logical reading order without missing sect
 
 ### What to avoid
 To keep your resume fully ATS-friendly, do not include:
-- **Photos or headshots** (not recommended for ATS and unnecessary for tech roles)
+- **Photos or headshots** (not recommended for ATS and unnecessary for most roles)
 - **Tables for layout** (parsers read across table rows rather than down columns)
 - **Text inside images** (invisible to text parsers)
 - **Headers or footers with contact details** (many parsers skip header and footer regions entirely)
@@ -375,7 +407,7 @@ docker run --rm -v "$PWD":/work -w /work/templates/network-cloud texlive/texlive
 <a id="project-structure"></a>
 ## 📁 Project Structure
 
-The repository contains three role-specific templates, documentation assets, and automated build workflows.
+The repository contains five role-specific templates, documentation assets, and automated build workflows.
 
 ```
 ats-resume-templates/
@@ -391,13 +423,13 @@ ats-resume-templates/
 │   │   ├── resume.pdf     ← Compiled PDF sample
 │   │   └── preview.png    ← Preview thumbnail
 │   ├── embedded-ece/
-│   │   ├── resume.tex
-│   │   ├── resume.pdf
-│   │   └── preview.png
-│   └── mobile-apps/
-│       ├── resume.tex
-│       ├── resume.pdf
-│       └── preview.png
+│   │   └── ...
+│   ├── mobile-apps/
+│   │   └── ...
+│   ├── software-web/
+│   │   └── ...
+│   └── business-finance/
+│       └── ...
 ├── resume.tex             ← Copy of Network & Cloud (legacy links)
 ├── resume.pdf             ← Copy of Network & Cloud
 ├── .gitignore             ← Ignores LaTeX aux files
@@ -428,7 +460,7 @@ Photos are not recommended for ATS-friendly resumes. They increase file size, ca
 <details>
 <summary>Can my resume be two pages?</summary>
 
-For students, interns, and early-career engineers with under five years of experience, a single page is standard. If your text spills onto a second page, tighten bullet phrasing or remove older coursework before shrinking margins.
+For students, interns, and early-career candidates with under five years of experience, a single page is standard. If your text spills onto a second page, tighten bullet phrasing or remove older coursework before shrinking margins.
 </details>
 
 <details>
@@ -463,6 +495,7 @@ If you commit your resume to a public GitHub repository, replace your phone numb
 
 Release history and template improvements across versions.
 
+- **v2.1 (Oct 2026):** Two new templates: Software Engineering (Web & Backend) and Business & Finance for Faculty of Commerce students. One-click "Open in Overleaf" links. Mobile Apps sample filled to a full page.
 - **v2.0 (Oct 2026):** Three role-focused templates, inline quick-guide comments, Leadership & Activities section, GitHub Actions CI build checks, and rewritten documentation.
 - **v1.0 (May 2026):** First public release of the single template with Overleaf integration, GitHub repository, and AI prompt.
 

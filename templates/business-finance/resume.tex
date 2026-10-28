@@ -1,0 +1,184 @@
+%-------------------------
+% Business & Finance Resume Template (one page, ATS-friendly)
+% For: Accounting, finance, audit, banking and business-analyst roles (Faculty of Commerce students and graduates)
+% Author: Amr Fathy Elsherif
+% LinkedIn: https://www.linkedin.com/in/amrelsherif-eng
+% GitHub: https://github.com/amrelsherif-eng
+% GitHub Repository: https://github.com/amrelsherif-eng/ats-resume-templates
+% Original base template by: https://github.com/sb2nov/resume (MIT License)
+%-------------------------
+%-------------------------
+% HOW TO USE & EDIT THIS TEMPLATE:
+% 1. AI-assisted (fastest): copy this whole file into ChatGPT/Gemini/Claude and say:
+%    "Fill this LaTeX resume template with my info: [paste your CV data]. Keep it to one page."
+% 2. Manual editing: scroll down to \begin{document}. Each section is marked with a
+%    %----------- SECTION ----------- comment. Replace the text inside the curly braces {}.
+% 3. Do not edit the preamble (everything before \begin{document}) unless you know LaTeX.
+% 4. All data below is FICTIONAL sample data (Your Name, example.com).
+%-------------------------
+
+\documentclass[letterpaper,11pt]{article}
+
+\usepackage{latexsym}
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage{marvosym}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{verbatim}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage[english]{babel}
+\usepackage{tabularx}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{textcomp}
+\input{glyphtounicode}
+
+\pagestyle{fancy}
+\fancyhf{} % clear all header and footer fields
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% Adjust margins
+\addtolength{\oddsidemargin}{-0.5in}
+\addtolength{\evensidemargin}{-0.5in}
+\addtolength{\textwidth}{1in}
+\addtolength{\topmargin}{-.5in}
+\addtolength{\textheight}{1.0in}
+
+\urlstyle{same}
+
+\raggedbottom
+\raggedright
+\setlength{\tabcolsep}{0in}
+
+% Sections formatting
+\titleformat{\section}{
+  \vspace{-4pt}\scshape\raggedright\large
+}{}{0em}{}[\color{black}\titlerule \vspace{-5pt}]
+
+% Ensure that generate pdf is machine-readable/ATS parsable
+\pdfgentounicode=1
+
+%-------------------------
+% Custom commands
+\newcommand{\resumeItem}[1]{
+  \item\small{
+    {#1 \vspace{-2pt}}
+  }
+}
+
+\newcommand{\resumeSubheading}[4]{
+  \vspace{-2pt}\item
+    \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{#1} & #2 \\
+      \textit{\small#3} & \textit{\small #4} \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeProjectHeading}[2]{
+    \item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \small#1 & #2 \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.15in, label={}]}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+\newcommand{\resumeItemListStart}{\begin{itemize}}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
+
+%-------------------------------------------
+%%%%%%  RESUME STARTS HERE  %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\hypersetup{pdftitle={Your Name - Resume}, pdfauthor={Your Name}, pdfsubject={Resume}}
+\begin{document}
+%==========================================================================
+% QUICK GUIDE (read once, then delete this box if you like)
+%  \resumeSubheading{Title}{Dates}{Organization}{Location}  -> one job / degree
+%  \resumeProjectHeading{\textbf{Name} $|$ \emph{Tech, Tech} $|$ \href{https://...}{GitHub}}{Dates}
+%  \resumeItem{...}  -> one bullet. Copy the line to add a bullet, delete it to remove one.
+%  Bullets sit between \resumeItemListStart and \resumeItemListEnd.
+%  Entries sit between \resumeSubHeadingListStart and \resumeSubHeadingListEnd.
+%  Remove a whole section: delete from its %----- marker to the next one.
+%  Escape special characters: \%  \&  \$  \#  \_
+%  Dates: "Jun 2025 -- Aug 2025" (two hyphens make a dash), "Sep 2025 -- Present".
+%  Keep it to ONE page: if it spills over, shorten bullets before shrinking anything.
+%==========================================================================
+
+
+%----------- HEADING: name, target role, contact links -----------
+\begin{center}
+  \textbf{\Huge \scshape Your Name} \\ \vspace{2pt}  \small \textbf{Accounting \& Finance $|$ Financial Analysis} \\ \vspace{4pt}
+  \small Your City, Country $|$ \href{tel:+15550000000}{+1 555 000 0000} $|$ \href{mailto:you@example.com}{you@example.com} \\ \vspace{1pt}
+  \small \href{https://linkedin.com/in/yourname}{linkedin.com/in/yourname} $|$ \href{https://yourname.dev}{yourname.dev (portfolio)}
+\end{center}
+%----------- EDUCATION: degree, GPA (if 3.0+), relevant coursework -----------
+\section{Education}
+\resumeSubHeadingListStart
+\resumeSubheading{Example University, Faculty of Commerce (English Section)}{Expected Jun 2027}{Bachelor of Commerce in Accounting and Finance $|$ GPA: 3.5/4.0}{Your City, Country}
+\resumeItemListStart
+\resumeItem{Coursework: Financial Accounting, Corporate Finance, Cost Accounting, Auditing, Business Statistics.}
+\resumeItemListEnd
+\resumeSubHeadingListEnd
+%----------- EXPERIENCE: newest first, 2-3 bullets each (action verb + task + result) -----------
+\section{Experience}
+\resumeSubHeadingListStart
+% To add a job: copy from \resumeSubheading to \resumeItemListEnd and paste it below.
+\resumeSubheading{Finance Intern}{Jun 2026 -- Aug 2026}{Acme Manufacturing Co.}{Your City, Country}
+\resumeItemListStart
+\resumeItem{Prepared bank reconciliations for 2 EGP and USD accounts over 3 month-ends, clearing 28 open items.}
+\resumeItem{Matched 120+ vendor invoices to purchase orders and receipts, flagging 15 price and quantity gaps.}
+\resumeItem{Rebuilt the weekly AP aging report in Power Query, cutting its refresh from about 3 hours to 30 minutes.}
+\resumeItemListEnd
+\resumeSubheading{Audit Trainee (Part-Time)}{Jan 2026 -- Apr 2026}{Example Audit Partners}{Your City, Country}
+\resumeItemListStart
+\resumeItem{Vouched a sample of 130 expense entries to invoices for 2 clients, logging 9 missing approvals.}
+\resumeItem{Checked 85 fixed-asset tags against the register during a site count and updated the working papers.}
+\resumeItemListEnd
+\resumeSubheading{Retail Banking Summer Intern}{Jul 2025 -- Aug 2025}{Example Bank}{Your City, Country}
+\resumeItemListStart
+\resumeItem{Reviewed 90+ account-opening KYC files with the branch team, chasing 20 missing customer documents.}
+\resumeItem{Compared 6 savings and payroll products in one Excel sheet that tellers used to answer common questions.}
+\resumeItemListEnd
+\resumeSubHeadingListEnd
+%----------- PROJECTS & CASE COMPETITIONS: tools in the heading, link to the file -----------
+\section{Projects \& Case Competitions}
+\resumeSubHeadingListStart
+% To add a project: copy from \resumeProjectHeading to \resumeItemListEnd and paste it below.
+\resumeProjectHeading{\textbf{Retail Sales \& Margin Dashboard} $|$ \emph{Excel, Power Query, Power BI, DAX} $|$ \href{https://yourname.dev/sales-dashboard}{Dashboard}}{May 2026 -- Jun 2026}
+\resumeItemListStart
+\resumeItem{Merged 12 monthly sales sheets for 5 stores into one Power Query model with a clean product list.}
+\resumeItem{Wrote 8 DAX measures for gross margin by store and category, highlighting 3 loss-making products.}
+\resumeItemListEnd
+\resumeProjectHeading{\textbf{Equity Valuation Case Competition} $|$ \emph{Excel, DCF, Comparables} $|$ \href{https://yourname.dev/valuation-case}{Report}}{Feb 2026 -- Mar 2026}
+\resumeItemListStart
+\resumeItem{Built a 5-year DCF and trading-comps model for a listed consumer company with 4 sensitivity cases.}
+\resumeItem{Presented the buy recommendation with a 4-person team to alumni judges, placing 2nd of 14 teams.}
+\resumeItemListEnd
+\resumeSubHeadingListEnd
+%----------- LEADERSHIP & ACTIVITIES: clubs, teaching, volunteering, competitions -----------
+\section{Leadership \& Activities}
+\resumeSubHeadingListStart
+\resumeSubheading{Head of Research}{Oct 2025 -- May 2026}{Example University Finance Club}{Your City, Country}
+\resumeItemListStart
+\resumeItem{Led 4 students in writing 6 one-page equity briefs, shared with 150+ club members each semester.}
+\resumeItemListEnd
+\resumeSubheading{Treasurer}{Sep 2025 -- Apr 2026}{Example Student Volunteering Team}{Your City, Country}
+\resumeItemListStart
+\resumeItem{Tracked a 60,000 EGP activities budget across 45 receipts, closing the year with a fully matched ledger.}
+\resumeItemListEnd
+\resumeSubHeadingListEnd
+%----------- SKILLS: 4 grouped lines, most relevant first -----------
+\section{Skills}
+\begin{itemize}[leftmargin=0.15in,label={}]
+\small\item{\textbf{Accounting \& Finance:} Journal Entries, Bank Reconciliation, AP/AR, Month-End Close, VAT \& E-Invoicing, IFRS \\
+\textbf{Data \& Reporting:} Excel (XLOOKUP, Pivot Tables, Power Query), Power BI, DAX, SQL Basics \\
+\textbf{Systems:} SAP (FI Basics), Odoo Accounting, Microsoft 365 \\
+\textbf{Languages:} Arabic (Native), English (Fluent), French (Basic)}
+\end{itemize}
+%----------- CERTIFICATIONS: one line, separated by semicolons -----------
+\section{Certifications}
+\small FMVA, Corporate Finance Institute; CMA Part 1 (In Progress, Expected 2027); Google Data Analytics.
+\end{document}

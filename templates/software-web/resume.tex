@@ -1,0 +1,184 @@
+%-------------------------
+% Software Engineering (Web & Backend) Resume Template (one page, ATS-friendly)
+% For: Backend, full-stack and web developer roles, CS students and juniors
+% Author: Amr Fathy Elsherif
+% LinkedIn: https://www.linkedin.com/in/amrelsherif-eng
+% GitHub: https://github.com/amrelsherif-eng
+% GitHub Repository: https://github.com/amrelsherif-eng/ats-resume-templates
+% Original base template by: https://github.com/sb2nov/resume (MIT License)
+%-------------------------
+%-------------------------
+% HOW TO USE & EDIT THIS TEMPLATE:
+% 1. AI-assisted (fastest): copy this whole file into ChatGPT/Gemini/Claude and say:
+%    "Fill this LaTeX resume template with my info: [paste your CV data]. Keep it to one page."
+% 2. Manual editing: scroll down to \begin{document}. Each section is marked with a
+%    %----------- SECTION ----------- comment. Replace the text inside the curly braces {}.
+% 3. Do not edit the preamble (everything before \begin{document}) unless you know LaTeX.
+% 4. All data below is FICTIONAL sample data (Your Name, example.com).
+%-------------------------
+
+\documentclass[letterpaper,11pt]{article}
+
+\usepackage{latexsym}
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage{marvosym}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{verbatim}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage[english]{babel}
+\usepackage{tabularx}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{textcomp}
+\input{glyphtounicode}
+
+\pagestyle{fancy}
+\fancyhf{} % clear all header and footer fields
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% Adjust margins
+\addtolength{\oddsidemargin}{-0.5in}
+\addtolength{\evensidemargin}{-0.5in}
+\addtolength{\textwidth}{1in}
+\addtolength{\topmargin}{-.5in}
+\addtolength{\textheight}{1.0in}
+
+\urlstyle{same}
+
+\raggedbottom
+\raggedright
+\setlength{\tabcolsep}{0in}
+
+% Sections formatting
+\titleformat{\section}{
+  \vspace{-4pt}\scshape\raggedright\large
+}{}{0em}{}[\color{black}\titlerule \vspace{-5pt}]
+
+% Ensure that generate pdf is machine-readable/ATS parsable
+\pdfgentounicode=1
+
+%-------------------------
+% Custom commands
+\newcommand{\resumeItem}[1]{
+  \item\small{
+    {#1 \vspace{-2pt}}
+  }
+}
+
+\newcommand{\resumeSubheading}[4]{
+  \vspace{-2pt}\item
+    \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{#1} & #2 \\
+      \textit{\small#3} & \textit{\small #4} \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeProjectHeading}[2]{
+    \item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \small#1 & #2 \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.15in, label={}]}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+\newcommand{\resumeItemListStart}{\begin{itemize}}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
+
+%-------------------------------------------
+%%%%%%  RESUME STARTS HERE  %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\hypersetup{pdftitle={Your Name - Resume}, pdfauthor={Your Name}, pdfsubject={Resume}}
+\begin{document}
+%==========================================================================
+% QUICK GUIDE (read once, then delete this box if you like)
+%  \resumeSubheading{Title}{Dates}{Organization}{Location}  -> one job / degree
+%  \resumeProjectHeading{\textbf{Name} $|$ \emph{Tech, Tech} $|$ \href{https://...}{GitHub}}{Dates}
+%  \resumeItem{...}  -> one bullet. Copy the line to add a bullet, delete it to remove one.
+%  Bullets sit between \resumeItemListStart and \resumeItemListEnd.
+%  Entries sit between \resumeSubHeadingListStart and \resumeSubHeadingListEnd.
+%  Remove a whole section: delete from its %----- marker to the next one.
+%  Escape special characters: \%  \&  \$  \#  \_
+%  Dates: "Jun 2025 -- Aug 2025" (two hyphens make a dash), "Sep 2025 -- Present".
+%  Keep it to ONE page: if it spills over, shorten bullets before shrinking anything.
+%==========================================================================
+
+
+%----------- HEADING: name, target role, contact links -----------
+\begin{center}
+  \textbf{\Huge \scshape Your Name} \\ \vspace{2pt}  \small \textbf{Software Engineer (Backend \& Web)} \\ \vspace{4pt}
+  \small Your City, Country $|$ \href{tel:+15550000000}{+1 555 000 0000} $|$ \href{mailto:you@example.com}{you@example.com} \\ \vspace{1pt}
+  \small \href{https://linkedin.com/in/yourname}{linkedin.com/in/yourname} $|$ \href{https://github.com/yourname}{github.com/yourname} $|$ \href{https://yourname.dev}{yourname.dev}
+\end{center}
+%----------- EDUCATION: degree, GPA (if 3.0+), relevant coursework -----------
+\section{Education}
+\resumeSubHeadingListStart
+\resumeSubheading{Example University}{Expected Jun 2027}{B.Sc. in Computer Science $|$ GPA: 3.4/4.0}{Your City, Country}
+\resumeItemListStart
+\resumeItem{Coursework: Data Structures, Algorithms, Databases, Operating Systems, Software Engineering, Networks.}
+\resumeItemListEnd
+\resumeSubHeadingListEnd
+%----------- EXPERIENCE: newest first, 2-3 bullets each (action verb + task + result) -----------
+\section{Experience}
+\resumeSubHeadingListStart
+% To add a job: copy from \resumeSubheading to \resumeItemListEnd and paste it below.
+\resumeSubheading{Backend Engineering Intern}{Jun 2026 -- Aug 2026}{Acme SaaS}{Remote}
+\resumeItemListStart
+\resumeItem{Built 9 NestJS REST endpoints on PostgreSQL for subscription billing, replacing a manual spreadsheet step.}
+\resumeItem{Added retries and logging to the payment and SMS API calls, cutting failed notifications in staging by half.}
+\resumeItem{Profiled and indexed 3 slow billing queries, lowering the invoices API p95 from 2.1s to 0.8s in staging.}
+\resumeItemListEnd
+\resumeSubheading{Software Engineering Trainee}{Feb 2026 -- May 2026}{Example Tech Institute (Full-Stack Program)}{Your City, Country}
+\resumeItemListStart
+\resumeItem{Delivered a 4-person capstone booking API with 14 tested endpoints, presented to a panel of 3 engineers.}
+\resumeItem{Set up Docker Compose and a pull-request checklist, so new teammates ran the project in under 30 minutes.}
+\resumeItemListEnd
+\resumeSubheading{Freelance Web Developer}{Sep 2025 -- Jan 2026}{Self-employed}{Remote}
+\resumeItemListStart
+\resumeItem{Built a class booking site for a local fitness studio, now handling about 25 bookings a week online.}
+\resumeItem{Added an admin panel with role-based access and daily database backups, deployed on a 5 USD VPS.}
+\resumeItemListEnd
+\resumeSubHeadingListEnd
+%----------- PROJECTS: 2 projects, tech stack in the heading, link to the code -----------
+\section{Projects}
+\resumeSubHeadingListStart
+% To add a project: copy from \resumeProjectHeading to \resumeItemListEnd and paste it below.
+\resumeProjectHeading{\textbf{Clinic Appointment Platform} $|$ \emph{React, NestJS, PostgreSQL, Docker} $|$ \href{https://github.com/yourname/clinic-booking}{GitHub}}{Feb 2026 -- Apr 2026}
+\resumeItemListStart
+\resumeItem{Shipped booking, reminders and doctor schedules with JWT auth; deployed live with a seeded demo account.}
+\resumeItem{Wrote 24 Jest unit tests and a GitHub Actions pipeline that blocks merges when tests or lint fail.}
+\resumeItemListEnd
+\resumeProjectHeading{\textbf{URL Shortener API} $|$ \emph{Node.js, Redis, PostgreSQL, k6} $|$ \href{https://github.com/yourname/url-shortener}{GitHub}}{Nov 2025 -- Jan 2026}
+\resumeItemListStart
+\resumeItem{Added Redis caching and per-IP rate limiting at 60 requests per minute, documented with Swagger.}
+\resumeItem{Load-tested with k6 at 200 virtual users, keeping median latency under 45 ms on a single small instance.}
+\resumeItemListEnd
+\resumeSubHeadingListEnd
+%----------- LEADERSHIP & ACTIVITIES: clubs, teaching, volunteering, competitions -----------
+\section{Leadership \& Activities}
+\resumeSubHeadingListStart
+\resumeSubheading{Technical Workshop Lead}{Oct 2025 -- May 2026}{Example University Developer Club}{Your City, Country}
+\resumeItemListStart
+\resumeItem{Ran 4 hands-on Git and REST API workshops for 35 students, with shared starter repos and exercises.}
+\resumeItemListEnd
+\resumeSubheading{Competitive Programming Team Member}{Oct 2025 -- Dec 2025}{Example Collegiate Programming Contest}{Your City, Country}
+\resumeItemListStart
+\resumeItem{Solved 6 problems with a 3-person team in the regional round, placing 14th of 60 teams.}
+\resumeItemListEnd
+\resumeSubHeadingListEnd
+%----------- SKILLS: 4 grouped lines, most relevant first -----------
+\section{Skills}
+\begin{itemize}[leftmargin=0.15in,label={}]
+\small\item{\textbf{Languages:} TypeScript, JavaScript, Python, SQL, C++ \\
+\textbf{Backend \& Databases:} Node.js, NestJS, Express, FastAPI, PostgreSQL, Redis, REST APIs, JWT \\
+\textbf{Frontend:} React, Next.js, HTML, CSS, Tailwind CSS \\
+\textbf{DevOps \& Tools:} Docker, Git, GitHub Actions, Linux, Nginx, Postman, Swagger/OpenAPI}
+\end{itemize}
+%----------- CERTIFICATIONS: one line, separated by semicolons -----------
+\section{Certifications}
+\small AWS Certified Cloud Practitioner; Meta Back-End Developer Professional Certificate (In Progress).
+\end{document}
