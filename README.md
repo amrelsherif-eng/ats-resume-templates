@@ -80,7 +80,7 @@ Choose the template that matches the job you want: three engineering tracks, sof
 
 <img src="templates/software-web/preview.png" width="260" alt="Software Engineering template preview">
 
-[.tex](templates/software-web/resume.tex) · [PDF](templates/software-web/resume.pdf) · [Open in Overleaf](https://www.overleaf.com/docs?snip_uri=https://raw.githubusercontent.com/amrelsherif-eng/ats-resume-templates/main/templates/software-web/resume.tex)
+[.tex](templates/software-web/resume.tex) · [PDF](templates/software-web/resume.pdf) · [Overleaf](https://www.overleaf.com/project/6ae24cbbb91643c3433bdf53/share#5c212b281201e2cd4d1433f0877a918fec537672141ba0e4)
 
 </td>
     <td align="center" valign="top" width="33%">
@@ -91,7 +91,7 @@ Choose the template that matches the job you want: three engineering tracks, sof
 
 <img src="templates/business-finance/preview.png" width="260" alt="Business & Finance template preview">
 
-[.tex](templates/business-finance/resume.tex) · [PDF](templates/business-finance/resume.pdf) · [Open in Overleaf](https://www.overleaf.com/docs?snip_uri=https://raw.githubusercontent.com/amrelsherif-eng/ats-resume-templates/main/templates/business-finance/resume.tex)
+[.tex](templates/business-finance/resume.tex) · [PDF](templates/business-finance/resume.pdf) · [Overleaf](https://www.overleaf.com/project/6ae24d2b537127bac7e70376/share#5cc2e5131e359736c6fb784a325e766dd439be52c846f976)
 
 </td>
     <td align="center" valign="top" width="33%">
@@ -112,7 +112,7 @@ Missing your track? [Open an issue](https://github.com/amrelsherif-eng/ats-resum
 You can create an editable copy and download your finished PDF directly in your web browser.
 
 1. **Pick** the template that matches the job you want ([see above](#-pick-your-template)).
-2. **Open it in Overleaf** (free account required). Read-only links: click **`File` → `Make a copy`**. "Open in Overleaf" links: the copy is created for you.
+2. **Open it in Overleaf** and click **`File` → `Make a copy`** (free account required).
 3. **Replace the sample text** with your own details, or let an AI fill it for you ([prompt below](#-let-ai-fill-it-in)), then click **Recompile** and download your PDF.
 
 > All five templates contain **fictional sample data** ("Your Name", example.com). Nothing in them is a real person's CV.
@@ -132,8 +132,8 @@ You can create an editable copy and download your finished PDF directly in your 
    - [Network & Cloud on Overleaf](https://www.overleaf.com/read/wxvvcdjzxnng#d23995)
    - [Embedded & ECE on Overleaf](https://www.overleaf.com/read/rjnzhhzrhffz#dd0591)
    - [Mobile Apps on Overleaf](https://www.overleaf.com/read/ytqxjshntmfb#335363)
-   - [Software Engineering in Overleaf](https://www.overleaf.com/docs?snip_uri=https://raw.githubusercontent.com/amrelsherif-eng/ats-resume-templates/main/templates/software-web/resume.tex) (opens as your own copy, skip to step 5)
-   - [Business & Finance in Overleaf](https://www.overleaf.com/docs?snip_uri=https://raw.githubusercontent.com/amrelsherif-eng/ats-resume-templates/main/templates/business-finance/resume.tex) (opens as your own copy, skip to step 5)
+   - [Software Engineering on Overleaf](https://www.overleaf.com/project/6ae24cbbb91643c3433bdf53/share#5c212b281201e2cd4d1433f0877a918fec537672141ba0e4)
+   - [Business & Finance on Overleaf](https://www.overleaf.com/project/6ae24d2b537127bac7e70376/share#5cc2e5131e359736c6fb784a325e766dd439be52c846f976)
 2. In the **top-left menu bar**, click **`File`**.
 3. Select **`Make a copy`** from the dropdown.
 4. A **"Copy project"** dialog will appear — rename the project if you like, then click the green **`Copy`** button.
@@ -495,7 +495,7 @@ If you commit your resume to a public GitHub repository, replace your phone numb
 
 Release history and template improvements across versions.
 
-- **v2.1 (Oct 2026):** Two new templates: Software Engineering (Web & Backend) and Business & Finance for Faculty of Commerce students. One-click "Open in Overleaf" links. Mobile Apps sample filled to a full page.
+- **v2.1 (Oct 2026):** Two new templates: Software Engineering (Web & Backend) and Business & Finance for Faculty of Commerce students. Overleaf links for both. Mobile Apps sample filled to a full page.
 - **v2.0 (Oct 2026):** Three role-focused templates, inline quick-guide comments, Leadership & Activities section, GitHub Actions CI build checks, and rewritten documentation.
 - **v1.0 (May 2026):** First public release of the single template with Overleaf integration, GitHub repository, and AI prompt.
 
