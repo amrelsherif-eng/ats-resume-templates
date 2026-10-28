@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; worker-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; media-src 'self'; connect-src 'self'; worker-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>ATS Resume Templates</title>
 <meta name="description" content="Five free, one-page LaTeX resume templates, checked automatically. Edit with AI, on Overleaf, or locally, and check your own PDF in the browser.">
@@ -23,7 +23,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;700&display=swap">
 <link rel="stylesheet" href="assets/styles.css">
-<link rel="preload" as="image" href="templates/software-web/preview-640.webp" type="image/webp">
 <script src="assets/i18n.js" defer></script>
 <script src="assets/app.js" defer></script>
 <script src="assets/checker.js" type="module"></script>
@@ -76,6 +75,17 @@
       <button class="chip" type="button" aria-pressed="false" data-f="biz" data-i="f.biz">Business</button>
     </div>
     <div class="grid" id="grid"></div>
+  </div>
+</section>
+
+<section id="video" aria-labelledby="vid-h" hidden>
+  <div class="wrap">
+    <div class="kicker" data-i="vid.kicker">Watch</div>
+    <h2 id="vid-h" data-i="vid.title">See it in one minute</h2>
+    <p class="sub" data-i="vid.sub">Pick a template, edit it three ways, and check the result.</p>
+    <div class="video-frame">
+      <video id="demo-video" controls playsinline preload="none"></video>
+    </div>
   </div>
 </section>
 
@@ -160,12 +170,22 @@ docker run --rm -v "$PWD":/work -w /work texlive/texlive:latest latexmk -pdf res
     <h2 id="chk-h" data-i="chk.title">Check your own CV in seconds</h2>
     <p class="sub" data-i="chk.sub">Drop any resume PDF. We read it the way an ATS does and show what it sees.</p>
     <div class="checker">
+      <div class="chk-in">
+      <fieldset class="levels" id="chk-level">
+        <legend data-i="chk.level">Your experience</legend>
+        <label><input type="radio" name="lvl" value="student" checked><span data-i="chk.level.student">Student / fresh grad</span></label>
+        <label><input type="radio" name="lvl" value="junior"><span data-i="chk.level.junior">1–2 years</span></label>
+        <label><input type="radio" name="lvl" value="mid"><span data-i="chk.level.mid">3–9 years</span></label>
+        <label><input type="radio" name="lvl" value="senior"><span data-i="chk.level.senior">10+ years</span></label>
+        <label><input type="radio" name="lvl" value="academic"><span data-i="chk.level.academic">Academic CV</span></label>
+      </fieldset>
       <label class="drop" id="chk-drop" for="chk-file" tabindex="0">
         <input type="file" id="chk-file" accept="application/pdf,.pdf">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4m0 0-4 4m4-4 4 4M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
         <span class="drop-t" data-i="chk.drop">Drop your PDF here or click to choose</span>
         <span class="drop-s" data-i="chk.private">Your file stays on your device. Nothing is uploaded.</span>
       </label>
+      </div>
       <div id="chk-out" class="chk-out" aria-live="polite"></div>
     </div>
 

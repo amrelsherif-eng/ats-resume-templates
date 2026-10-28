@@ -1,247 +1,234 @@
 /**
- * ATS Resume Checker — client-side PDF inspection using self-hosted pdf.js.
- * Strictly in-browser: files never leave the client.
- * Drafted by Gemini 3.8 Flash from a written spec; reviewed and adjusted.
+ * ATS check UI: reads a resume PDF in the browser (the file never leaves the device),
+ * runs the extraction, layout and content checks, and renders a scored report.
+ * Modules in ./ats/ were drafted by Codex and Gemini from written specs and reviewed.
  */
+import { extract } from './ats/extract.js';
+import { layoutIssues, I18N_EN as LAYOUT_EN } from './ats/layout.js';
+import { contentIssues, I18N_EN as RULES_EN } from './ats/rules.js';
+import { CHECK_AR } from './ats/i18n-ar.js';
 
-const dropZone = document.getElementById('chk-drop');
-const fileInput = document.getElementById('chk-file');
-const outEl = document.getElementById('chk-out');
-
-let pdfjsLib = null;
-let lastState = null;
-
-const SECTION_DEFS = [
-  // Headings are matched at the start of a line, so body text like "5 years of experience" does not count.
-  { name: 'Education', re: /^\s*education\b/im, expected: true },
-  { name: 'Experience', re: /^\s*(?:work\s+|professional\s+)?experience\b/im, expected: true },
-  { name: 'Skills', re: /^\s*(?:technical\s+)?skills\b/im, expected: true },
-  { name: 'Projects', re: /^\s*projects\b/im, expected: false },
-  { name: 'Certifications', re: /^\s*certifications?\b/im, expected: false }
+const MAX_BYTES = 25 * 1024 * 1024;
+const CATS = [
+  { id: 'parse', weight: 0.4 },
+  { id: 'content', weight: 0.35 },
+  { id: 'contact', weight: 0.25 }
 ];
+const LEVEL_ORDER = { fail: 0, warn: 1, info: 2, ok: 3 };
+const CHECK_EN = { ...LAYOUT_EN, ...RULES_EN };
 
-function t(key, vars = {}) {
-  let str = (typeof window.i18nT === 'function' ? window.i18nT(key) : '') || key;
-  for (const [k, v] of Object.entries(vars)) {
-    str = str.replaceAll(`{${k}}`, v);
-  }
-  return str;
+const drop = document.getElementById('chk-drop');
+const input = document.getElementById('chk-file');
+const out = document.getElementById('chk-out');
+const levels = document.getElementById('chk-level');
+
+let pdfjs = null;
+let lastDoc = null;
+let lastError = null;
+let level = 'student';
+
+/** UI strings come from the page dictionary; check messages from the module dictionaries. */
+function ui(key, vars) { return fill((window.i18nT && window.i18nT(key)) || key, vars); }
+function msg(key, vars) {
+  const ar = document.documentElement.lang === 'ar';
+  return fill((ar && CHECK_AR[key]) || CHECK_EN[key] || key, vars);
+}
+function fill(s, vars = {}) {
+  return String(s).replace(/\{(\w+)\}/g, (m, k) => (vars[k] ?? m));
 }
 
-async function getPdfJs() {
-  if (!pdfjsLib) {
-    const pdfjs = await import('./vendor/pdfjs/pdf.min.mjs');
-    pdfjs.GlobalWorkerOptions.workerSrc = new URL(
-      './vendor/pdfjs/pdf.worker.min.mjs',
-      import.meta.url
-    ).href;
-    pdfjsLib = pdfjs;
-  }
-  return pdfjsLib;
+function el(tag, cls, text) {
+  const n = document.createElement(tag);
+  if (cls) n.className = cls;
+  if (text !== undefined) n.textContent = text;
+  return n;
 }
 
-function evaluateResume(file, numPages, text) {
-  const checks = [];
-
-  // 1. Pages
-  if (numPages === 1) {
-    checks.push({ status: 'ok', key: 'chk.pages.ok', vars: { n: numPages } });
-  } else if (numPages === 2) {
-    checks.push({ status: 'warn', key: 'chk.pages.warn', vars: { n: numPages } });
-  } else {
-    checks.push({ status: 'fail', key: 'chk.pages.fail', vars: { n: numPages } });
+async function loadPdfJs() {
+  if (!pdfjs) {
+    pdfjs = await import('./vendor/pdfjs/pdf.min.mjs');
+    pdfjs.GlobalWorkerOptions.workerSrc = new URL('./vendor/pdfjs/pdf.worker.min.mjs', import.meta.url).href;
   }
-
-  // 2. Words
-  const words = (text.match(/[\p{L}\p{N}][\p{L}\p{N}'’.-]*/gu) || []).length;
-  if (words < 80) {
-    checks.push({ status: 'fail', key: 'chk.words.low', vars: { n: words } });
-  } else if (words > 900) {
-    checks.push({ status: 'warn', key: 'chk.words.high', vars: { n: words } });
-  } else {
-    checks.push({ status: 'ok', key: 'chk.words.ok', vars: { n: words } });
-  }
-
-  // 3. Contact details
-  const hasEmail = /[\w.+-]+@[\w-]+\.[\w.-]+/.test(text);
-  checks.push(hasEmail ? { status: 'ok', key: 'chk.email.ok' } : { status: 'warn', key: 'chk.email.miss' });
-
-  const hasPhone = /\+?\d[\d\s().-]{7,}\d/.test(text);
-  checks.push(hasPhone ? { status: 'ok', key: 'chk.phone.ok' } : { status: 'warn', key: 'chk.phone.miss' });
-
-  const hasLi = /linkedin\.com\/in\//i.test(text);
-  checks.push(hasLi ? { status: 'ok', key: 'chk.li.ok' } : { status: 'warn', key: 'chk.li.miss' });
-
-  // 4. Headings
-  const foundSecs = SECTION_DEFS.filter(s => s.re.test(text)).map(s => s.name);
-  const missingExp = SECTION_DEFS.filter(s => s.expected && !s.re.test(text)).map(s => s.name);
-  if (missingExp.length > 0) {
-    checks.push({ status: 'warn', key: 'chk.sec.miss', vars: { list: missingExp.join(', ') } });
-  } else {
-    checks.push({ status: 'ok', key: 'chk.sec.ok', vars: { list: foundSecs.join(', ') } });
-  }
-
-  // 5. Garbled text
-  const garbledCount = (text.match(/\(cid:|\uFFFD/g) || []).length;
-  checks.push(
-    garbledCount > 3 ? { status: 'fail', key: 'chk.garble.fail' } : { status: 'ok', key: 'chk.garble.ok' }
-  );
-
-  // 6. File size
-  const sizeMB = (file.size / (1024 * 1024)).toFixed(1);
-  if (file.size > 2 * 1024 * 1024) {
-    checks.push({ status: 'warn', key: 'chk.size.warn', vars: { n: sizeMB } });
-  } else {
-    checks.push({ status: 'ok', key: 'chk.size.ok', vars: { n: sizeMB } });
-  }
-
-  return { type: 'result', checks, text };
+  return pdfjs;
 }
 
-function render(state) {
-  if (!outEl || !state) return;
+/** 100 minus weighted penalties, per category, then a weighted overall score. */
+function score(issues) {
+  const per = {};
+  for (const c of CATS) {
+    const list = issues.filter(i => i.cat === c.id);
+    const max = list.reduce((s, i) => s + i.weight, 0) || 1;
+    const lost = list.reduce((s, i) => s + i.weight * (i.level === 'fail' ? 1 : i.level === 'warn' ? 0.5 : 0), 0);
+    per[c.id] = Math.round(100 * (1 - lost / max));
+  }
+  const overall = Math.round(CATS.reduce((s, c) => s + per[c.id] * c.weight, 0));
+  // A resume an ATS cannot read at all should never look "good".
+  const unreadable = issues.some(i => i.id === 'selectable-text' && i.level === 'fail');
+  return { per, overall: unreadable ? Math.min(overall, 25) : overall };
+}
 
-  if (state.type === 'error') {
-    const ul = document.createElement('ul');
-    ul.className = 'chk-list';
-    const li = document.createElement('li');
-    li.className = 'fail';
-    li.textContent = t(state.key);
-    ul.appendChild(li);
-    outEl.replaceChildren(ul);
+function band(n) { return n >= 85 ? 'great' : n >= 70 ? 'good' : n >= 50 ? 'fair' : 'poor'; }
+
+function ring(value) {
+  const NS = 'http://www.w3.org/2000/svg';
+  const svg = document.createElementNS(NS, 'svg');
+  svg.setAttribute('viewBox', '0 0 120 120');
+  svg.setAttribute('class', 'ring ' + band(value));
+  svg.setAttribute('role', 'img');
+  svg.setAttribute('aria-label', ui('chk.score.aria', { n: value }));
+  const r = 52, c = 2 * Math.PI * r;
+  for (const [cls, dash] of [['track', c], ['bar', c * value / 100]]) {
+    const circle = document.createElementNS(NS, 'circle');
+    circle.setAttribute('cx', '60'); circle.setAttribute('cy', '60'); circle.setAttribute('r', String(r));
+    circle.setAttribute('class', cls);
+    circle.setAttribute('stroke-dasharray', `${dash} ${c}`);
+    svg.append(circle);
+  }
+  const t = document.createElementNS(NS, 'text');
+  t.setAttribute('x', '60'); t.setAttribute('y', '60'); t.setAttribute('class', 'ring-n');
+  t.textContent = String(value);
+  svg.append(t);
+  return svg;
+}
+
+function issueRow(i) {
+  const d = el('details', 'issue ' + i.level);
+  const s = el('summary');
+  s.append(el('span', 'dot'), el('span', 'issue-t', msg(i.key, i.vars)));
+  d.append(s);
+  const body = el('div', 'issue-b');
+  if (i.fix) body.append(el('p', 'issue-fix', msg(i.fix, i.vars)));
+  if (i.examples?.length) {
+    body.append(el('p', 'issue-ex-h', ui('chk.examples')));
+    const ul = el('ul', 'issue-ex');
+    for (const e of i.examples) ul.append(el('li', '', e)); // plain text from the file: textContent only
+    body.append(ul);
+  }
+  if (body.childNodes.length) d.append(body); else d.classList.add('flat');
+  return d;
+}
+
+function aiPrompt(issues, doc) {
+  const problems = issues.filter(i => i.level === 'fail' || i.level === 'warn')
+    .map(i => `- ${CHECK_EN[i.key] ? fill(CHECK_EN[i.key], i.vars) : i.key}${i.examples?.length ? ` (e.g. "${i.examples[0]}")` : ''}`);
+  return [
+    'Improve my resume text below. Keep it truthful: do not invent numbers, tools or results; ask me for any missing numbers.',
+    'Start every bullet with a strong action verb, add measurable results where I can provide them, keep it to the right length for my experience.',
+    'An ATS check found these issues:',
+    ...(problems.length ? problems : ['- (no major issues; polish wording only)']),
+    '',
+    'Return the improved bullets section by section.',
+    '',
+    '--- MY RESUME (extracted text) ---',
+    doc.text.slice(0, 12000)
+  ].join('\n');
+}
+
+function render() {
+  if (lastError) {
+    const p = el('p', 'chk-error', ui(lastError));
+    out.replaceChildren(p);
     return;
   }
+  if (!lastDoc) return;
+  const doc = lastDoc;
+  const issues = [...layoutIssues(doc, { level }), ...contentIssues(doc, { level })]
+    .sort((a, b) => LEVEL_ORDER[a.level] - LEVEL_ORDER[b.level] || b.weight - a.weight);
+  const { per, overall } = score(issues);
 
-  const passed = state.checks.filter(c => c.status === 'ok').length;
-  const total = state.checks.length;
-
-  const scoreEl = document.createElement('p');
-  scoreEl.className = 'chk-score';
-  scoreEl.textContent = t('chk.score', { n: passed, t: total });
-
-  const ul = document.createElement('ul');
-  ul.className = 'chk-list';
-  for (const c of state.checks) {
-    const li = document.createElement('li');
-    li.className = c.status;
-    li.textContent = t(c.key, c.vars);
-    ul.appendChild(li);
+  const head = el('div', 'chk-head');
+  const summary = el('div', 'chk-sum');
+  summary.append(el('p', 'chk-verdict', ui('chk.band.' + band(overall))));
+  summary.append(el('p', 'chk-file', `${doc.fileName} · ${doc.pages} ${ui('chk.pagesWord')}`));
+  const bars = el('div', 'bars');
+  for (const c of CATS) {
+    const row = el('div', 'barrow');
+    row.append(el('span', 'bar-l', ui('chk.cat.' + c.id)));
+    const track = el('span', 'bar-t');
+    const fillEl = el('span', 'bar-f ' + band(per[c.id]));
+    fillEl.style.setProperty('--w', per[c.id] + '%');
+    track.append(fillEl);
+    row.append(track, el('span', 'bar-n', String(per[c.id])));
+    bars.append(row);
   }
+  summary.append(bars);
+  head.append(ring(overall), summary);
 
-  const details = document.createElement('details');
-  details.className = 'chk-text';
-  const summary = document.createElement('summary');
-  summary.textContent = t('chk.preview');
-  const pre = document.createElement('pre');
-  pre.textContent = state.text.slice(0, 3000);
-  details.append(summary, pre);
+  const problems = issues.filter(i => i.level !== 'ok');
+  const passed = issues.filter(i => i.level === 'ok');
+  const list = el('div', 'issues');
+  list.append(el('h3', 'issues-h', problems.length ? ui('chk.toFix', { n: problems.length }) : ui('chk.allGood')));
+  for (const i of problems) list.append(issueRow(i));
 
-  const priv = document.createElement('p');
-  priv.className = 'chk-private';
-  priv.textContent = t('chk.private');
+  const ok = el('details', 'passed');
+  ok.append(el('summary', '', ui('chk.passed', { n: passed.length })));
+  for (const i of passed) ok.append(issueRow(i));
 
-  outEl.replaceChildren(scoreEl, ul, details, priv);
+  const tools = el('div', 'chk-tools');
+  const aiBtn = el('button', 'btn sm', ui('chk.ai'));
+  aiBtn.type = 'button';
+  aiBtn.addEventListener('click', async () => {
+    let done = false;
+    try { await navigator.clipboard.writeText(aiPrompt(issues, doc)); done = true; } catch { done = false; }
+    aiBtn.textContent = done ? ui('copied') : ui('copy.fail');
+    setTimeout(() => { aiBtn.textContent = ui('chk.ai'); }, 1800);
+  });
+  tools.append(aiBtn, el('span', 'chk-ai-note', ui('chk.ai.note')));
+
+  const text = el('details', 'chk-text');
+  text.append(el('summary', '', ui('chk.preview')));
+  text.append(el('pre', '', doc.streamText.slice(0, 6000)));
+
+  out.replaceChildren(head, list, ok, tools, text, el('p', 'chk-private', ui('chk.private')));
 }
 
-async function handleFile(file) {
+async function handle(file) {
   if (!file) return;
-
-  if (file.size > 25 * 1024 * 1024) {
-    lastState = { type: 'error', key: 'chk.tooBig' };
-    render(lastState);
-    return;
-  }
-
-  if (fileInput) fileInput.disabled = true;
-
-  if (outEl) {
-    const loading = document.createElement('p');
-    loading.className = 'chk-reading';
-    loading.textContent = t('chk.reading');
-    outEl.replaceChildren(loading);
-  }
-
+  lastError = null;
+  if (file.size > MAX_BYTES) { lastError = 'chk.tooBig'; lastDoc = null; render(); return; }
+  input.disabled = true;
+  out.replaceChildren(el('p', 'chk-reading', ui('chk.reading')));
   try {
-    const pdfjs = await getPdfJs();
-    const buffer = await file.arrayBuffer();
-    // isEvalSupported: false keeps pdf.js inside the page CSP (no eval).
-    const pdf = await pdfjs.getDocument({ data: buffer, isEvalSupported: false }).promise;
-
-    let fullText = '';
-    for (let i = 1; i <= pdf.numPages; i++) {
-      const page = await pdf.getPage(i);
-      const content = await page.getTextContent();
-      for (const item of content.items) {
-        if (typeof item.str === 'string') {
-          fullText += item.str + (item.hasEOL ? '\n' : ' ');
-        }
-      }
-    }
-
-    lastState = evaluateResume(file, pdf.numPages, fullText);
-    pdf.destroy();
-    render(lastState);
+    lastDoc = await extract(await loadPdfJs(), file);
   } catch {
-    lastState = { type: 'error', key: 'chk.error' };
-    render(lastState);
+    lastDoc = null;
+    lastError = 'chk.error';
   } finally {
-    if (fileInput) {
-      fileInput.disabled = false;
-      fileInput.value = '';
-    }
+    input.disabled = false;
+    input.value = '';
   }
+  render();
+  out.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'nearest' });
 }
 
 function init() {
-  if (!dropZone || !fileInput) return;
-
-  dropZone.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      fileInput.click();
-    }
+  if (!drop || !input || !out) return;
+  try { level = localStorage.getItem('chk-level') || level; } catch { /* storage blocked */ }
+  if (levels) {
+    const current = levels.querySelector(`input[value="${level}"]`);
+    if (current) current.checked = true;
+    levels.addEventListener('change', e => {
+      level = e.target.value;
+      try { localStorage.setItem('chk-level', level); } catch { /* ignore */ }
+      render();
+    });
+  }
+  input.addEventListener('change', () => handle(input.files?.[0]));
+  drop.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); input.click(); }
   });
-
-  fileInput.addEventListener('change', () => {
-    const file = fileInput.files?.[0];
-    if (file) handleFile(file);
+  let depth = 0;
+  drop.addEventListener('dragenter', e => { e.preventDefault(); depth += 1; drop.classList.add('drag'); });
+  drop.addEventListener('dragover', e => e.preventDefault());
+  drop.addEventListener('dragleave', () => { depth -= 1; if (depth <= 0) { depth = 0; drop.classList.remove('drag'); } });
+  drop.addEventListener('drop', e => {
+    e.preventDefault(); depth = 0; drop.classList.remove('drag');
+    handle(e.dataTransfer?.files?.[0]);
   });
-
-  let dragDepth = 0;
-  dropZone.addEventListener('dragenter', (e) => {
-    e.preventDefault();
-    dragDepth++;
-    dropZone.classList.add('drag');
-  });
-
-  dropZone.addEventListener('dragover', (e) => {
-    e.preventDefault();
-  });
-
-  dropZone.addEventListener('dragleave', (e) => {
-    e.preventDefault();
-    dragDepth--;
-    if (dragDepth <= 0) {
-      dragDepth = 0;
-      dropZone.classList.remove('drag');
-    }
-  });
-
-  dropZone.addEventListener('drop', (e) => {
-    e.preventDefault();
-    dragDepth = 0;
-    dropZone.classList.remove('drag');
-    const file = e.dataTransfer?.files?.[0];
-    if (file) handleFile(file);
-  });
-
-  // A file dropped outside the zone should not make the browser leave the page.
-  window.addEventListener('dragover', (e) => e.preventDefault());
-  window.addEventListener('drop', (e) => { if (!dropZone.contains(e.target)) e.preventDefault(); });
-
-  document.addEventListener('langchange', () => {
-    if (lastState) render(lastState);
-  });
+  // A file dropped outside the zone should not navigate away from the page.
+  window.addEventListener('dragover', e => e.preventDefault());
+  window.addEventListener('drop', e => { if (!drop.contains(e.target)) e.preventDefault(); });
+  document.addEventListener('langchange', render);
 }
 
 init();

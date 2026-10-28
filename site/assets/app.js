@@ -3,8 +3,10 @@
 
 const REPO = 'https://github.com/amrelsherif-eng/ats-resume-templates';
 const RAW = 'https://raw.githubusercontent.com/amrelsherif-eng/ats-resume-templates/main/templates';
-// Optional support link (Buy Me a Coffee, Ko-fi, ...). Leave empty to hide the button.
+// Optional support link (for example GitHub Sponsors). Leave empty to hide the button.
 const SUPPORT_URL = '';
+// Optional demo video, self-hosted under site/assets/video/. Leave src empty to hide the section.
+const VIDEO = { src: '', poster: '', captionsEn: '', captionsAr: '' };
 
 const TEMPLATES = [
   { id: 'software-web', group: 'sw', color: '#c084fc', skills: ['NestJS', 'PostgreSQL', 'Redis', 'Docker', 'React'],
@@ -206,6 +208,16 @@ function init() {
 
   const support = document.getElementById('support');
   if (SUPPORT_URL) { support.href = SUPPORT_URL; support.hidden = false; }
+
+  if (VIDEO.src) {
+    const video = document.getElementById('demo-video');
+    if (VIDEO.poster) video.poster = VIDEO.poster;
+    video.append(el('source', { src: VIDEO.src, type: 'video/mp4' }));
+    for (const [src, code, label] of [[VIDEO.captionsEn, 'en', 'English'], [VIDEO.captionsAr, 'ar', 'العربية']]) {
+      if (src) video.append(el('track', { kind: 'captions', src, srclang: code, label }));
+    }
+    document.getElementById('video').hidden = false;
+  }
 
   applyLang();
 }

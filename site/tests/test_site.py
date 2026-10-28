@@ -168,27 +168,52 @@ def upload(page, file_path):
     page.locator("#chk-file").set_input_files(str(file_path))
 
 
-def test_checker_template_pdf(page):
-    upload(page, ROOT / "templates/business-finance/resume.pdf")
-    expect(page.locator(".chk-score")).to_be_visible()
-    expect(page.locator("#chk-out li.ok").filter(has_text=re.compile("page", re.I))).to_be_visible()
-    expect(page.locator("#chk-out li.fail")).to_have_count(0)
-    expect(page.locator("#chk-out pre")).to_contain_text("Your Name")
+def score_of(page):
+    expect(page.locator("#chk-out .ring-n")).to_be_visible()
+    return int(page.locator("#chk-out .ring-n").text_content())
 
 
-def test_checker_two_pages(page, tmp_path):
+def make_pdf(path, pages, lines_per_page):
     import pymupdf
 
-    path = tmp_path / "two-pages.pdf"
     doc = pymupdf.open()
-    for _ in range(2):
+    for _ in range(pages):
         pdf_page = doc.new_page()
-        pdf_page.insert_text((72, 72), "Education Experience Skills " + "word " * 120)
+        for i, text in enumerate(lines_per_page):
+            pdf_page.insert_text((60, 60 + i * 16), text, fontsize=10)
     doc.save(path)
     doc.close()
+    return path
+
+
+GOOD_LINES = [
+    "Sara Ahmed", "sara@example.com | +20 100 000 0000 | Cairo, Egypt | linkedin.com/in/sara",
+    "Education", "B.Com, Example University, Jun 2026",
+    "Experience", "Finance Intern, Acme Co, Jun 2025 - Aug 2025",
+] + [f"- Reconciled {n} bank accounts each month and cleared {n + 3} open items before close" for n in range(2, 20)] + [
+    "Skills", "Excel, Power BI, SQL, SAP",
+]
+
+
+@pytest.mark.parametrize("template_id", TEMPLATE_IDS)
+def test_checker_scores_every_template_high(page, template_id):
+    upload(page, ROOT / f"templates/{template_id}/resume.pdf")
+    assert score_of(page) >= 90
+    expect(page.locator("#chk-out .issue.fail")).to_have_count(0)
+    page.locator("#chk-out details.chk-text").evaluate("d => d.open = true")
+    expect(page.locator("#chk-out .chk-text pre")).to_contain_text("Your Name")
+    assert_no_browser_errors(page)
+
+
+def test_checker_page_rule_follows_experience(page, tmp_path):
+    path = make_pdf(tmp_path / "two-pages.pdf", 2, GOOD_LINES)
     upload(page, path)
-    expect(page.locator(".chk-score")).to_be_visible()
-    expect(page.locator("#chk-out li.warn").filter(has_text=re.compile("2"))).to_be_visible()
+    score_of(page)
+    pages_row = page.locator("#chk-out .issue", has_text=re.compile(r"\b2 pages"))
+    expect(pages_row.first).to_have_class(re.compile(r"\bwarn\b"))
+    page.locator('#chk-level input[value="senior"]').check(force=True)
+    expect(page.locator("#chk-out .passed .issue.ok", has_text=re.compile(r"\b2 page"))).to_have_count(1)
+    page.locator('#chk-level input[value="student"]').check(force=True)
 
 
 def test_checker_scanned_like(page, tmp_path):
@@ -201,16 +226,61 @@ def test_checker_scanned_like(page, tmp_path):
     doc.save(path)
     doc.close()
     upload(page, path)
-    expect(page.locator(".chk-score")).to_be_visible()
-    expect(page.locator("#chk-out li.fail")).to_be_visible()
+    assert score_of(page) <= 25
+    expect(page.locator("#chk-out .issue.fail").first).to_be_visible()
+
+
+def test_checker_two_columns(page, tmp_path):
+    import pymupdf
+
+    path = tmp_path / "columns.pdf"
+    doc = pymupdf.open()
+    pdf_page = doc.new_page()
+    left = ["CONTACT", "sara@example.com", "+20 100 000 0000", "Cairo, Egypt", "SKILLS", "Python", "SQL", "Excel"] * 3
+    right = [f"- Built {n} Power BI dashboards for the regional sales team" for n in range(1, 25)]
+    for i, t in enumerate(left):
+        pdf_page.insert_text((40, 60 + i * 14), t, fontsize=9)
+    for i, t in enumerate(right):
+        pdf_page.insert_text((230, 60 + i * 14), t, fontsize=9)
+    doc.save(path)
+    doc.close()
+    upload(page, path)
+    score_of(page)
+    expect(page.locator("#chk-out .issue.warn", has_text=re.compile("column", re.I))).to_have_count(1)
+
+
+def test_checker_weak_content(page, tmp_path):
+    lines = ["Omar Hassan", "omar@example.com | +20 111 222 3333 | Giza, Egypt", "Experience"] + [
+        "- Responsible for helping users with computer problems in the office every day" for _ in range(8)
+    ] + ["- I am a hard-working team player", "Education", "BSc, Example University", "Skills", "Windows"]
+    upload(page, make_pdf(tmp_path / "weak.pdf", 1, lines))
+    score_of(page)
+    for pattern in ["passive openers", "pronouns", "buzzwords"]:
+        expect(page.locator("#chk-out .issue", has_text=re.compile(pattern, re.I)).first).to_be_visible()
+
+
+def test_checker_arabic_report(page):
+    page.locator("#lang").click()
+    upload(page, ROOT / "templates/network-cloud/resume.pdf")
+    score_of(page)
+    assert re.search(r"[؀-ۿ]", page.locator("#chk-out .chk-verdict").text_content())
+    assert re.search(r"[؀-ۿ]", page.locator("#chk-out .passed .issue-t").first.text_content())
+
+
+def test_checker_ai_prompt(page):
+    page.context.grant_permissions(["clipboard-read", "clipboard-write"])
+    upload(page, ROOT / "templates/mobile-apps/resume.pdf")
+    score_of(page)
+    page.locator("#chk-out .chk-tools button").click()
+    page.wait_for_function("navigator.clipboard.readText().then(t => t.includes('MY RESUME'))")
 
 
 def test_checker_not_pdf(page, tmp_path):
     path = tmp_path / "not-really.pdf"
     path.write_text("this is plain text, not a PDF", encoding="utf-8")
     upload(page, path)
-    expect(page.locator("#chk-out li.fail")).to_be_visible()
-    assert not page._site_errors, "Uncaught browser errors: " + "\n".join(page._site_errors)
+    expect(page.locator("#chk-out .chk-error")).to_be_visible()
+    assert not [e for e in page._site_errors if "Invalid PDF" not in e], page._site_errors
 
 
 @pytest.mark.parametrize("lang", ["en", "ar"])

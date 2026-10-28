@@ -213,3 +213,61 @@ Object.assign(AR, {
   'ext.free': 'نسخة مجانية',
   'ext.note': 'على عكس الفاحص بالأعلى، هذه المواقع ترفع ملفك على خوادمها. يمكنك حذف رقم هاتفك قبل الرفع إن أردت.'
 });
+
+Object.assign(EN, {
+  'chk.level': 'Your experience',
+  'chk.level.student': 'Student / fresh grad',
+  'chk.level.junior': '1–2 years',
+  'chk.level.mid': '3–9 years',
+  'chk.level.senior': '10+ years',
+  'chk.level.academic': 'Academic CV',
+  'chk.score.aria': 'ATS readiness score {n} out of 100',
+  'chk.band.great': 'Excellent: ready for most ATS',
+  'chk.band.good': 'Good: a few fixes will help',
+  'chk.band.fair': 'Fair: fix the issues below',
+  'chk.band.poor': 'Needs work: an ATS may misread it',
+  'chk.pagesWord': 'page(s)',
+  'chk.cat.parse': 'ATS reading',
+  'chk.cat.content': 'Content',
+  'chk.cat.contact': 'Contact & sections',
+  'chk.toFix': '{n} things to improve',
+  'chk.allGood': 'Nothing to fix. Nice work.',
+  'chk.passed': '{n} checks passed',
+  'chk.examples': 'From your resume:',
+  'chk.ai': 'Copy a fix-it prompt for AI',
+  'chk.ai.note': 'Paste it into ChatGPT, Gemini or Claude with your free account.'
+});
+Object.assign(AR, {
+  'chk.level': 'مستوى خبرتك',
+  'chk.level.student': 'طالب / حديث التخرج',
+  'chk.level.junior': '1–2 سنة',
+  'chk.level.mid': '3–9 سنوات',
+  'chk.level.senior': '+10 سنوات',
+  'chk.level.academic': 'CV أكاديمي',
+  'chk.score.aria': 'درجة الجاهزية لأنظمة الـ ATS: {n} من 100',
+  'chk.band.great': 'ممتاز: جاهزة لأغلب أنظمة الـ ATS',
+  'chk.band.good': 'جيد: بعض التعديلات ستساعد',
+  'chk.band.fair': 'مقبول: أصلح الملاحظات بالأسفل',
+  'chk.band.poor': 'تحتاج عملاً: قد يقرؤها الـ ATS بشكل خاطئ',
+  'chk.pagesWord': 'صفحة',
+  'chk.cat.parse': 'قراءة الـ ATS',
+  'chk.cat.content': 'المحتوى',
+  'chk.cat.contact': 'التواصل والأقسام',
+  'chk.toFix': '{n} نقاط للتحسين',
+  'chk.allGood': 'لا يوجد ما يحتاج إصلاحاً. عمل رائع.',
+  'chk.passed': 'نجح {n} فحصاً',
+  'chk.examples': 'من سيرتك الذاتية:',
+  'chk.ai': 'انسخ Prompt للإصلاح بالـ AI',
+  'chk.ai.note': 'الصقه في ChatGPT أو Gemini أو Claude بحسابك المجاني.'
+});
+
+Object.assign(EN, {
+  'vid.kicker': 'Watch',
+  'vid.title': 'See it in one minute',
+  'vid.sub': 'Pick a template, edit it three ways, and check the result.'
+});
+Object.assign(AR, {
+  'vid.kicker': 'شاهد',
+  'vid.title': 'شاهدها في دقيقة واحدة',
+  'vid.sub': 'اختر نموذجاً، عدّله بثلاث طرق، وافحص النتيجة.'
+});
