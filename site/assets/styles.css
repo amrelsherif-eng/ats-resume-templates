@@ -254,3 +254,54 @@ html[dir=rtl] .issue-b{padding:0 42px 14px 14px}
 .video-frame video{width:100%;height:100%;display:block}
 .notfound{min-height:100vh;display:flex;align-items:center}
 .notfound h1{font-size:clamp(72px,14vw,140px);margin:8px 0}
+/* --- design pass --- */
+.navlinks{display:flex;gap:4px;list-style:none;margin:0;padding:0}
+.navlinks a{display:block;padding:8px 12px;border-radius:8px;color:var(--muted);text-decoration:none;font-size:15px;transition:color .2s,background .2s}
+.navlinks a:hover{color:var(--text);background:rgba(230,237,243,.05)}
+@media (max-width:900px){.navlinks{display:none}}
+.pill{display:inline-flex;align-items:center;gap:10px;padding:5px 14px 5px 5px;border-radius:999px;border:1px solid var(--line2);background:rgba(17,23,29,.7);color:var(--muted);font-size:13px;text-decoration:none;margin-bottom:18px;transition:border-color .2s}
+html[dir=rtl] .pill{padding:5px 5px 5px 14px}
+.pill:hover{border-color:var(--cyan)}
+.pill-tag{padding:2px 10px;border-radius:999px;background:rgba(0,240,255,.12);color:var(--cyan);font:500 12px var(--mono)}
+.pill.ok{margin:0;padding:4px 12px;border-color:rgba(63,185,80,.5);color:var(--green);font:500 12px var(--mono)}
+.fan .badge{position:absolute;z-index:6;padding:6px 12px;border-radius:999px;background:rgba(10,13,16,.9);border:1px solid var(--line2);font:500 12px var(--mono);color:var(--text);white-space:nowrap;box-shadow:0 10px 30px -10px rgba(0,0,0,.8);animation:float 6s ease-in-out infinite}
+.fan .badge b{color:var(--green);font-weight:500}
+.fan .b1{top:12%;inset-inline-start:2%}
+.fan .b2{top:44%;inset-inline-end:0;animation-delay:-2s}
+.fan .b3{bottom:22%;inset-inline-start:6%;animation-delay:-4s}
+@keyframes float{50%{transform:translateY(-8px)}}
+@media (max-width:600px){.fan .badge{display:none}}
+.trust{padding:8px 0 24px}
+.trust-list{list-style:none;margin:0;padding:18px;display:grid;grid-template-columns:repeat(4,1fr);gap:16px;border:1px solid var(--line);border-radius:var(--r);background:var(--card)}
+@media (max-width:900px){.trust-list{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:520px){.trust-list{grid-template-columns:1fr}}
+.trust-list li{display:flex;gap:12px;align-items:flex-start}
+.trust-list .ic{flex:none;width:28px;height:28px;border-radius:8px;display:grid;place-items:center;background:rgba(63,185,80,.12);color:var(--green);font-weight:700}
+.trust-list b{display:block;font-size:15px}
+.trust-list small{display:block;color:var(--muted);font-size:13px;margin-top:2px}
+.panel-bar{display:flex;align-items:center;gap:12px;padding:10px 16px;border:1px solid var(--line);border-bottom:0;border-radius:var(--r) var(--r) 0 0;background:#070a0d;color:var(--muted);font-size:13px}
+.panel-bar .pill{margin-inline-start:auto}
+@media (max-width:520px){.panel-bar .mono{display:none}}
+#check .checker{padding:22px;border:1px solid var(--line);border-radius:0 0 var(--r) var(--r);background:linear-gradient(180deg,rgba(17,23,29,.6),rgba(10,13,16,.6))}
+.chk-side{min-width:0}
+.chk-empty{display:flex;gap:22px;align-items:center;padding:20px 22px;border:1px dashed var(--line2);border-radius:var(--r)}
+@media (max-width:520px){.chk-empty{flex-direction:column;text-align:center}}
+.chk-empty .ring{width:96px;height:96px}
+.ring.idle .ring-n{fill:var(--muted)}
+.chk-side:has(.chk-out:not(:empty)) .chk-empty{display:none}
+.foot{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:28px;padding-bottom:28px}
+@media (max-width:900px){.foot{grid-template-columns:1fr 1fr}}
+@media (max-width:520px){.foot{grid-template-columns:1fr}}
+.foot-brand p{margin:10px 0 0;max-width:320px}
+.foot-col{display:flex;flex-direction:column;gap:8px}
+.foot-col h3{margin:0 0 4px;font:500 13px var(--mono);color:var(--text);text-transform:uppercase;letter-spacing:.06em}
+html[dir=rtl] .foot-col h3{letter-spacing:0;font-family:var(--sans)}
+.foot-col a{color:var(--muted);text-decoration:none}
+.foot-col a:hover{color:var(--text)}
+.foot-bottom{border-top:1px solid var(--line);padding-top:20px;display:block!important}
+footer .wrap.foot{display:grid}
+/* hidden must always win over component display rules (support button, video section) */
+[hidden]{display:none!important}
+/* footer navs are not the sticky top bar */
+footer nav{position:static;backdrop-filter:none;background:none;border:0;z-index:auto}
+@media (max-width:520px){.tab{padding:0 12px;font-size:14px}.tabs{gap:2px}}

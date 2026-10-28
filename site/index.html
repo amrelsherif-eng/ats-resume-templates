@@ -32,6 +32,12 @@
 <nav aria-label="Main">
   <div class="wrap">
     <a class="brand" href="#top"><span class="dollar">$</span> <span class="who">amrelsherif-eng /</span> <b>ats-resume-templates</b></a>
+    <ul class="navlinks">
+      <li><a href="#templates" data-i="nav.templates">Templates</a></li>
+      <li><a href="#edit" data-i="nav.edit">How to edit</a></li>
+      <li><a href="#check" data-i="nav.check">Check your CV</a></li>
+      <li><a href="#faq" data-i="nav.faq">FAQ</a></li>
+    </ul>
     <div class="navr">
       <button class="btn sm lang" id="lang" type="button" lang="ar" aria-label="عربي">عربي</button>
       <a class="btn sm" href="https://github.com/amrelsherif-eng/ats-resume-templates" target="_blank" rel="noopener">
@@ -46,6 +52,7 @@
 <header class="hero" id="top">
   <div class="wrap">
     <div>
+      <a class="pill" href="#templates"><span class="pill-tag">v2.1</span><span data-i="hero.pill">5 templates · checked on every change</span></a>
       <div class="cmd" aria-hidden="true"><span class="p">$</span> latexmk -pdf resume.tex<span class="caret"></span></div>
       <h1><span data-i="hero.t1">Your resume,</span><br><span class="accent" data-i="hero.t2">one page that gets read.</span></h1>
       <p class="lead" data-i="hero.lead">Five free LaTeX templates for students and early-career candidates.</p>
@@ -62,6 +69,17 @@
     <div class="fan" id="fan" aria-hidden="true"></div>
   </div>
 </header>
+
+<section class="trust" aria-label="Quality checks">
+  <div class="wrap">
+    <ul class="trust-list">
+      <li><span class="ic" aria-hidden="true">✓</span><span><b data-i="c1.t">Compiles cleanly</b><small data-i="c1.p">Built from source.</small></span></li>
+      <li><span class="ic" aria-hidden="true">✓</span><span><b data-i="c2.t">Exactly one page</b><small data-i="c2.p">Page count is checked.</small></span></li>
+      <li><span class="ic" aria-hidden="true">✓</span><span><b data-i="c3.t">Text extracts cleanly</b><small data-i="c3.p">Text is checked.</small></span></li>
+      <li><span class="ic" aria-hidden="true">✓</span><span><b data-i="trust.free">Free, MIT licensed</b><small data-i="trust.free.p">No sign-up, no watermark.</small></span></li>
+    </ul>
+  </div>
+</section>
 
 <section id="templates" aria-labelledby="tpl-h">
   <div class="wrap">
@@ -169,6 +187,11 @@ docker run --rm -v "$PWD":/work -w /work texlive/texlive:latest latexmk -pdf res
     <div class="kicker" data-i="chk.kicker">03 · Check</div>
     <h2 id="chk-h" data-i="chk.title">Check your own CV in seconds</h2>
     <p class="sub" data-i="chk.sub">Drop any resume PDF. We read it the way an ATS does and show what it sees.</p>
+    <div class="panel-bar">
+      <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span class="mono" data-i="chk.panel">ats-check</span>
+      <span class="pill ok" data-i="chk.badge">No upload · runs in your browser</span>
+    </div>
     <div class="checker">
       <div class="chk-in">
       <fieldset class="levels" id="chk-level">
@@ -186,7 +209,16 @@ docker run --rm -v "$PWD":/work -w /work texlive/texlive:latest latexmk -pdf res
         <span class="drop-s" data-i="chk.private">Your file stays on your device. Nothing is uploaded.</span>
       </label>
       </div>
-      <div id="chk-out" class="chk-out" aria-live="polite"></div>
+      <div class="chk-side">
+        <div class="chk-empty" id="chk-empty">
+          <svg viewBox="0 0 120 120" class="ring idle" aria-hidden="true"><circle cx="60" cy="60" r="52" class="track"/><text x="60" y="60" class="ring-n">–</text></svg>
+          <div>
+            <p class="chk-verdict" data-i="chk.empty.t">Your report appears here</p>
+            <p class="chk-file" data-i="chk.empty.p">Score out of 100, what to fix first, and the exact text an ATS reads.</p>
+          </div>
+        </div>
+        <div id="chk-out" class="chk-out" aria-live="polite"></div>
+      </div>
     </div>
 
     <h3 class="ext-h" data-i="ext.title">Want a match score against a job post?</h3>
@@ -201,22 +233,9 @@ docker run --rm -v "$PWD":/work -w /work texlive/texlive:latest latexmk -pdf res
   </div>
 </section>
 
-<section id="ats" class="tint" aria-labelledby="ats-h">
-  <div class="wrap">
-    <div class="kicker" data-i="ats.kicker">04 · Verified</div>
-    <h2 id="ats-h" data-i="ats.title">Checked automatically on every change</h2>
-    <p class="sub" data-i="ats.sub">Every template is compiled by GitHub Actions each time it changes.</p>
-    <div class="checks">
-      <div class="check"><div class="ic" aria-hidden="true">✓</div><h3 data-i="c1.t">Compiles cleanly</h3><p data-i="c1.p">Built from source.</p></div>
-      <div class="check"><div class="ic" aria-hidden="true">✓</div><h3 data-i="c2.t">Exactly one page</h3><p data-i="c2.p">Page count is checked.</p></div>
-      <div class="check"><div class="ic" aria-hidden="true">✓</div><h3 data-i="c3.t">Text extracts cleanly</h3><p data-i="c3.p">Text is extracted and checked.</p></div>
-    </div>
-  </div>
-</section>
-
 <section id="faq" aria-labelledby="faq-h">
   <div class="wrap narrow">
-    <div class="kicker" data-i="faq.kicker">05 · FAQ</div>
+    <div class="kicker" data-i="faq.kicker">04 · FAQ</div>
     <h2 id="faq-h" data-i="faq.title">Questions</h2>
     <details><summary data-i="q1">Is it really free?</summary><p data-i="a1">Yes.</p></details>
     <details><summary data-i="q2">Do I need to know LaTeX?</summary><p data-i="a2">No.</p></details>
@@ -245,10 +264,33 @@ docker run --rm -v "$PWD":/work -w /work texlive/texlive:latest latexmk -pdf res
 </main>
 
 <footer>
-  <div class="wrap">
-    <span data-i="foot.made">© 2026 Amr Elsherif · Free and open source (MIT)</span>
-    <span><a href="https://github.com/amrelsherif-eng/ats-resume-templates" target="_blank" rel="noopener">GitHub</a> · <a href="https://github.com/amrelsherif-eng/ats-resume-templates/issues/new" target="_blank" rel="noopener" data-i="foot.issue">Request a template</a></span>
+  <div class="wrap foot">
+    <div class="foot-brand">
+      <a class="brand" href="#top"><span class="dollar">$</span> <b>ats-resume-templates</b></a>
+      <p data-i="foot.tag">Free one-page resume templates and an ATS check that never uploads your file.</p>
+    </div>
+    <nav class="foot-col" aria-label="Templates">
+      <h3 data-i="foot.h.templates">Templates</h3>
+      <a href="#templates" data-i="software-web.n">Software Engineering</a>
+      <a href="#templates" data-i="business-finance.n">Business &amp; Finance</a>
+      <a href="#templates" data-i="network-cloud.n">Network &amp; Cloud</a>
+      <a href="#templates" data-i="embedded-ece.n">Embedded &amp; ECE</a>
+      <a href="#templates" data-i="mobile-apps.n">Mobile Apps</a>
+    </nav>
+    <nav class="foot-col" aria-label="Resources">
+      <h3 data-i="foot.h.res">Resources</h3>
+      <a href="#check" data-i="nav.check">Check your CV</a>
+      <a href="https://github.com/amrelsherif-eng/ats-resume-templates" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://github.com/amrelsherif-eng/ats-resume-templates/issues/new" target="_blank" rel="noopener" data-i="foot.issue">Request a template</a>
+    </nav>
+    <nav class="foot-col" aria-label="Author">
+      <h3 data-i="foot.h.author">Author</h3>
+      <a href="https://www.linkedin.com/in/amrelsherif-eng" target="_blank" rel="noopener me">LinkedIn</a>
+      <a href="https://github.com/amrelsherif-eng" target="_blank" rel="noopener me">GitHub</a>
+      <a href="https://amrelsherif-eng.vercel.app" target="_blank" rel="noopener me" data-i="au.portfolio">Portfolio</a>
+    </nav>
   </div>
+  <div class="wrap foot-bottom"><span data-i="foot.made">© 2026 Amr Elsherif · Free and open source (MIT)</span></div>
 </footer>
 <noscript><p class="nojs">Templates: <a href="https://github.com/amrelsherif-eng/ats-resume-templates">github.com/amrelsherif-eng/ats-resume-templates</a></p></noscript>
 </body>

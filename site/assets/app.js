@@ -151,7 +151,12 @@ function buildFan() {
     if (i === 2) page.append(el('div', { class: 'scan' }));
     fan.append(page);
   });
-  fan.append(el('div', { class: 'okpill', text: '✓ 1 page · text OK' }));
+  // Real results for these templates (see the checker and CI), not marketing numbers.
+  for (const [cls, mark, text] of [['b1', '✓', '1 page'], ['b2', '100', '/ 100 ATS check'], ['b3', '✓', 'text extracts cleanly']]) {
+    const b = el('div', { class: 'badge ' + cls });
+    b.append(el('b', { text: mark }), ' ' + text);
+    fan.append(b);
+  }
 }
 
 function init() {

@@ -343,3 +343,10 @@ def test_live_security_headers(page):
 def test_unknown_path_is_404(page, site_url):
     response = page.request.get(site_url + "/no-such-page-xyz")
     assert response.status == 404
+
+
+def test_unconfigured_features_stay_hidden(page):
+    # The support button and demo video show only when configured in app.js.
+    expect(page.locator("#support")).to_be_hidden()
+    expect(page.locator("#video")).to_be_hidden()
+    assert page.locator("footer nav").first.evaluate("n => getComputedStyle(n).position") == "static"
