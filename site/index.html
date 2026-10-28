@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; media-src 'self'; connect-src 'self'; worker-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title>ATS Resume Templates</title>
+<meta name="description" content="Five free, one-page LaTeX resume templates, checked automatically. Edit with AI, on Overleaf, or locally, and check your own PDF in the browser.">
+<meta name="author" content="Amr Elsherif">
+<meta name="theme-color" content="#0a0d10">
+<link rel="canonical" href="https://amrelsherif-eng.github.io/ats-resume-templates/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://amrelsherif-eng.github.io/ats-resume-templates/">
+<meta property="og:title" content="ATS Resume Templates">
+<meta property="og:description" content="Five free, one-page LaTeX resumes. Edit with AI, on Overleaf, or locally.">
+<meta property="og:image" content="https://amrelsherif-eng.github.io/ats-resume-templates/assets/social-preview.png">
+<meta property="og:image:width" content="1280">
+<meta property="og:image:height" content="640">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="assets/styles.css">
+<script src="assets/i18n.js" defer></script>
+<script src="assets/app.js" defer></script>
+<script src="assets/checker.js" type="module"></script>
+</head>
+<body>
+<a class="skip" href="#templates" data-i="nav.skip">Skip to templates</a>
+<nav aria-label="Main">
+  <div class="wrap">
+    <a class="brand" href="#top"><span class="dollar">$</span> <span class="who">amrelsherif-eng /</span> <b>ats-resume-templates</b></a>
+    <div class="navr">
+      <button class="btn sm lang" id="lang" type="button" lang="ar" aria-label="عربي">عربي</button>
+      <a class="btn sm" href="https://github.com/amrelsherif-eng/ats-resume-templates" target="_blank" rel="noopener">
+        <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.75.75 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"/></svg>
+        <span class="gh-text" data-i="nav.star">Star on GitHub</span>
+      </a>
+    </div>
+  </div>
+</nav>
+
+<main>
+<header class="hero" id="top">
+  <div class="wrap">
+    <div>
+      <div class="cmd" aria-hidden="true"><span class="p">$</span> latexmk -pdf resume.tex<span class="caret"></span></div>
+      <h1><span data-i="hero.t1">Your resume,</span><br><span class="accent" data-i="hero.t2">one page that gets read.</span></h1>
+      <p class="lead" data-i="hero.lead">Five free LaTeX templates for students and early-career candidates.</p>
+      <div class="ctas">
+        <a class="btn primary" href="#templates" data-i="hero.cta1">Pick your template</a>
+        <a class="btn" href="#check" data-i="hero.cta3">Check my CV</a>
+      </div>
+      <dl class="stats">
+        <div class="stat"><dt>5</dt><dd data-i="stat.tracks">career tracks</dd></div>
+        <div class="stat"><dt>1</dt><dd data-i="stat.page">page, checked on every change</dd></div>
+        <div class="stat"><dt>0</dt><dd data-i="stat.latex">LaTeX skills needed</dd></div>
+      </dl>
+    </div>
+    <div class="fan" id="fan" aria-hidden="true"></div>
+  </div>
+</header>
+
+<section id="templates" aria-labelledby="tpl-h">
+  <div class="wrap">
+    <div class="kicker" data-i="tpl.kicker">01 · Templates</div>
+    <h2 id="tpl-h" data-i="tpl.title">Pick the one that matches the job you want</h2>
+    <p class="sub" data-i="tpl.sub">Same clean layout, different focus.</p>
+    <div class="filters" role="group" aria-label="Filter">
+      <button class="chip" type="button" aria-pressed="true" data-f="all" data-i="f.all">All</button>
+      <button class="chip" type="button" aria-pressed="false" data-f="eng" data-i="f.eng">Engineering</button>
+      <button class="chip" type="button" aria-pressed="false" data-f="sw" data-i="f.sw">Software</button>
+      <button class="chip" type="button" aria-pressed="false" data-f="biz" data-i="f.biz">Business</button>
+    </div>
+    <div class="grid" id="grid"></div>
+  </div>
+</section>
+
+<section id="video" aria-labelledby="vid-h" hidden>
+  <div class="wrap">
+    <div class="kicker" data-i="vid.kicker">Watch</div>
+    <h2 id="vid-h" data-i="vid.title">See it in one minute</h2>
+    <p class="sub" data-i="vid.sub">Pick a template, edit it three ways, and check the result.</p>
+    <div class="video-frame">
+      <video id="demo-video" controls playsinline preload="none"></video>
+    </div>
+  </div>
+</section>
+
+<section id="edit" class="tint" aria-labelledby="edit-h">
+  <div class="wrap">
+    <div class="kicker" data-i="edit.kicker">02 · Edit</div>
+    <h2 id="edit-h" data-i="edit.title">Three ways to make it yours</h2>
+    <p class="sub" data-i="edit.sub">Pick the one that fits you.</p>
+    <div class="tabs" role="tablist" aria-label="Ways to edit">
+      <button class="tab" type="button" role="tab" id="t-ai" aria-controls="p-ai" aria-selected="true" data-t="ai"><span class="n">01</span><span data-i="tab.ai">With AI</span></button>
+      <button class="tab" type="button" role="tab" id="t-ol" aria-controls="p-ol" aria-selected="false" tabindex="-1" data-t="ol"><span class="n">02</span><span data-i="tab.ol">On Overleaf</span></button>
+      <button class="tab" type="button" role="tab" id="t-lc" aria-controls="p-lc" aria-selected="false" tabindex="-1" data-t="lc"><span class="n">03</span><span data-i="tab.lc">Locally</span></button>
+    </div>
+
+    <div class="panel active" id="p-ai" role="tabpanel" aria-labelledby="t-ai">
+      <div>
+        <ol class="steps">
+          <li data-i="ai.s1">Copy the template.</li>
+          <li data-i="ai.s2">Paste it into an AI chat.</li>
+          <li data-i="ai.s3">Paste the result back into Overleaf.</li>
+        </ol>
+        <p class="note" data-i="ai.note">Read every line before you send it.</p>
+      </div>
+      <div class="term">
+        <div class="bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span>prompt.txt</span><button class="copy" type="button" data-copy="prompt" data-i="copy">Copy</button></div>
+        <pre id="prompt" tabindex="0">Fill this LaTeX resume template with my information below.
+Rules: keep it to ONE page, keep every LaTeX command and the layout unchanged,
+use only the facts I give you (do not invent numbers, tools or results),
+start each bullet with an action verb, and list experience newest first.
+
+My information:
+[paste your details, old CV, or LinkedIn "About" and "Experience" here]</pre>
+      </div>
+    </div>
+
+    <div class="panel" id="p-ol" role="tabpanel" aria-labelledby="t-ol" hidden>
+      <div>
+        <ol class="steps">
+          <li data-i="ol.s1">Create a free Overleaf account.</li>
+          <li data-i="ol.s2">Click Open in Overleaf.</li>
+          <li data-i="ol.s3">Replace the text inside the { }.</li>
+          <li data-i="ol.s4">Click Recompile and download.</li>
+        </ol>
+      </div>
+      <div class="term">
+        <div class="bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span>resume.tex</span><span></span></div>
+        <pre tabindex="0"><span class="c">%----------- EXPERIENCE: newest first, 2-3 bullets each</span>
+<span class="k">\section</span>{Experience}
+<span class="k">\resumeSubheading</span>{<span class="h">Finance Intern</span>}{Jun 2026 -- Aug 2026}
+  {Acme Manufacturing Co.}{Your City, Country}
+<span class="k">\resumeItem</span>{<span class="h">Prepared bank reconciliations for 2 accounts ...</span>}
+
+<span class="c">% Edit the text inside { }. Copy a line to add a bullet,</span>
+<span class="c">% delete it to remove one. Keep it to ONE page.</span></pre>
+      </div>
+    </div>
+
+    <div class="panel" id="p-lc" role="tabpanel" aria-labelledby="t-lc" hidden>
+      <div>
+        <ol class="steps">
+          <li data-i="lc.s1">Install a LaTeX distribution.</li>
+          <li data-i="lc.s2">Clone the repository.</li>
+          <li data-i="lc.s3">Build and preview.</li>
+        </ol>
+      </div>
+      <div class="term">
+        <div class="bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span>terminal</span><button class="copy" type="button" data-copy="local" data-i="copy">Copy</button></div>
+        <pre id="local" tabindex="0">git clone https://github.com/amrelsherif-eng/ats-resume-templates.git
+cd ats-resume-templates/templates/software-web
+latexmk -pdf resume.tex
+
+<span class="c"># no LaTeX installed? use Docker:</span>
+docker run --rm -v "$PWD":/work -w /work texlive/texlive:latest latexmk -pdf resume.tex</pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="check" aria-labelledby="chk-h">
+  <div class="wrap">
+    <div class="kicker" data-i="chk.kicker">03 · Check</div>
+    <h2 id="chk-h" data-i="chk.title">Check your own CV in seconds</h2>
+    <p class="sub" data-i="chk.sub">Drop any resume PDF. We read it the way an ATS does and show what it sees.</p>
+    <div class="checker">
+      <div class="chk-in">
+      <fieldset class="levels" id="chk-level">
+        <legend data-i="chk.level">Your experience</legend>
+        <label><input type="radio" name="lvl" value="student" checked><span data-i="chk.level.student">Student / fresh grad</span></label>
+        <label><input type="radio" name="lvl" value="junior"><span data-i="chk.level.junior">1–2 years</span></label>
+        <label><input type="radio" name="lvl" value="mid"><span data-i="chk.level.mid">3–9 years</span></label>
+        <label><input type="radio" name="lvl" value="senior"><span data-i="chk.level.senior">10+ years</span></label>
+        <label><input type="radio" name="lvl" value="academic"><span data-i="chk.level.academic">Academic CV</span></label>
+      </fieldset>
+      <label class="drop" id="chk-drop" for="chk-file" tabindex="0">
+        <input type="file" id="chk-file" accept="application/pdf,.pdf">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4m0 0-4 4m4-4 4 4M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="drop-t" data-i="chk.drop">Drop your PDF here or click to choose</span>
+        <span class="drop-s" data-i="chk.private">Your file stays on your device. Nothing is uploaded.</span>
+      </label>
+      </div>
+      <div id="chk-out" class="chk-out" aria-live="polite"></div>
+    </div>
+
+    <h3 class="ext-h" data-i="ext.title">Want a match score against a job post?</h3>
+    <p class="sub" data-i="ext.sub">These outside tools compare your CV with a job description. Scores differ between tools: there is no official ATS score.</p>
+    <div class="ext">
+      <a class="ext-card" href="https://www.jobscan.co/" target="_blank" rel="noopener"><b>Jobscan</b><span data-i="ext.jobscan">Match rate against a job post, keyword gaps, ATS formatting tips.</span><em data-i="ext.limited">Free scans are limited</em></a>
+      <a class="ext-card" href="https://skillsyncer.com/" target="_blank" rel="noopener"><b>SkillSyncer</b><span data-i="ext.skillsyncer">Keyword match against a job post, similar to Jobscan.</span><em data-i="ext.free">Free tier</em></a>
+      <a class="ext-card" href="https://resumeworded.com/" target="_blank" rel="noopener"><b>Resume Worded</b><span data-i="ext.rw">Overall score with line-by-line feedback on your bullets.</span><em data-i="ext.free">Free tier</em></a>
+      <a class="ext-card" href="https://enhancv.com/resources/resume-checker/" target="_blank" rel="noopener"><b>Enhancv Checker</b><span data-i="ext.enhancv">Content and formatting review of the whole resume.</span><em data-i="ext.free">Free tier</em></a>
+    </div>
+    <p class="ext-note" data-i="ext.note">Unlike the checker above, these sites upload your file to their servers. Remove your phone number if you prefer.</p>
+  </div>
+</section>
+
+<section id="ats" class="tint" aria-labelledby="ats-h">
+  <div class="wrap">
+    <div class="kicker" data-i="ats.kicker">04 · Verified</div>
+    <h2 id="ats-h" data-i="ats.title">Checked automatically on every change</h2>
+    <p class="sub" data-i="ats.sub">Every template is compiled by GitHub Actions each time it changes.</p>
+    <div class="checks">
+      <div class="check"><div class="ic" aria-hidden="true">✓</div><h3 data-i="c1.t">Compiles cleanly</h3><p data-i="c1.p">Built from source.</p></div>
+      <div class="check"><div class="ic" aria-hidden="true">✓</div><h3 data-i="c2.t">Exactly one page</h3><p data-i="c2.p">Page count is checked.</p></div>
+      <div class="check"><div class="ic" aria-hidden="true">✓</div><h3 data-i="c3.t">Text extracts cleanly</h3><p data-i="c3.p">Text is extracted and checked.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="faq" aria-labelledby="faq-h">
+  <div class="wrap narrow">
+    <div class="kicker" data-i="faq.kicker">05 · FAQ</div>
+    <h2 id="faq-h" data-i="faq.title">Questions</h2>
+    <details><summary data-i="q1">Is it really free?</summary><p data-i="a1">Yes.</p></details>
+    <details><summary data-i="q2">Do I need to know LaTeX?</summary><p data-i="a2">No.</p></details>
+    <details><summary data-i="q3">Can I add a photo or two columns?</summary><p data-i="a3">Not recommended.</p></details>
+    <details><summary data-i="q4">My field is not here. What now?</summary><p data-i="a4">Pick the closest template.</p></details>
+    <details><summary data-i="q5">Is my PDF uploaded when I use the checker?</summary><p data-i="a5">No.</p></details>
+  </div>
+</section>
+
+<section id="author" class="tint" aria-labelledby="au-h">
+  <div class="wrap author">
+    <div class="avatar" aria-hidden="true">AE</div>
+    <div>
+      <div class="kicker" data-i="au.kicker">Made by</div>
+      <h2 id="au-h">Amr Elsherif</h2>
+      <p class="sub" data-i="au.bio">ECE student focused on network and cloud infrastructure.</p>
+      <div class="links">
+        <a class="btn sm" href="https://www.linkedin.com/in/amrelsherif-eng" target="_blank" rel="noopener me">LinkedIn</a>
+        <a class="btn sm" href="https://github.com/amrelsherif-eng" target="_blank" rel="noopener me">GitHub</a>
+        <a class="btn sm" href="https://amrelsherif-eng.vercel.app" target="_blank" rel="noopener me" data-i="au.portfolio">Portfolio</a>
+        <a class="btn sm support" id="support" href="#" target="_blank" rel="noopener" hidden data-i="au.support">Buy me a coffee</a>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span data-i="foot.made">© 2026 Amr Elsherif · Free and open source (MIT)</span>
+    <span><a href="https://github.com/amrelsherif-eng/ats-resume-templates" target="_blank" rel="noopener">GitHub</a> · <a href="https://github.com/amrelsherif-eng/ats-resume-templates/issues/new" target="_blank" rel="noopener" data-i="foot.issue">Request a template</a></span>
+  </div>
+</footer>
+<noscript><p class="nojs">Templates: <a href="https://github.com/amrelsherif-eng/ats-resume-templates">github.com/amrelsherif-eng/ats-resume-templates</a></p></noscript>
+</body>
+</html>

@@ -1,0 +1,11 @@
+{
+  "name": "ats-resume-templates-site",
+  "private": true,
+  "description": "Pinned front-end dependencies for the GitHub Pages site (vendored at build time).",
+  "dependencies": {
+    "pdfjs-dist": "4.10.38"
+  },
+  "devDependencies": {
+    "axe-core": "4.10.2"
+  }
+}

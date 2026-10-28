@@ -1,0 +1,136 @@
+/** Layout and extraction checks for the ATS Doc model. This module is pure.
+ * Drafted by Codex from a written spec; reviewed (separate ok messages, stream-order check). */
+const fix = {
+  'l.pages-2': 'Consider fitting the resume to one page when your experience allows.',
+  'l.pages-many': 'Remove less relevant details and keep the resume concise.',
+  'l.no-text': 'Use a text based PDF; scanned pages and outlined text cannot be read reliably.',
+  'l.columns': 'Use a single column so resume text is read in the intended order.',
+  'l.icons': 'Replace decorative icons with plain text labels.',
+  'l.garbled': 'Export the PDF again with embedded fonts and selectable text.',
+  'l.images': 'Keep important information as text; photos are not needed for most roles.',
+  'l.contact-edge': 'Move your email and phone into the main page content.',
+  'l.fonts': 'Use no more than four font families for a consistent resume.',
+  'l.table': 'Replace table-like rows with simple text and clear section headings.',
+  'l.order': 'Place your name and contact details at the beginning of the document.',
+  'l.filename': 'Use a clear file name such as FirstName-LastName-CV.pdf.',
+  'l.size': 'Compress the PDF while keeping text clear.'
+};
+
+export const I18N_EN = {
+  'l.pages-ok': '{n} page(s): right length for your experience level.',
+  'l.pages-2': '{n} pages: longer than the usual {max} for your experience level.',
+  'l.pages-many': '{n} pages: much longer than the usual {max} for your experience level.',
+  'l.text-ok': 'Selectable text found ({n} words).', 'l.no-text': 'Very little selectable text was found.',
+  'l.columns': 'This page may use multiple columns.', 'l.icons': 'Decorative symbols found ({n}).',
+  'l.garbled': 'Some extracted text appears garbled.', 'l.images': 'Images found ({n}).',
+  'l.contact-edge': 'Contact details appear only in a page header or footer.',
+  'l.fonts': 'Many font families found ({n}).', 'l.table': 'Table-like rows may disrupt text reading.',
+  'l.order': 'The largest text may appear late in the document.',
+  'l.filename': 'This file name is generic.', 'l.filename-ok': 'Your file name is descriptive.',
+  'l.size': 'This PDF is large ({mb} MB).', 'l.size-ok': 'Your PDF file size is reasonable.',
+  'l.columns-ok': 'Single-column layout: text reads in the right order.',
+  'l.icons-ok': 'No icon fonts or emoji that an ATS would drop.',
+  'l.garbled-ok': 'Text extracts as real characters.',
+  'l.images-ok': 'No images: everything is real text.',
+  'l.contact-edge-ok': 'Contact details are in the page body.',
+  'l.fonts-ok': 'Consistent fonts.',
+  'l.table-ok': 'No table-style rows.',
+  'l.order-ok': 'Your name is read first, as it should be.',
+  'l.pages-2.fix': fix['l.pages-2'], 'l.pages-many.fix': fix['l.pages-many'],
+  'l.no-text.fix': fix['l.no-text'], 'l.columns.fix': fix['l.columns'], 'l.icons.fix': fix['l.icons'],
+  'l.garbled.fix': fix['l.garbled'], 'l.images.fix': fix['l.images'],
+  'l.contact-edge.fix': fix['l.contact-edge'], 'l.fonts.fix': fix['l.fonts'],
+  'l.table.fix': fix['l.table'], 'l.order.fix': fix['l.order'], 'l.filename.fix': fix['l.filename'],
+  'l.size.fix': fix['l.size']
+};
+
+const words = s => (s.match(/[\p{L}\p{N}]+(?:['’][\p{L}\p{N}]+)*/gu) || []).length;
+const snippet = s => s.replace(/\s+/g, ' ').trim().slice(0, 90);
+const issue = (id, level, key, weight, vars, examples) => ({
+  id, cat: 'parse', level, key, ...(vars && { vars }), ...(fix[key] && level !== 'ok' && { fix: `${key}.fix` }),
+  ...(examples?.length && { examples: examples.slice(0, 3) }), weight
+});
+
+/**
+ * Page-count norms by experience level (career-center and recruiter guidance, 2026):
+ * students and juniors: 1 page; 3-9 years: 1-2; 10+ years: 2 is normal; academic CVs: no limit.
+ * @type {Record<string, {ok:number, warn:number}>} ok = max pages that pass, warn = max pages that only warn
+ */
+export const PAGE_NORMS = {
+  student: { ok: 1, warn: 2 }, junior: { ok: 1, warn: 2 }, mid: { ok: 2, warn: 3 },
+  senior: { ok: 2, warn: 3 }, academic: { ok: Infinity, warn: Infinity }
+};
+
+/** Return one scored issue for each layout check; never reads files or browser state.
+ * @param {object} doc
+ * @param {{level?: keyof PAGE_NORMS}} [opts] */
+export function layoutIssues(doc, opts = {}) {
+  const lines = doc.lines || [], first = lines.filter(l => l.page === 1), text = doc.text || '';
+  const out = [];
+  const norm = PAGE_NORMS[opts.level] || PAGE_NORMS.student;
+  const pagesLevel = doc.pages <= norm.ok ? 'ok' : doc.pages <= norm.warn ? 'warn' : 'fail';
+  out.push(issue('pages', pagesLevel,
+    pagesLevel === 'ok' ? 'l.pages-ok' : pagesLevel === 'warn' ? 'l.pages-2' : 'l.pages-many', 8,
+    { n: doc.pages, max: norm.ok }));
+  const wc = words(text);
+  out.push(issue('selectable-text', wc < 80 ? 'fail' : 'ok', wc < 80 ? 'l.no-text' : 'l.text-ok', 10, { n: wc }));
+
+  // Columns: the extractor merges side-by-side text into one line, so look for a wide gap inside
+  // a line (or a line that starts mid-page) whose right part is real content, not a date or place.
+  const body = first.filter(l => l.text?.trim());
+  const W = doc.width || 612;
+  const dateOrPlace = s => /\b(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:t(?:ember)?)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?|Present|Remote|Expected)\b|\b(?:19|20)\d{2}\b/i.test(s) ||
+    (s.length < 32 && /^[A-Z][\w.'-]*(?:\s+[A-Z][\w.'-]*)*(?:,\s*[A-Z][\w.'-]*(?:\s+[A-Z][\w.'-]*)*)?$/.test(s));
+  const overlaps = body.filter(line => {
+    const items = [...(line.items || [])].sort((a, b) => a.x - b.x);
+    for (let i = 1; i < items.length; i += 1) {
+      const gap = items[i].x - (items[i - 1].x + items[i - 1].w);
+      if (gap < 0.08 * W || items[i].x < 0.3 * W) continue;
+      const rightText = items.slice(i).map(it => it.text).join(' ').trim();
+      if (!dateOrPlace(rightText)) return true;
+    }
+    // A content line that starts mid-page while other lines start at the left margin.
+    const last = items[items.length - 1] || { x: line.x, w: 0 };
+    const centered = Math.abs((line.x + last.x + last.w) / 2 - W / 2) < 0.06 * W; // centered headers are fine
+    return !centered && line.x > 0.3 * W && !dateOrPlace(line.text.trim()) && line.text.trim().split(/\s+/).length >= 4 &&
+      body.some(l => l !== line && l.x < 0.2 * W);
+  });
+  const multi = body.length > 0 && overlaps.length / body.length >= .2;
+  out.push(issue('columns', multi ? 'warn' : 'ok', multi ? 'l.columns' : 'l.columns-ok', 8, undefined, overlaps.map(l => snippet(l.text))));
+
+  const symbolRe = /[\uE000-\uF8FF\u2600-\u27BF]|[\u{1F300}-\u{1FAFF}]/gu;
+  const symMatches = [...text.matchAll(symbolRe)];
+  out.push(issue('icons', symMatches.length ? 'warn' : 'ok', symMatches.length ? 'l.icons' : 'l.icons-ok', 5, { n: symMatches.length }, symMatches.slice(0, 3).map(m => snippet(text.slice(Math.max(0, m.index - 25), m.index + 35)))));
+
+  const bad = (text.match(/\(cid:/gi) || []).length + (text.match(/\uFFFD/g) || []).length + (text.match(/(?:[^\p{L}\p{N}\s]){4,}/gu) || []).length;
+  out.push(issue('garbled-text', bad > 3 ? 'fail' : 'ok', bad > 3 ? 'l.garbled' : 'l.garbled-ok', 9));
+  out.push(issue('images', doc.images > 0 ? 'info' : 'ok', doc.images > 0 ? 'l.images' : 'l.images-ok', 3, { n: doc.images }));
+
+  const contact = /[\w.+-]+@[\w.-]+\.[A-Z]{2,}|(?:\+?\d[\d().\s-]{7,}\d)/i;
+  const hasMain = first.some(l => contact.test(l.text || '') && l.y > doc.height * .04 && l.y + (l.h || 0) < doc.height * .96);
+  const edge = !hasMain && lines.some(l => contact.test(l.text || '') && (l.y <= doc.height * .04 || l.y + (l.h || 0) >= doc.height * .96));
+  out.push(issue('contact-edge', edge ? 'warn' : 'ok', edge ? 'l.contact-edge' : 'l.contact-edge-ok', 4));
+  const fontCount = (doc.fonts || []).filter(Boolean).length;
+  out.push(issue('fonts', fontCount > 4 ? 'info' : 'ok', fontCount > 4 ? 'l.fonts' : 'l.fonts-ok', 2, { n: fontCount }));
+
+  const tableRows = first.filter(l => {
+    const items = l.items || []; if (items.length < 3) return false;
+    const sorted = [...items].sort((a, b) => a.x - b.x);
+    return sorted.slice(1).filter((it, i) => it.x - (sorted[i].x + sorted[i].w) > 3 * (it.size || 10)).length >= 2;
+  });
+  out.push(issue('table-rows', tableRows.length >= 6 ? 'warn' : 'ok', tableRows.length >= 6 ? 'l.table' : 'l.table-ok', 4, undefined, tableRows.map(l => snippet(l.text))));
+
+  const largest = first.reduce((best, l) => Math.max(best, ...(l.items || []).map(i => i.size || 0), 0), 0);
+  const nameLine = first.find(l => (l.items || []).some(i => (i.size || 0) === largest) && largest > 0);
+  // Visual order always puts the name first; the content stream shows what an ATS actually reads first.
+  const stream = (doc.streamText || text).replace(/\s+/g, ' ');
+  const nameText = nameLine ? nameLine.text.replace(/\s+/g, ' ').trim() : '';
+  const namePos = nameText ? stream.indexOf(nameText) : 0;
+  const late = !!nameLine && namePos >= stream.length * .15;
+  out.push(issue('reading-order', late ? 'warn' : 'ok', late ? 'l.order' : 'l.order-ok', 6));
+  const generic = /^(resume|cv|document|untitled|final|my[\W_]?cv)[\W_]*\d*\.pdf$/i.test(doc.fileName || '');
+  out.push(issue('file-name', generic ? 'info' : 'ok', generic ? 'l.filename' : 'l.filename-ok', 1));
+  const mb = (doc.fileSize || 0) / (1024 * 1024), large = mb > 2;
+  out.push(issue('file-size', large ? 'warn' : 'ok', large ? 'l.size' : 'l.size-ok', 2, { mb: Number(mb.toFixed(1)) }));
+  return out;
+}
