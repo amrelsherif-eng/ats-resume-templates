@@ -274,3 +274,32 @@ Object.assign(AR, {
 
 Object.assign(EN, { 'chk.toFix1': '1 thing to improve', 'chk.passed1': '1 check passed' });
 Object.assign(AR, { 'chk.toFix1': 'نقطة واحدة للتحسين', 'chk.passed1': 'نجح فحص واحد' });
+
+Object.assign(EN, {
+  'nav.templates': 'Templates', 'nav.edit': 'How to edit', 'nav.check': 'Check your CV', 'nav.faq': 'FAQ',
+  'hero.pill': '5 templates · checked on every change',
+  'trust.free': 'Free, MIT licensed', 'trust.free.p': 'No sign-up, no watermark.',
+  'c1.p': 'Built from the LaTeX source on every change.',
+  'c2.p': 'The page count is read from the PDF.',
+  'c3.p': 'Plain-text extraction, the way an ATS reads it.',
+  'chk.panel': 'ats-check', 'chk.badge': 'No upload · runs in your browser',
+  'chk.empty.t': 'Your report appears here',
+  'chk.empty.p': 'Score out of 100, what to fix first, and the exact text an ATS reads.',
+  'faq.kicker': '04 · FAQ',
+  'foot.tag': 'Free one-page resume templates and an ATS check that never uploads your file.',
+  'foot.h.templates': 'Templates', 'foot.h.res': 'Resources', 'foot.h.author': 'Author'
+});
+Object.assign(AR, {
+  'nav.templates': 'النماذج', 'nav.edit': 'طريقة التعديل', 'nav.check': 'افحص سيرتك', 'nav.faq': 'أسئلة شائعة',
+  'hero.pill': '5 نماذج · تُفحص مع كل تعديل',
+  'trust.free': 'مجاني برخصة MIT', 'trust.free.p': 'بدون تسجيل وبدون علامة مائية.',
+  'c1.p': 'يُبنى من كود LaTeX مع كل تعديل.',
+  'c2.p': 'عدد الصفحات يُقرأ من ملف الـ PDF.',
+  'c3.p': 'استخراج النص كما يقرؤه نظام الـ ATS.',
+  'chk.panel': 'ats-check', 'chk.badge': 'بدون رفع · يعمل داخل متصفحك',
+  'chk.empty.t': 'سيظهر تقريرك هنا',
+  'chk.empty.p': 'درجة من 100، وما يجب إصلاحه أولاً، والنص كما يقرؤه الـ ATS بالضبط.',
+  'faq.kicker': '04 · أسئلة شائعة',
+  'foot.tag': 'نماذج سير ذاتية مجانية من صفحة واحدة، وفاحص ATS لا يرفع ملفك أبداً.',
+  'foot.h.templates': 'النماذج', 'foot.h.res': 'مصادر', 'foot.h.author': 'المؤلف'
+});
