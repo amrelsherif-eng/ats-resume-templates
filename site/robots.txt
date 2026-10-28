@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://amrelsherif-eng.github.io/ats-resume-templates/sitemap.xml

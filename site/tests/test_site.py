@@ -11,7 +11,8 @@ from playwright.sync_api import expect, sync_playwright
 
 ROOT = Path(__file__).resolve().parents[2]
 TEMPLATE_IDS = ["software-web", "business-finance", "network-cloud", "embedded-ece", "mobile-apps"]
-ALLOWED_HOSTS = {"127.0.0.1", "localhost", "fonts.googleapis.com", "fonts.gstatic.com"}
+# Everything is self-hosted: any request to another host fails the test.
+ALLOWED_HOSTS = {"127.0.0.1", "localhost"}
 # Set SITE_URL (e.g. https://ats-resume-templates.pages.dev) to run the same suite against the live site.
 LIVE_URL = os.environ.get("SITE_URL", "").rstrip("/")
 if LIVE_URL:
@@ -360,3 +361,49 @@ def test_unconfigured_features_stay_hidden(page):
     expect(page.locator("#support")).to_have_attribute("href", "https://github.com/sponsors/amrelsherif-eng")
     expect(page.locator("#video")).to_be_hidden()
     assert page.locator("footer nav").first.evaluate("n => getComputedStyle(n).position") == "static"
+
+
+def test_seo_basics(page, site_url):
+    assert page.locator('meta[name="description"]').get_attribute("content")
+    assert page.locator('link[rel="canonical"]').get_attribute("href").startswith("https://")
+    assert page.locator('meta[property="og:image"]').get_attribute("content").endswith(".png")
+    assert page.locator("html").get_attribute("lang") in ("en", "ar")
+    assert page.locator("h1").count() == 1
+    for path in ("/robots.txt", "/sitemap.xml", "/assets/social-preview.png"):
+        assert page.request.get(site_url + path).status == 200, path
+
+
+def test_keyboard_skip_link_and_focus(page):
+    page.keyboard.press("Tab")
+    skip = page.locator("a.skip")
+    expect(skip).to_be_focused()
+    expect(skip).to_be_in_viewport()
+    page.keyboard.press("Enter")
+    assert page.evaluate("location.hash") == "#templates"
+    # Focus rings must be visible on interactive elements.
+    page.locator(".chip").first.focus()
+    outline = page.locator(".chip").first.evaluate("e => getComputedStyle(e).outlineStyle")
+    assert outline != "none"
+
+
+def test_reduced_motion(browser, site_url):
+    context = browser.new_context(reduced_motion="reduce")
+    page = context.new_page()
+    page.goto(site_url, wait_until="networkidle")
+    durations = page.evaluate("""() => [...document.querySelectorAll('.caret, .scan, .badge')]
+        .map(e => getComputedStyle(e).animationDuration)""")
+    context.close()
+    assert durations and all(d in ("0s", "1e-05s") or d.startswith("0") for d in durations), durations
+
+
+def test_page_weight_budget(browser, site_url):
+    """First visit (before using the checker) stays under 1.6 MB and loads fonts from the site itself."""
+    context = browser.new_context()
+    page = context.new_page()
+    sizes, hosts = [], set()
+    page.on("response", lambda r: (sizes.append(len(r.body())) if r.ok else None, hosts.add(urlparse(r.url).hostname)))
+    page.goto(site_url, wait_until="networkidle")
+    context.close()
+    total = sum(sizes)
+    assert total < 1_600_000, f"first load is {total / 1e6:.2f} MB"
+    assert hosts <= ALLOWED_HOSTS, hosts
