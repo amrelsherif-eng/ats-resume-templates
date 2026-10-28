@@ -157,21 +157,31 @@ def test_tabs_keyboard(page):
     expect(page.locator("#p-lc")).to_be_hidden()
 
 
-def test_copy_prompt(page):
+def capture_clipboard(page):
+    """Record what the page copies, without touching the machine's real clipboard (shared and flaky)."""
     page.context.grant_permissions(["clipboard-read", "clipboard-write"])
-    page.evaluate("navigator.clipboard.writeText('')")  # the clipboard is shared between tests
+    page.evaluate("""() => {
+      window.__copied = null;
+      navigator.clipboard.writeText = async (t) => { window.__copied = t; };
+    }""")
+
+
+def copied_text(page, must_contain):
+    page.wait_for_function("t => (window.__copied || '').includes(t)", arg=must_contain, timeout=15000)
+    return page.evaluate("window.__copied")
+
+
+def test_copy_prompt(page):
+    capture_clipboard(page)
     page.locator('#p-ai [data-copy="prompt"]').click()
-    page.wait_for_function("navigator.clipboard.readText().then(t => t.startsWith('Fill this'))")
-    assert page.evaluate("navigator.clipboard.readText()").startswith("Fill this LaTeX resume template")
+    assert copied_text(page, "Fill this").startswith("Fill this LaTeX resume template")
 
 
 def test_copy_for_ai(page):
-    page.context.grant_permissions(["clipboard-read", "clipboard-write"])
-    page.evaluate("navigator.clipboard.writeText('')")  # the clipboard is shared between tests
+    capture_clipboard(page)
     page.locator('[data-ai="software-web"]').click()
-    page.wait_for_function("navigator.clipboard.readText().then(t => t.includes('documentclass'))", timeout=15000)
-    copied = page.evaluate("navigator.clipboard.readText()")
-    assert "Fill this LaTeX resume template" in copied
+    copied = copied_text(page, "documentclass")
+    assert copied.startswith("Fill this LaTeX resume template")
     assert "\\documentclass" in copied
 
 
@@ -282,12 +292,11 @@ def test_checker_arabic_report(page):
 
 
 def test_checker_ai_prompt(page):
-    page.context.grant_permissions(["clipboard-read", "clipboard-write"])
+    capture_clipboard(page)
     upload(page, ROOT / "templates/mobile-apps/resume.pdf")
     score_of(page)
-    page.evaluate("navigator.clipboard.writeText('')")
     page.locator("#chk-out .chk-tools button").click()
-    page.wait_for_function("navigator.clipboard.readText().then(t => t.includes('MY RESUME'))")
+    assert "Your Name" in copied_text(page, "MY RESUME")
 
 
 def test_checker_not_pdf(page, tmp_path):
@@ -346,7 +355,8 @@ def test_unknown_path_is_404(page, site_url):
 
 
 def test_unconfigured_features_stay_hidden(page):
-    # The support button and demo video show only when configured in app.js.
-    expect(page.locator("#support")).to_be_hidden()
+    # The demo video shows only when configured in app.js; the support link points at GitHub Sponsors.
+    expect(page.locator("#support")).to_be_visible()
+    expect(page.locator("#support")).to_have_attribute("href", "https://github.com/sponsors/amrelsherif-eng")
     expect(page.locator("#video")).to_be_hidden()
     assert page.locator("footer nav").first.evaluate("n => getComputedStyle(n).position") == "static"

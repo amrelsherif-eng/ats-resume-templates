@@ -4,7 +4,7 @@
 const REPO = 'https://github.com/amrelsherif-eng/ats-resume-templates';
 const RAW = 'https://raw.githubusercontent.com/amrelsherif-eng/ats-resume-templates/main/templates';
 // Optional support link (for example GitHub Sponsors). Leave empty to hide the button.
-const SUPPORT_URL = '';
+const SUPPORT_URL = 'https://github.com/sponsors/amrelsherif-eng';
 // Optional demo video, self-hosted under site/assets/video/. Leave src empty to hide the section.
 const VIDEO = { src: '', poster: '', captionsEn: '', captionsAr: '' };
 
