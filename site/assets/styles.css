@@ -306,3 +306,37 @@ footer .wrap.foot{display:grid}
 footer nav{position:static;backdrop-filter:none;background:none;border:0;z-index:auto}
 @media (max-width:520px){.tab{padding:0 12px;font-size:14px}.tabs{gap:2px}}
 img.avatar{width:96px;height:96px;object-fit:cover;background:var(--card);border:2px solid var(--line2);box-shadow:0 0 0 4px rgba(0,240,255,.08)}
+
+/* ===== Refinement: one accent, quiet surfaces, steady rhythm ===== */
+:root{--r:14px;--surface:#0f1419;--surface-2:#131a21}
+body{font-size:16px;line-height:1.65}
+section{padding:96px 0;border-top:1px solid rgba(230,237,243,.06)}
+@media (max-width:700px){section{padding:64px 0}}
+.trust{border-top:0}
+.tint{background:none}
+h2{font-size:clamp(30px,3.6vw,44px);letter-spacing:-.025em}
+.sub{font-size:17px;max-width:600px}
+.kicker{font-size:12px;letter-spacing:.12em;opacity:.9}
+/* One accent: cyan is for the main call to action, links and focus only */
+h1 .accent{background:linear-gradient(90deg,#e6edf3 0%,var(--cyan) 70%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.btn{border-radius:10px;font-weight:500}
+.btn.primary{box-shadow:0 0 0 1px rgba(0,240,255,.3),0 8px 30px -10px rgba(0,240,255,.45)}
+/* Template cards: same buttons everywhere; the track colour is only a hairline and a dot */
+.card{background:var(--surface);border-color:rgba(230,237,243,.08);box-shadow:inset 0 2px 0 0 color-mix(in srgb,var(--c) 75%,transparent)}
+.card:hover{transform:none;border-color:rgba(230,237,243,.18);box-shadow:inset 0 2px 0 0 var(--c),0 24px 48px -32px rgba(0,0,0,.9)}
+.actions .btn.primary{background:var(--text);border-color:var(--text);color:#0a0d10;box-shadow:none}
+.actions .btn.primary:hover{background:#fff}
+.card.request{box-shadow:none;background:transparent}
+.skills span{background:transparent;color:var(--muted)}
+.tag{color:var(--muted)}
+.ext-card em{color:var(--muted)}
+.ext-card{background:var(--surface)}
+.btn.support{border-color:var(--line2);color:var(--text)}
+.trust-list{background:var(--surface)}
+.term{background:#080b0e}
+.drop{background:var(--surface)}
+.chk-out{background:var(--surface)}
+.check,.issue{background:var(--surface-2)}
+
+.card .shot img,.fan .page img{height:auto}
+.fan .page img{height:100%}
