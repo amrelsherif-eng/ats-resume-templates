@@ -4,4 +4,4 @@
 *.log
 *.out
 *.gz
-*.synctex*
+*.synctex*_site/
