@@ -512,3 +512,22 @@ def test_english_page_does_not_download_arabic_font(browser, site_url):
     page.wait_for_load_state("networkidle")
     assert fonts and not [u for u in fonts if "arabic" in u], fonts
     page.close()
+
+
+def test_arabic_browser_gets_arabic_without_layout_shift(browser, site_url):
+    # lang-boot.js picks Arabic before the first paint; the page stays hidden until the text is Arabic.
+    context = browser.new_context(locale="ar-EG", viewport={"width": 390, "height": 844})
+    page = context.new_page()
+    page.goto(site_url + "/")
+    page.wait_for_load_state("networkidle")
+    assert page.evaluate("() => [document.documentElement.dir, document.documentElement.lang]") == ["rtl", "ar"]
+    assert page.evaluate("() => document.documentElement.classList.contains('i18n-wait')") is False
+    expect(page.locator("h1")).not_to_contain_text("Your")
+    shift = page.evaluate("""() => new Promise(done => {
+        let total = 0;
+        new PerformanceObserver(list => { for (const e of list.getEntries()) if (!e.hadRecentInput) total += e.value; })
+            .observe({ type: 'layout-shift', buffered: true });
+        setTimeout(() => done(total), 500);
+    })""")
+    assert shift < 0.1, shift
+    context.close()
