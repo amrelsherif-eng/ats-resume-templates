@@ -88,6 +88,8 @@ function ring(value) {
   t.setAttribute('x', '60'); t.setAttribute('y', '60'); t.setAttribute('class', 'ring-n');
   t.textContent = String(value);
   svg.append(t);
+  // The bar animates from 0 to the score via the registered --score property.
+  requestAnimationFrame(() => requestAnimationFrame(() => svg.style.setProperty('--score', String(value))));
   return svg;
 }
 
@@ -146,7 +148,7 @@ function render() {
     row.append(el('span', 'bar-l', ui('chk.cat.' + c.id)));
     const track = el('span', 'bar-t');
     const fillEl = el('span', 'bar-f ' + band(per[c.id]));
-    fillEl.style.setProperty('--w', per[c.id] + '%');
+    fillEl.style.setProperty('--scale', String(per[c.id] / 100));
     track.append(fillEl);
     row.append(track, el('span', 'bar-n', String(per[c.id])));
     bars.append(row);
@@ -158,11 +160,25 @@ function render() {
   const passed = issues.filter(i => i.level === 'ok');
   const list = el('div', 'issues');
   list.append(el('h3', 'issues-h', problems.length ? ui(problems.length === 1 ? 'chk.toFix1' : 'chk.toFix', { n: problems.length }) : ui('chk.allGood')));
-  for (const i of problems) list.append(issueRow(i));
+  for (const category of CATS) {
+    const group = problems.filter(i => i.cat === category.id);
+    if (!group.length) continue;
+    const section = el('div', 'issue-group');
+    section.append(el('h4', 'issue-group-h', ui('chk.cat.' + category.id)));
+    for (const i of group) section.append(issueRow(i));
+    list.append(section);
+  }
 
   const ok = el('details', 'passed');
   ok.append(el('summary', '', ui(passed.length === 1 ? 'chk.passed1' : 'chk.passed', { n: passed.length })));
-  for (const i of passed) ok.append(issueRow(i));
+  for (const category of CATS) {
+    const group = passed.filter(i => i.cat === category.id);
+    if (!group.length) continue;
+    const section = el('div', 'issue-group');
+    section.append(el('h4', 'issue-group-h', ui('chk.cat.' + category.id)));
+    for (const i of group) section.append(issueRow(i));
+    ok.append(section);
+  }
 
   const tools = el('div', 'chk-tools');
   const aiBtn = el('button', 'btn sm', ui('chk.ai'));
