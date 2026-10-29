@@ -353,6 +353,7 @@ def test_support_link_and_demo_video(page, site_url):
     video = page.locator("#demo-video")
     # The poster is lazy: nothing under assets/video/ loads with the first screen.
     assert video.get_attribute("poster") is None
+    assert page.locator("#tut-video source").count() == 0, "tutorial source must wait until the section is near"
     video.scroll_into_view_if_needed()
     expect(video).to_be_visible()
     expect(page.locator("#video-soon")).to_have_count(0)
