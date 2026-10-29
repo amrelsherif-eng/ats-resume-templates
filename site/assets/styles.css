@@ -1382,3 +1382,7 @@ html.js .reveal.is-visible{opacity:1;transform:none}
 .issue::details-content{height:0;overflow:clip;transition:content-visibility .22s allow-discrete,height .22s var(--ease)}
 .issue[open]::details-content{height:auto}
 .issue-group-h{margin:14px 0 7px;color:var(--muted);font-size:12px;font-weight:600;letter-spacing:.02em}
+
+/* The "عربي" toggle on English pages uses a system face, so the Arabic web font loads only in Arabic mode. */
+html:not([dir=rtl]) .lang{
+  font-family:system-ui,"Segoe UI",Tahoma,Arial,sans-serif}

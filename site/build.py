@@ -29,6 +29,9 @@ FONTS = {
 }
 
 
+ARABIC_RANGE = "U+0600-06FF, U+0750-077F, U+0870-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC"
+
+
 def build_fonts():
     """Copy the WOFF2 files and write assets/fonts.css pointing at them."""
     out_dir = OUT / "assets" / "fonts"
@@ -40,6 +43,9 @@ def build_fonts():
             woff2 = re.search(r"url\(\./files/([^)]+\.woff2)\)", rule).group(1)
             shutil.copy2(FONTSOURCE / pkg / "files" / woff2, out_dir / woff2)
             rule = re.sub(r"src:[^;]+;", f"src: url(fonts/{woff2}) format('woff2');", rule)
+            if "arabic" in woff2 and "unicode-range" not in rule:
+                # Without a range, symbols missing from Space Grotesk (✓ · ↗) pull this font on English pages.
+                rule = rule.replace("font-display:", f"unicode-range: {ARABIC_RANGE};\n  font-display:", 1)
             css.append(rule.strip())
     (OUT / "assets" / "fonts.css").write_text("\n".join(css) + "\n", encoding="utf-8")
 
