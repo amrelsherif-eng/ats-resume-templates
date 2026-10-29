@@ -386,6 +386,11 @@ function init() {
 
   applyLang();
   setTutorial();
+  // Arabic first load: reveal once the Arabic font is in (or after 700 ms), so the text does not reflow.
+  const reveal = () => document.documentElement.classList.remove('i18n-wait');
+  if (document.documentElement.classList.contains('i18n-wait') && document.fonts) {
+    Promise.race([document.fonts.ready, new Promise(r => setTimeout(r, 700))]).then(reveal);
+  } else reveal();
 }
 
 init();

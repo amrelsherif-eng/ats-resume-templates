@@ -1363,3 +1363,6 @@ html.js .reveal.is-visible{opacity:1;transform:none}
 html:not([dir=rtl]) .lang,
 html:not([dir=rtl]) .tut-lang [lang=ar]{
   font-family:system-ui,"Segoe UI",Tahoma,Arial,sans-serif}
+
+/* Arabic visitors: hidden for the moment between first paint and app.js applying the Arabic text (see lang-boot.js). */
+html.i18n-wait body{visibility:hidden}
