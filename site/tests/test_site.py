@@ -137,13 +137,13 @@ def test_checker_framing_and_footer_links(page):
 
 def test_video_cards_are_compact_rows_on_mobile(page):
     page.set_viewport_size({"width": 390, "height": 844})
-    # The LinkedIn card stays a compact row; the playable demo gets the full width at 4:5.
-    box = page.locator("#video .li-video .video-frame").bounding_box()
-    assert 108 <= box["width"] <= 116
-    demo = page.locator("#video .vid-new .video-frame").bounding_box()
+    # Both playable videos get the full width on phones: the demo at 4:5, the tutorial at 16:9.
     section = page.locator("#video .vid-grid").bounding_box()
-    assert demo["width"] >= section["width"] - 4
+    demo = page.locator("#video .vid-new .video-frame").bounding_box()
+    tut = page.locator("#video .vid-tut .video-frame").bounding_box()
+    assert demo["width"] >= section["width"] - 4 and tut["width"] >= section["width"] - 4
     assert abs(demo["height"] / demo["width"] - 1.25) < 0.02
+    assert abs(tut["height"] / tut["width"] - 9 / 16) < 0.02
     expect(page.locator(".vid-new .video-duration")).to_have_text("0:41")
     page.locator("#lang").click()
     expect(page.locator(".vid-new .video-duration")).to_have_text("0:41")
@@ -371,7 +371,22 @@ def test_support_link_and_demo_video(page, site_url):
     for name in ("demo-poster.webp", "demo.en.vtt", "demo.ar.vtt"):
         assert page.request.get(base + "assets/video/" + name).status == 200
     assert page.request.get(base + "assets/video/demo.en.vtt").text().startswith("WEBVTT")
-    expect(page.locator("#video .li-video")).to_have_attribute("href", re.compile(r"^https://www\.linkedin\.com/"))
+    # The full tutorial follows the site language and is self-hosted too.
+    tut = page.locator("#tut-video")
+    expect(tut).to_be_visible()
+    expect(tut).to_have_attribute("preload", "none")
+    expect(tut.locator("source")).to_have_attribute("src", "assets/video/tutorial-en.mp4")
+    expect(tut).to_have_attribute("poster", re.compile(r"tutorial-poster-en\.webp$"))
+    for name in ("tutorial-en.mp4", "tutorial-ar.mp4"):
+        r = page.request.get(base + "assets/video/" + name)
+        assert r.status == 200 and r.headers["content-type"].startswith("video/mp4")
+        assert len(r.body()) < 25 * 1024 * 1024, "Cloudflare Pages rejects files over 25 MiB"
+    for name in ("tutorial-poster-en.webp", "tutorial-poster-ar.webp"):
+        assert page.request.get(base + "assets/video/" + name).status == 200
+    page.locator("#lang").click()
+    expect(tut.locator("source")).to_have_attribute("src", "assets/video/tutorial-ar.mp4")
+    expect(tut).to_have_attribute("poster", re.compile(r"tutorial-poster-ar\.webp$"))
+    expect(page.locator(".vid-tut .video-duration")).to_have_text("5:02")
     assert page.locator("footer nav").first.evaluate("n => getComputedStyle(n).position") == "static"
 
 

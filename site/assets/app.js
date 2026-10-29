@@ -8,6 +8,11 @@ const ISSUE_TEMPLATE_URL = `${REPO}/issues/new?title=Template%20request%3A%20&bo
 // Optional support link (for example GitHub Sponsors). Leave empty to hide the button.
 const SUPPORT_URL = 'https://github.com/sponsors/amrelsherif-eng';
 // Optional demo video, self-hosted under site/assets/video/. Leave src empty to hide the section.
+// Full tutorial: one video per site language (subtitles are burned in).
+const TUTORIAL = {
+  en: { src: 'assets/video/tutorial-en.mp4', poster: 'assets/video/tutorial-poster-en.webp' },
+  ar: { src: 'assets/video/tutorial-ar.mp4', poster: 'assets/video/tutorial-poster-ar.webp' }
+};
 const VIDEO = { src: 'assets/video/demo.mp4', poster: 'assets/video/demo-poster.webp',
   captionsEn: 'assets/video/demo.en.vtt', captionsAr: 'assets/video/demo.ar.vtt' };
 
@@ -303,7 +308,28 @@ function init() {
     document.getElementById('video-soon').remove();
   }
 
+  // Tutorial follows the site language; the poster loads only when the section is near.
+  const tut = document.getElementById('tut-video');
+  let tutNear = false;
+  const setTutorial = () => {
+    const c = TUTORIAL[lang] || TUTORIAL.en;
+    if (tut.dataset.lang === lang) return;
+    tut.pause();
+    tut.replaceChildren(el('source', { src: c.src, type: 'video/mp4' }));
+    tut.dataset.lang = lang;
+    tut.load();
+    if (tutNear) tut.poster = c.poster;
+  };
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver(entries => {
+      if (entries.some(e => e.isIntersecting)) { tutNear = true; tut.poster = (TUTORIAL[lang] || TUTORIAL.en).poster; io.disconnect(); }
+    }, { rootMargin: '800px 0px' });
+    io.observe(document.getElementById('video'));
+  } else tutNear = true;
+  document.addEventListener('langchange', setTutorial);
+
   applyLang();
+  setTutorial();
 }
 
 init();

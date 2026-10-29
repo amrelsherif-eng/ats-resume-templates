@@ -9,7 +9,7 @@
 
 <p align="center">
   <a href="#-start-in-3-steps"><img src="assets/btn-overleaf.svg" height="44" alt="Start in 3 Steps"></a>
-  <a href="https://www.linkedin.com/feed/update/urn:li:ugcPost:7500210253041508354"><img src="assets/btn-video.svg" height="44" alt="Watch Video Tutorial"></a>
+  <a href="https://amrelsherif-eng.github.io/ats-resume-templates/#video"><img src="assets/btn-video.svg" height="44" alt="Watch Video Tutorial"></a>
   <a href="#-pick-your-template"><img src="assets/btn-pdf.svg" height="44" alt="Pick Your Template"></a>
   <a href="https://github.com/amrelsherif-eng/ats-resume-templates"><img src="assets/btn-star.svg" height="44" alt="Star on GitHub"></a>
 </p>
@@ -153,17 +153,20 @@ You can create an editable copy and download your finished PDF directly in your 
 
 ---
 
+<a id="-video-tutorials"></a>
+<a id="video-tutorials"></a>
 <a id="-video-tutorial-2-min"></a>
 <a id="video-tutorial-2-min"></a>
-## 🎥 Video Tutorial (2 min)
+## 🎥 Video Tutorials
 
-Watch a two-minute walkthrough showing how to edit and compile your resume.
+Two videos on the website, in English and Arabic:
 
-A two-minute walkthrough of the three ways to edit a template: with AI, on Overleaf, or locally.
+- **Full tutorial (5 min):** every step from picking a template to a checked CV: copy it on Overleaf, fill it with AI, build it locally, then run the ATS check. Voice-over with burned-in subtitles; the English (5:15) or Arabic (5:02) version plays to match the site language.
+- **Quick demo (under 1 min):** the website, templates, and CV checker at a glance.
 
-**[▶ Watch on LinkedIn](https://www.linkedin.com/feed/update/urn:li:ugcPost:7500210253041508354)** · [Download the MP4](docs/video-tutorial.mp4)
+**[▶ Watch on the website](https://amrelsherif-eng.github.io/ats-resume-templates/#video)**
 
-> 📣 First released on LinkedIn, where the launch post reached **12K+ impressions**. [Read the release post](https://www.linkedin.com/feed/update/urn:li:share:7463276669491937281) and share it with anyone preparing for internships or their first job.
+> 📣 The project launched on LinkedIn, where the release post reached **12K+ impressions**. [Read the release post](https://www.linkedin.com/feed/update/urn:li:share:7463276669491937281) and share it with anyone preparing for internships or their first job.
 
 ---
 
@@ -421,8 +424,6 @@ ats-resume-templates/
 │   └── workflows/
 │       └── build.yml      ← GitHub Actions CI pipeline
 ├── assets/                ← README graphics, banners, and buttons
-├── docs/
-│   └── video-tutorial.mp4 ← 2-minute walkthrough video
 ├── templates/
 │   ├── network-cloud/
 │   │   ├── resume.tex     ← LaTeX source
@@ -501,6 +502,7 @@ If you commit your resume to a public GitHub repository, replace your phone numb
 
 Release history and template improvements across versions.
 
+- **v2.4 (Oct 2026):** Full video tutorial on the website (5 min, English and Arabic, follows the site language), replacing the old 2-minute walkthrough.
 - **v2.3 (Oct 2026):** Website redesign (calmer visual system, smoother motion, animated score gauge), a 20-case test corpus for the ATS checker, GitHub Sponsors.
 - **v2.2 (Oct 2026):** Website with a template gallery, an in-browser ATS check (scored report, fixes, experience-aware page rules), English and Arabic, and automated site tests.
 - **v2.1 (Oct 2026):** Two new templates: Software Engineering (Web & Backend) and Business & Finance for Faculty of Commerce students. Overleaf links for both. Mobile Apps sample filled to a full page.

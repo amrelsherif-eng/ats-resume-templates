@@ -279,13 +279,12 @@ Object.assign(EN, {
   'vid.new.checker': 'Website + CV checker',
   'vid.new.s': 'See the site, templates and CV checker.',
   'vid.soon': 'Coming soon',
-  'vid.li.t': 'The 2-minute walkthrough',
-  'vid.li.duration': '2:08',
-  'vid.li.time': '2 minutes',
-  'vid.li.language': 'Spoken Egyptian Arabic',
-  'vid.li.editing': 'Editing step by step',
-  'vid.li.s': 'Follow one template from start to finish.',
-  'vid.li.go': 'LinkedIn ↗'
+  'vid.tut.t': 'The full tutorial, step by step',
+  'vid.tut.duration': '5:15',
+  'vid.tut.time': '5 minutes',
+  'vid.tut.voice': 'English voice-over + on-screen subtitles',
+  'vid.tut.steps': 'Overleaf, AI and the checker',
+  'vid.tut.s': 'Every click, zoomed in. No code needed. The Arabic version plays when the site is in Arabic.'
 });
 Object.assign(AR, {
   'vid.kicker': 'شاهد',
@@ -298,13 +297,12 @@ Object.assign(AR, {
   'vid.new.checker': 'الموقع + فاحص السيرة',
   'vid.new.s': 'شاهد الموقع والنماذج وفاحص السيرة.',
   'vid.soon': 'قريباً',
-  'vid.li.t': 'شرح عملي في دقيقتين',
-  'vid.li.duration': '2:08',
-  'vid.li.time': 'دقيقتان',
-  'vid.li.language': 'بالعامية المصرية',
-  'vid.li.editing': 'التعديل خطوة بخطوة',
-  'vid.li.s': 'تابع تعديل نموذج واحد من البداية للنهاية.',
-  'vid.li.go': 'لينكدإن ↗'
+  'vid.tut.t': 'الشرح الكامل خطوة بخطوة',
+  'vid.tut.duration': '5:02',
+  'vid.tut.time': '5 دقائق',
+  'vid.tut.voice': 'بصوت مصري + ترجمة على الشاشة',
+  'vid.tut.steps': 'Overleaf والذكاء الاصطناعي والفاحص',
+  'vid.tut.s': 'كل ضغطة بزوم واضح، ومن غير أي كود. النسخة الإنجليزية بتشتغل لما الموقع يكون بالإنجليزي.'
 });
 
 Object.assign(EN, { 'chk.toFix1': '1 thing to improve', 'chk.passed1': '1 check passed' });
