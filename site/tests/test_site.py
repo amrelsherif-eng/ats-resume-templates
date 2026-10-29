@@ -380,7 +380,7 @@ def test_support_link_and_demo_video(page, site_url):
     for name in ("tutorial-en.mp4", "tutorial-ar.mp4"):
         r = page.request.get(base + "assets/video/" + name)
         assert r.status == 200 and r.headers["content-type"].startswith("video/mp4")
-        assert len(r.body()) < 40 * 1024 * 1024, "keep each tutorial under 40 MB"
+        assert len(r.body()) < 25 * 1024 * 1024, "Cloudflare Pages rejects files over 25 MiB"
     for name in ("tutorial-poster-en.webp", "tutorial-poster-ar.webp"):
         assert page.request.get(base + "assets/video/" + name).status == 200
     page.locator("#lang").click()
