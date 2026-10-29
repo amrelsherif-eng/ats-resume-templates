@@ -308,21 +308,24 @@ function init() {
     document.getElementById('video-soon').remove();
   }
 
-  // Tutorial follows the site language; the poster loads only when the section is near.
+  // Tutorial follows the site language. Source and poster are set only when the section is near,
+  // so the first page load never downloads any of the video.
   const tut = document.getElementById('tut-video');
   let tutNear = false;
   const setTutorial = () => {
+    if (!tutNear) return;
     const c = TUTORIAL[lang] || TUTORIAL.en;
     if (tut.dataset.lang === lang) return;
+    const switching = Boolean(tut.dataset.lang);
     tut.pause();
     tut.replaceChildren(el('source', { src: c.src, type: 'video/mp4' }));
     tut.dataset.lang = lang;
-    tut.load();
-    if (tutNear) tut.poster = c.poster;
+    tut.poster = c.poster;
+    if (switching) tut.load();
   };
   if ('IntersectionObserver' in window) {
     const io = new IntersectionObserver(entries => {
-      if (entries.some(e => e.isIntersecting)) { tutNear = true; tut.poster = (TUTORIAL[lang] || TUTORIAL.en).poster; io.disconnect(); }
+      if (entries.some(e => e.isIntersecting)) { tutNear = true; setTutorial(); io.disconnect(); }
     }, { rootMargin: '800px 0px' });
     io.observe(document.getElementById('video'));
   } else tutNear = true;
