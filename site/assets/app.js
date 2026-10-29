@@ -168,6 +168,26 @@ function init() {
 
   buildFan();
 
+  const fan = document.getElementById('fan');
+  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
+  if (matchMedia('(hover: hover) and (pointer: fine)').matches && !reduceMotion.matches) {
+    let frame = 0;
+    fan.addEventListener('pointermove', e => {
+      if (frame) return;
+      frame = requestAnimationFrame(() => {
+        const r = fan.getBoundingClientRect();
+        fan.style.setProperty('--tilt-y', (Math.max(-5, Math.min(5, ((e.clientX-r.left)/r.width-.5)*10))) + 'deg');
+        fan.style.setProperty('--tilt-x', (Math.max(-3, Math.min(3, (.5-(e.clientY-r.top)/r.height)*6))) + 'deg');
+        frame = 0;
+      });
+    });
+    fan.addEventListener('pointerleave', () => { fan.style.setProperty('--tilt-x','0deg'); fan.style.setProperty('--tilt-y','0deg'); });
+  }
+  document.querySelectorAll('.grid').forEach(g => g.addEventListener('pointermove', e => {
+    const card = e.target.closest('.card'); if (!card || reduceMotion.matches) return;
+    const r = card.getBoundingClientRect(); card.style.setProperty('--mx', (e.clientX-r.left) + 'px'); card.style.setProperty('--my', (e.clientY-r.top) + 'px');
+  }));
+
   document.querySelectorAll('.chip').forEach(c => c.addEventListener('click', () => applyFilter(c.dataset.f)));
 
   const tabs = [...document.querySelectorAll('.tab')];
@@ -204,6 +224,15 @@ function init() {
       }
     }
   });
+
+  const menu = document.getElementById('menu-toggle');
+  const navPanel = document.getElementById('nav-panel');
+  menu.addEventListener('click', () => {
+    const open = menu.getAttribute('aria-expanded') !== 'true';
+    menu.setAttribute('aria-expanded', String(open));
+    navPanel.classList.toggle('open', open);
+  });
+  navPanel.addEventListener('click', e => { if (e.target.closest('a')) { menu.setAttribute('aria-expanded','false'); navPanel.classList.remove('open'); } });
 
   document.getElementById('lang').addEventListener('click', () => {
     lang = lang === 'ar' ? 'en' : 'ar';
