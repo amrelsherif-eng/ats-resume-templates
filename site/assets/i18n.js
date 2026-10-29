@@ -267,14 +267,28 @@ Object.assign(EN, {
   'vid.title': 'Watch how it works',
   'vid.sub': 'Pick a template, edit it three ways, and check the result.',
   'vid.li.t': 'Watch the 2-minute walkthrough on LinkedIn',
-  'vid.li.s': 'Spoken in Arabic · three ways to edit, step by step · 119 reactions'
+  'vid.li.s': 'Spoken in Arabic · three ways to edit, step by step · 119 reactions',
+  'vid.soon': 'Coming soon',
+  'vid.new.t': 'The new 60-second demo',
+  'vid.new.s': 'The whole site in one minute: pick a template, edit it with AI, on Overleaf or locally, then check your CV here. Silent-friendly, English captions, Arabic end card.',
+  'vid.d.new': 'New demo',
+  'vid.d.new.s': 'Short and visual. Shows the website, all five templates and the CV checker.',
+  'vid.d.old': 'LinkedIn walkthrough',
+  'vid.d.old.s': 'The original 2-minute explainer, spoken in Egyptian Arabic. Goes slower through editing one template step by step.'
 });
 Object.assign(AR, {
   'vid.kicker': 'شاهد',
   'vid.title': 'شاهد طريقة الاستخدام',
   'vid.sub': 'اختر نموذجاً، عدّله بثلاث طرق، وافحص النتيجة.',
   'vid.li.t': 'شاهد الشرح في دقيقتين على لينكدإن',
-  'vid.li.s': 'بالعربي · ثلاث طرق للتعديل خطوة بخطوة · 119 تفاعل'
+  'vid.li.s': 'بالعربي · ثلاث طرق للتعديل خطوة بخطوة · 119 تفاعل',
+  'vid.soon': 'قريباً',
+  'vid.new.t': 'الفيديو الجديد في 60 ثانية',
+  'vid.new.s': 'الموقع كله في دقيقة: اختر نموذجاً، عدّله بالذكاء الاصطناعي أو على Overleaf أو على جهازك، ثم افحص سيرتك هنا. يصلح للمشاهدة بدون صوت، مع نص إنجليزي وخاتمة بالعربي.',
+  'vid.d.new': 'الفيديو الجديد',
+  'vid.d.new.s': 'قصير ومرئي. يعرض الموقع والنماذج الخمسة وفاحص السيرة الذاتية.',
+  'vid.d.old': 'شرح لينكدإن',
+  'vid.d.old.s': 'الشرح الأصلي في دقيقتين بالعامية المصرية. أبطأ، ويمشي معك في تعديل نموذج واحد خطوة بخطوة.'
 });
 
 Object.assign(EN, { 'chk.toFix1': '1 thing to improve', 'chk.passed1': '1 check passed' });

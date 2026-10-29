@@ -270,7 +270,9 @@ def test_unconfigured_features_stay_hidden(page):
     # The demo video shows only when configured in app.js; the support link points at GitHub Sponsors.
     expect(page.locator("#support")).to_be_visible()
     expect(page.locator("#support")).to_have_attribute("href", "https://github.com/sponsors/amrelsherif-eng")
-    expect(page.locator("#video-frame")).to_be_hidden()
+    # Until the new demo is set in app.js, its frame shows a "coming soon" placeholder next to the LinkedIn post.
+    expect(page.locator("#video-soon")).to_be_visible()
+    expect(page.locator("#demo-video")).to_be_hidden()
     expect(page.locator("#video .li-video")).to_have_attribute("href", re.compile(r"^https://www\.linkedin\.com/"))
     assert page.locator("footer nav").first.evaluate("n => getComputedStyle(n).position") == "static"
 
