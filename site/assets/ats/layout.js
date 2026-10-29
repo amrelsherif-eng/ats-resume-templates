@@ -79,7 +79,7 @@ export function layoutIssues(doc, opts = {}) {
   // a line (or a line that starts mid-page) whose right part is real content, not a date or place.
   const body = first.filter(l => l.text?.trim());
   const W = doc.width || 612;
-  const dateOrPlace = s => /\b(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:t(?:ember)?)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?|Present|Remote|Expected)\b|\b(?:19|20)\d{2}\b/i.test(s) ||
+  const dateOrPlace = s => /\b(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:t(?:ember)?)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?|Present|Remote|Expected)\b|\b(?:19|20)\d{2}\b|\b(?:0?[1-9]|1[0-2])[/.](?:\d{2}|(?:19|20)\d{2})\b|\b(?:19|20)\d{2}[-/.](?:0?[1-9]|1[0-2])\b/i.test(s) ||
     (s.length < 32 && /^[A-Z][\w.'-]*(?:\s+[A-Z][\w.'-]*)*(?:,\s*[A-Z][\w.'-]*(?:\s+[A-Z][\w.'-]*)*)?$/.test(s));
   const overlaps = body.filter(line => {
     const items = [...(line.items || [])].sort((a, b) => a.x - b.x);

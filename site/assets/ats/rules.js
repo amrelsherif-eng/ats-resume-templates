@@ -4,7 +4,7 @@
  * (MENA locations, bullet glyphs, currency codes, fewer false positives).
  */
 
-const HEADINGS_RE = /^(?:education|academic background|academics|experience|work experience|professional experience|employment history|work history|projects|personal projects|academic projects|key projects|skills|technical skills|core competencies|skills & expertise|certifications|summary|profile|professional summary|executive summary|leadership|activities|volunteer|volunteering|languages|awards|honors)$/i;
+const HEADINGS_RE = /^(?:education|academic background|academics|experience|work experience|professional experience|employment history|work history|projects|personal projects|academic projects|key projects|skills|technical skills|core competencies|skills & expertise|certifications|certificates|licenses|certifications & licenses|summary|profile|professional summary|executive summary|leadership|leadership experience|activities|extracurricular activities|volunteer|volunteering|volunteer experience|community involvement|languages|language skills|awards|honors|interests|hobbies)$/i;
 
 const ACTION_VERBS = new Set(
   ("accelerate accelerated achieve achieved acquire acquired adapt adapted administer administered advance advanced " +
@@ -42,7 +42,7 @@ const ACTION_VERBS = new Set(
   "load-tested benchmark benchmarked containerize containerized refactor rebuilt rebuild wire wired prototype prototyped " +
   "debug debugged troubleshoot troubleshot troubleshooted patch patched secure document handle handled process processed " +
   "file filed record recorded update updated serve served sell sold close closed collect gather gathered calibrate calibrated " +
-  "solder soldered measure flash flashed port ported tune tuned simulate assemble wrote led ran grew grow cofounded co-founded").split(" ")
+  "solder soldered measure flash flashed port ported tune tuned simulate assemble wrote led ran grew grow travel traveled cofounded co-founded").split(" ")
 );
 
 const BUZZWORDS = [
@@ -73,6 +73,8 @@ function detectHeading(text) {
   if (lower.includes('experience') || lower.includes('employment') || lower.includes('work history')) return 'exp';
   if (lower.includes('project')) return 'proj';
   if (lower.includes('skill') || lower.includes('competenc')) return 'skills';
+  if (lower.includes('leadership') || lower.includes('activit') || lower.includes('volunteer') || lower.includes('community')) return 'leadership';
+  if (lower.includes('education') || lower.includes('academic')) return 'edu';
   return 'other';
 }
 
@@ -121,7 +123,7 @@ export function contentIssues(doc, opts = {}) {
     ? { id: 'contact-email', cat: 'contact', level: 'ok', key: 'r.email-ok', weight: 5 }
     : { id: 'contact-email', cat: 'contact', level: 'warn', key: 'r.email-miss', fix: 'r.email-miss.fix', weight: 5 });
 
-  const phoneMatch = text.match(/(?:\+\d{1,3}[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}\b|\b(?:\+\d{1,3}[-.\s]?)?\d{2,4}[-.\s]?\d{3,4}[-.\s]?\d{3,5}\b/);
+  const phoneMatch = text.match(/(?:\(\+20\)|\+20)\s*1[0125](?:[\s.-]?\d){8}(?!\d)|\b01[0125](?:[\s.-]?\d){8}\b|(?:\+\d{1,3}[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}\b|\b(?:\+\d{1,3}[-.\s]?)?\d{2,4}[-.\s]?\d{3,4}[-.\s]?\d{3,5}\b/);
   issues.push(phoneMatch
     ? { id: 'contact-phone', cat: 'contact', level: 'ok', key: 'r.phone-ok', weight: 4 }
     : { id: 'contact-phone', cat: 'contact', level: 'warn', key: 'r.phone-miss', fix: 'r.phone-miss.fix', weight: 4 });
@@ -172,61 +174,77 @@ export function contentIssues(doc, opts = {}) {
   }
 
   // Extract bullets for content checks
-  const cleanBullet = b => b.replace(/^[\s•–—\-\*\u2022\u2212\u25E6\u2023\u25AA\u25BA\u27A4\u2713\d.)]+\s*/, '').trim();
+  const cleanBullet = b => b.replace(/^[\s•–—\-\*\u2022\u2212\u25E6\u2023\u25AA\u25BA\u27A4\u2713]+/, '').replace(/^\d+[.)]\s*/, '').trim();
   const hasGlyphs = lines.some(l => l.bullet);
   let bullets = [];
-  if (hasGlyphs) {
-    bullets = lines.filter(l => l.bullet && l.text.trim().length > 0).map(l => cleanBullet(l.text))
-      // "Coursework: A, B, C" style label lines are lists, not achievements.
-      .filter(b => b && !/^(?:relevant\s+)?(?:coursework|courses|skills|tools|technologies|languages)\s*:/i.test(b));
-  } else {
-    let inExpOrProj = false;
-    for (const l of lines) {
-      const h = detectHeading(l.text);
-      if (h) {
-        inExpOrProj = (h === 'exp' || h === 'proj');
-        continue;
-      }
-      if (inExpOrProj) {
-        const words = l.text.trim().split(/\s+/).filter(Boolean);
-        if (words.length >= 6) bullets.push(cleanBullet(l.text));
+  const achievementBullets = [];
+  const dateToken = String.raw`(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:t(?:ember)?)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?\.?)\s+(?:19|20)\d{2}|\d{1,2}[/.]\d{2,4}|(?:19|20)\d{2}[-/.]\d{1,2}`;
+  const dateRange = new RegExp(String.raw`\b${dateToken}\b\s*(?:-|–|—|to)\s*(?:\b${dateToken}\b|present|current|now)\b`, 'i');
+  let section = 'other';
+  for (const line of lines) {
+    const heading = detectHeading(line.text);
+    if (heading) {
+      section = heading;
+      continue;
+    }
+    const achievementSection = section === 'exp' || section === 'proj' || section === 'leadership';
+    const clean = cleanBullet(line.text);
+    if (hasGlyphs) {
+      if (!line.bullet || !clean) continue;
+      if (!/^(?:relevant\s+)?(?:coursework|courses|skills|tools|technologies|languages)\s*:/i.test(clean)) bullets.push(clean);
+      if (achievementSection) achievementBullets.push(clean);
+    } else if (achievementSection) {
+      const wordCount = line.text.trim().split(/\s+/).filter(Boolean).length;
+      const metadata = dateRange.test(line.text) || (line.text.match(/ \| /g) || []).length >= 2;
+      if (wordCount >= 6 && !metadata && clean) {
+        bullets.push(clean);
+        achievementBullets.push(clean);
       }
     }
-    bullets = bullets.filter(Boolean);
   }
+  // Safety net: if no Experience/Projects heading was recognised (e.g. "Internships", "Research"),
+  // judge every bulleted line rather than letting weak content pass unchecked.
+  if (!achievementBullets.length && bullets.length) achievementBullets.push(...bullets);
 
   // 3. Action verbs
   let verbCount = 0;
   const nonVerbEx = [];
-  for (const b of bullets) {
-    const first = (b.replace(/^[^a-zA-Z]+/, '').split(/\s+/)[0] || '').toLowerCase().replace(/[^a-z]/g, '');
+  const stripLabel = b => b.replace(/^(?:[\p{L}\p{N}][\p{L}\p{N}+.#&/-]*(?:\s+[\p{L}\p{N}][\p{L}\p{N}+.#&/-]*){0,3}):\s*/u, '');
+  const openingText = b => stripLabel(b).trim();
+  const normalizeVerb = word => word
+    .replace(/isation$/, 'ization').replace(/ising$/, 'izing').replace(/ised$/, 'ized')
+    .replace(/ysing$/, 'yzing').replace(/ysed$/, 'yzed').replace(/lling$/, 'ling').replace(/lled$/, 'led');
+  const openingWord = b => normalizeVerb((openingText(b).replace(/^[^a-zA-Z]+/, '').split(/\s+/)[0] || '').toLowerCase().replace(/[^a-z]/g, ''));
+  const verbBullets = achievementBullets.filter(b => !/^[+−-]?(?:\d|%)/.test(openingText(b)));
+  for (const b of verbBullets) {
+    const first = openingWord(b);
     if (ACTION_VERBS.has(first)) {
       verbCount++;
     } else {
       nonVerbEx.push(b);
     }
   }
-  const verbPct = bullets.length ? Math.round((verbCount / bullets.length) * 100) : 0;
+  const verbPct = verbBullets.length ? Math.round((verbCount / verbBullets.length) * 100) : 100;
   issues.push(verbPct < 60
-    ? { id: 'action-verbs', cat: 'content', level: verbPct < 25 && bullets.length >= 3 ? 'fail' : 'warn', key: 'r.verbs', vars: { pct: verbPct }, fix: 'r.verbs.fix', examples: nonVerbEx.slice(0, 3).map(trimEx), weight: 7 }
+    ? { id: 'action-verbs', cat: 'content', level: verbPct < 25 && verbBullets.length >= 3 ? 'fail' : 'warn', key: 'r.verbs', vars: { pct: verbPct }, fix: 'r.verbs.fix', examples: nonVerbEx.slice(0, 3).map(trimEx), weight: 7 }
     : { id: 'action-verbs', cat: 'content', level: 'ok', key: 'r.verbs-ok', vars: { pct: verbPct }, weight: 7 });
 
   // 4. Weak openers
   const weakRe = /^(?:responsible for|worked on|helped(?:\s+with)?|assisted(?:\s+with)?|participated in|involved in|duties included|tasked with)\b/i;
-  const weakEx = bullets.filter(b => weakRe.test(b.replace(/^[^a-zA-Z]+/, '')));
+  const weakEx = achievementBullets.filter(b => weakRe.test(openingText(b).replace(/^[^a-zA-Z]+/, '')));
   issues.push(weakEx.length > 0
-    ? { id: 'weak-openers', cat: 'content', level: weakEx.length >= 3 && weakEx.length * 2 >= bullets.length ? 'fail' : 'warn', key: 'r.weak', vars: { n: weakEx.length }, fix: 'r.weak.fix', examples: weakEx.slice(0, 3).map(trimEx), weight: 6 }
+    ? { id: 'weak-openers', cat: 'content', level: 'warn', key: 'r.weak', vars: { n: weakEx.length }, fix: 'r.weak.fix', examples: weakEx.slice(0, 3).map(trimEx), weight: 6 }
     : { id: 'weak-openers', cat: 'content', level: 'ok', key: 'r.weak-ok', weight: 6 });
 
   // 5. Quantified impact
   const numRe = /(?:\b(?:EGP|SAR|AED|USD|EUR)\b|[\$€£¥₹]\s*\d+|\d+[\d,.]*\s*(?:%|k\b|m\b|b\b|x\b)?|\b\d+\b|%|[\$€£¥₹]|\b(?:zero|one|two|three|four|five|six|seven|eight|nine|ten|hundred|thousand|million|billion)\b|\b(?:hours?|days?|weeks?|months?|years?|seconds?|minutes?|quarterly|annually)\b)/i;
   let numCount = 0;
   const nonNumEx = [];
-  for (const b of bullets) {
+  for (const b of achievementBullets) {
     if (numRe.test(b)) numCount++;
     else nonNumEx.push(b);
   }
-  const numPct = bullets.length ? Math.round((numCount / bullets.length) * 100) : 0;
+  const numPct = achievementBullets.length ? Math.round((numCount / achievementBullets.length) * 100) : 0;
   issues.push(numPct < 40
     ? { id: 'quantified-impact', cat: 'content', level: 'warn', key: 'r.numbers', vars: { pct: numPct }, fix: 'r.numbers.fix', examples: nonNumEx.slice(0, 3).map(trimEx), weight: 7 }
     : { id: 'quantified-impact', cat: 'content', level: 'ok', key: 'r.numbers-ok', vars: { pct: numPct }, weight: 7 });
@@ -269,8 +287,8 @@ export function contentIssues(doc, opts = {}) {
   // 9. Repeated opening verbs
   const verbTally = {};
   const verbExMap = {};
-  for (const b of bullets) {
-    const first = (b.replace(/^[^a-zA-Z]+/, '').split(/\s+/)[0] || '').toLowerCase().replace(/[^a-z]/g, '');
+  for (const b of achievementBullets) {
+    const first = openingWord(b);
     if (first.length >= 3 && ACTION_VERBS.has(first)) {
       verbTally[first] = (verbTally[first] || 0) + 1;
       if (!verbExMap[first]) verbExMap[first] = [];
@@ -287,9 +305,10 @@ export function contentIssues(doc, opts = {}) {
   }
   // 9b. Copy-pasted bullets: the same line twice adds nothing and reads as filler.
   const seenBullets = new Map();
-  for (const b of bullets) {
+  for (const b of achievementBullets) {
+    if (/^(?:[\p{L}\p{N}][\p{L}\p{N}+.#&/-]*(?:\s+[\p{L}\p{N}][\p{L}\p{N}+.#&/-]*){0,3}):\s*/u.test(b)) continue;
     const k = b.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
-    if (k.split(' ').length >= 4) seenBullets.set(k, (seenBullets.get(k) || []).concat(b));
+    if (k.split(' ').length >= 6) seenBullets.set(k, (seenBullets.get(k) || []).concat(b));
   }
   const dupes = [...seenBullets.values()].filter(list => list.length > 1);
   const dupCount = dupes.reduce((s, list) => s + list.length - 1, 0);
