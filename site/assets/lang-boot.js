@@ -1,24 +1,21 @@
-// Runs before the first paint. Arabic visitors get RTL straight away, and the page stays hidden until
-// app.js has applied the Arabic text, so they never see an English flash or a layout jump.
+// Redirect before paint to the matching pre-rendered language page.
 (function () {
-  var lang = 'en';
+  var saved = null;
   try {
-    var saved = localStorage.getItem('lang');
-    if (saved === 'ar' || saved === 'en') lang = saved;
-    else if ((navigator.language || '').toLowerCase().indexOf('ar') === 0) lang = 'ar';
+    saved = localStorage.getItem('lang');
   } catch (e) { /* storage blocked: keep English */ }
-  if (lang !== 'ar') return;
+  var fromUrl = /[?&]lang=(en|ar)(&|$)/.exec(location.search);
+  if (fromUrl) saved = fromUrl[1];
   var root = document.documentElement;
-  root.lang = 'ar';
-  root.dir = 'rtl';
-  root.classList.add('i18n-wait');
-  // Fetch the Arabic font now (normally it starts only after the CSS is applied) so it is ready at reveal.
-  ['400', '500', '700'].forEach(function (w) {
-    var link = document.createElement('link');
-    link.rel = 'preload'; link.as = 'font'; link.type = 'font/woff2'; link.crossOrigin = 'anonymous';
-    link.href = 'assets/fonts/ibm-plex-sans-arabic-arabic-' + w + '-normal.woff2';
-    document.head.appendChild(link);
-  });
-  // Safety net: never keep the page hidden if app.js fails to run.
-  setTimeout(function () { root.classList.remove('i18n-wait'); }, 2500);
+  var prerendered = root.dataset.prerendered === 'ar';
+  var arabic = saved === 'ar' || (saved !== 'en' && (navigator.language || '').toLowerCase().indexOf('ar') === 0);
+  var target = prerendered ? (saved === 'en' ? './' + location.hash : null) : (arabic ? 'ar.html' + location.hash : null);
+  if (!target) return;
+  try { location.replace(target); }
+  catch (e) {
+    if (!prerendered) {
+      root.lang = 'ar'; root.dir = 'rtl'; root.classList.add('i18n-wait');
+      setTimeout(function () { root.classList.remove('i18n-wait'); }, 2500);
+    }
+  }
 })();
