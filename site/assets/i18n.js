@@ -1,7 +1,7 @@
 /* UI strings. English is the source; Arabic was drafted with Gemini and reviewed. */
 const EN={'nav.menu':'Menu','nav.star':'Star on GitHub','hero.t1':'Your resume,','hero.t2':'one page that gets read.',
   'hero.lead':'A one-page CV that applicant tracking systems can actually read.','hero.lead.more':'Pick a template, edit it with AI or on Overleaf, then check your CV right here.',
-  'hero.cta1':'Pick your template','hero.cta2':'How to edit','stat.tracks':'career tracks','stat.page':'page, checked on every change','stat.latex':'LaTeX skills needed',
+  'hero.cta1':'Pick your template','hero.cta2':'How to edit','stat.tracks':'career tracks','stat.page':'page, ATS-friendly','stat.latex':'LaTeX skills needed',
   'tpl.kicker':'01 · Templates','tpl.title':'Pick the one that matches the job you want','tpl.sub':'Same clean layout, different focus. Each template orders its sections and sample content for one career path. All sample data is fictional.',
   'software-web.n':'Software Engineering','software-web.en':'Software Engineering','software-web.d':'Projects include backend APIs and web apps.','software-web.b':'Backend, full-stack and web developers, CS students.',
   'business-finance.n':'Business & Finance','business-finance.en':'Business & Finance','business-finance.d':'Finance internships, dashboards and valuation cases.','business-finance.b':'Accounting, finance, audit and banking. Built for Faculty of Commerce students.',
@@ -30,7 +30,7 @@ const AR={
  "hero.cta1": "اختر نموذجك",
  "hero.cta2": "طريقة التعديل",
  "stat.tracks": "مسارات وظيفية",
- "stat.page": "صفحة واحدة، مفحوصة آلياً مع كل تعديل",
+ "stat.page": "صفحة، متوافقة مع ATS",
  "stat.latex": "خبرة مطلوبة في LaTeX",
  "tpl.kicker": "01 · النماذج",
  "tpl.title": "اختر النموذج المناسب للمجال الذي تستهدفه",
@@ -280,11 +280,14 @@ Object.assign(EN, {
   'vid.new.s': 'See the site, templates and CV checker.',
   'vid.soon': 'Coming soon',
   'vid.tut.t': 'The full tutorial, step by step',
-  'vid.tut.duration': '5:15',
+  'vid.tut.durEn': '5:15',
+  'vid.tut.durAr': '5:02',
+  'vid.tut.pick': 'Tutorial language',
   'vid.tut.time': '5 minutes',
-  'vid.tut.voice': 'English voice-over + on-screen subtitles',
+  'vid.tut.voiceEn': 'English voice-over + on-screen subtitles',
+  'vid.tut.voiceAr': 'Egyptian Arabic voice-over + on-screen subtitles',
   'vid.tut.steps': 'Overleaf, AI and the checker',
-  'vid.tut.s': 'Every click, zoomed in. No code needed. The Arabic version plays when the site is in Arabic.'
+  'vid.tut.s': 'Every click, zoomed in. No code needed.'
 });
 Object.assign(AR, {
   'vid.kicker': 'شاهد',
@@ -298,11 +301,14 @@ Object.assign(AR, {
   'vid.new.s': 'شاهد الموقع والنماذج وفاحص السيرة.',
   'vid.soon': 'قريباً',
   'vid.tut.t': 'الشرح الكامل خطوة بخطوة',
-  'vid.tut.duration': '5:02',
+  'vid.tut.durEn': '5:15',
+  'vid.tut.durAr': '5:02',
+  'vid.tut.pick': 'لغة الشرح',
   'vid.tut.time': '5 دقائق',
-  'vid.tut.voice': 'بصوت مصري + ترجمة على الشاشة',
+  'vid.tut.voiceEn': 'صوت إنجليزي + ترجمة على الشاشة',
+  'vid.tut.voiceAr': 'صوت مصري + ترجمة على الشاشة',
   'vid.tut.steps': 'Overleaf والذكاء الاصطناعي والفاحص',
-  'vid.tut.s': 'كل ضغطة بزوم واضح، ومن غير أي كود. النسخة الإنجليزية بتشتغل لما الموقع يكون بالإنجليزي.'
+  'vid.tut.s': 'كل ضغطة بزوم واضح، ومن غير أي كود.'
 });
 
 Object.assign(EN, { 'chk.toFix1': '1 thing to improve', 'chk.passed1': '1 check passed' });
@@ -363,7 +369,7 @@ Object.assign(AR, {
 });
 
 Object.assign(EN, {
-  'stat.page': 'page, checked on every change',
+  'stat.page': 'page, ATS-friendly',
   'local.link': 'Already use LaTeX? Build it locally',
   'tab.ol': 'Overleaf',
   'chk.level': 'How should we judge length?',
@@ -384,7 +390,7 @@ Object.assign(EN, {
   'foot.checked': 'Checked on every change'
 });
 Object.assign(AR, {
-  'stat.page': 'صفحة، مفحوصة مع كل تعديل',
+  'stat.page': 'صفحة، متوافقة مع ATS',
   'local.link': 'تستخدم LaTeX بالفعل؟ ابنِه محلياً',
   'tab.ol': 'على Overleaf',
   'chk.level': 'على أي أساس نحكم على الطول؟',

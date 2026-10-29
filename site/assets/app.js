@@ -118,6 +118,7 @@ function flash(btn, ok, duration = 1800, success = t('copied')) {
 function updateTabIndicator(tab) {
   const tabs = document.querySelector('.tabs');
   if (!tabs || !tab) return;
+  tabs.classList.remove('no-sel');
   const list = [...tabs.querySelectorAll('.tab')];
   const width = tab.offsetWidth;
   const x = list.slice(0, list.indexOf(tab)).reduce((sum, item) => sum + item.offsetWidth, 0);
@@ -244,7 +245,7 @@ function init() {
     panel.hidden = false;
     panel.classList.add('active');
     localLink.setAttribute('aria-expanded', 'true');
-    document.querySelector('.tabs').style.setProperty('--tab-width', '0px');
+    document.querySelector('.tabs').classList.add('no-sel');
   });
 
   document.addEventListener('click', async e => {
@@ -308,28 +309,49 @@ function init() {
     document.getElementById('video-soon').remove();
   }
 
-  // Tutorial follows the site language. Source and poster are set only when the section is near,
-  // so the first page load never downloads any of the video.
+  // The tutorial follows the site language until the viewer makes a manual choice.
   const tut = document.getElementById('tut-video');
+  const tutButtons = [...document.querySelectorAll('.tut-lang')];
+  const tutDuration = document.querySelector('.vid-tut .video-duration');
+  const tutVoice = document.querySelector('.vid-tut [data-i^="vid.tut.voice"]');
   let tutNear = false;
+  let tutManual = false;
+  let tutLang = lang;
   const setTutorial = () => {
+    tutButtons.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.tl === tutLang)));
+    tutDuration.dataset.i = tutLang === 'en' ? 'vid.tut.durEn' : 'vid.tut.durAr';
+    tutDuration.textContent = t(tutDuration.dataset.i);
+    tutVoice.dataset.i = tutLang === 'en' ? 'vid.tut.voiceEn' : 'vid.tut.voiceAr';
+    tutVoice.textContent = t(tutVoice.dataset.i);
     if (!tutNear) return;
-    const c = TUTORIAL[lang] || TUTORIAL.en;
-    if (tut.dataset.lang === lang) return;
+    const c = TUTORIAL[tutLang] || TUTORIAL.en;
+    if (tut.dataset.lang === tutLang) return;
     const switching = Boolean(tut.dataset.lang);
     tut.pause();
     tut.replaceChildren(el('source', { src: c.src, type: 'video/mp4' }));
-    tut.dataset.lang = lang;
+    tut.dataset.lang = tutLang;
     tut.poster = c.poster;
     if (switching) tut.load();
   };
+  tutButtons.forEach(button => button.addEventListener('click', () => {
+    tutManual = true;
+    tutLang = button.dataset.tl;
+    setTutorial();
+    tutButtons.forEach(item => item.setAttribute('aria-pressed', String(item === button)));
+  }));
   if ('IntersectionObserver' in window) {
     const io = new IntersectionObserver(entries => {
       if (entries.some(e => e.isIntersecting)) { tutNear = true; setTutorial(); io.disconnect(); }
     }, { rootMargin: '800px 0px' });
     io.observe(document.getElementById('video'));
   } else tutNear = true;
-  document.addEventListener('langchange', setTutorial);
+  document.addEventListener('langchange', () => {
+    if (!tutManual) tutLang = lang;
+    setTutorial();
+  });
+
+  document.getElementById('demo-video').addEventListener('play', () => tut.pause());
+  tut.addEventListener('play', () => document.getElementById('demo-video').pause());
 
   applyLang();
   setTutorial();

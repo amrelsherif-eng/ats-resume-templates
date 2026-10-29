@@ -62,7 +62,7 @@
       </div>
       <dl class="stats">
         <div class="stat"><dt>5</dt><dd data-i="stat.tracks">career tracks</dd></div>
-        <div class="stat"><dt>1</dt><dd><a href="https://github.com/amrelsherif-eng/ats-resume-templates/actions/workflows/build.yml" target="_blank" rel="noopener" data-i="stat.page">page, checked on every change</a></dd></div>
+        <div class="stat"><dt>1</dt><dd data-i="stat.page">page, ATS-friendly</dd></div>
         <div class="stat"><dt>0</dt><dd data-i="stat.latex">LaTeX skills needed</dd></div>
       </dl>
     </div>
@@ -119,13 +119,17 @@
       <figure class="vid-card vid-tut">
         <div class="video-frame">
           <video id="tut-video" controls playsinline preload="none"></video>
-          <span class="video-duration" dir="ltr" data-i="vid.tut.duration">5:15</span>
+          <span class="video-duration" dir="ltr" data-i="vid.tut.durEn">5:15</span>
         </div>
         <figcaption class="video-content">
           <b data-i="vid.tut.t">The full tutorial, step by step</b>
+          <div class="tut-language" role="group" aria-label="Tutorial language" data-i-aria="vid.tut.pick">
+            <button type="button" class="tut-lang" data-tl="en" lang="en" aria-pressed="true">English</button>
+            <button type="button" class="tut-lang" data-tl="ar" lang="ar" aria-pressed="false">عربي</button>
+          </div>
           <ul class="video-chips">
             <li data-i="vid.tut.time">5 minutes</li>
-            <li data-i="vid.tut.voice">English voice-over + on-screen subtitles</li>
+            <li data-i="vid.tut.voiceEn">English voice-over + on-screen subtitles</li>
             <li data-i="vid.tut.steps">Overleaf, AI and the checker</li>
           </ul>
           <span class="video-description" data-i="vid.tut.s">Every click, zoomed in. No code needed.</span>
