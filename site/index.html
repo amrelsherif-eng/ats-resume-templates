@@ -31,7 +31,7 @@
 <a class="skip" href="#templates" data-i="nav.skip">Skip to templates</a>
 <nav aria-label="Main">
   <div class="wrap">
-    <a class="brand" href="#top"><span class="dollar">$</span> <span class="who">amrelsherif-eng /</span> <b>ats-resume-templates</b></a>
+    <a class="brand" href="#top" data-i="brand">ATS Resume Templates</a>
     <button class="menu-toggle btn sm" id="menu-toggle" type="button" aria-expanded="false" aria-controls="nav-panel" data-i="nav.menu">Menu</button>
     <ul class="navlinks" id="nav-panel">
       <li><a href="#templates" data-i="nav.templates">Templates</a></li>
@@ -41,7 +41,7 @@
     </ul>
     <div class="navr">
       <button class="btn sm lang" id="lang" type="button" lang="ar" aria-label="عربي">عربي</button>
-      <a class="btn sm" href="https://github.com/amrelsherif-eng/ats-resume-templates" target="_blank" rel="noopener" aria-label="Star on GitHub">
+      <a class="btn sm" href="https://github.com/amrelsherif-eng/ats-resume-templates" target="_blank" rel="noopener" aria-label="Star on GitHub" data-i-aria="nav.star.aria">
         <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.75.75 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"/></svg>
         <span class="gh-text" data-i="nav.star">Star on GitHub</span>
       </a>
@@ -53,10 +53,9 @@
 <header class="hero" id="top">
   <div class="wrap">
     <div>
-      <a class="pill" href="#templates"><span class="pill-tag">v2.1</span><span data-i="hero.pill">5 templates · checked on every change</span></a>
-      <div class="cmd" aria-hidden="true"><span class="p">$</span> latexmk -pdf resume.tex<span class="caret"></span></div>
+      <a class="pill" href="#templates"><span data-i="hero.pill">Free · 5 templates · MIT licensed</span></a>
       <h1><span data-i="hero.t1">Your resume,</span><br><span class="accent" data-i="hero.t2">one page that gets read.</span></h1>
-      <p class="lead" data-i="hero.lead">Five free LaTeX templates for students and early-career candidates.</p>
+      <p class="lead"><span data-i="hero.lead">A one-page CV that applicant tracking systems can actually read.</span><br><span data-i="hero.lead.more">Pick a template, edit it with AI or on Overleaf, then check your CV right here.</span></p>
       <div class="ctas">
         <a class="btn primary" href="#templates" data-i="hero.cta1">Pick your template</a>
         <a class="btn" href="#check" data-i="hero.cta3">Check my CV</a>
@@ -87,12 +86,6 @@
     <div class="kicker" data-i="tpl.kicker">01 · Templates</div>
     <h2 id="tpl-h" data-i="tpl.title">Pick the one that matches the job you want</h2>
     <p class="sub" data-i="tpl.sub">Same clean layout, different focus.</p>
-    <div class="filters" role="group" aria-label="Filter">
-      <button class="chip" type="button" aria-pressed="true" data-f="all" data-i="f.all">All</button>
-      <button class="chip" type="button" aria-pressed="false" data-f="eng" data-i="f.eng">Engineering</button>
-      <button class="chip" type="button" aria-pressed="false" data-f="sw" data-i="f.sw">Software</button>
-      <button class="chip" type="button" aria-pressed="false" data-f="biz" data-i="f.biz">Business</button>
-    </div>
     <div class="grid" id="grid"></div>
   </div>
 </section>
@@ -305,16 +298,16 @@ docker run --rm -v "$PWD":/work -w /work texlive/texlive:latest latexmk -pdf res
 <footer>
   <div class="wrap foot">
     <div class="foot-brand">
-      <a class="brand" href="#top"><span class="dollar">$</span> <b>ats-resume-templates</b></a>
+      <a class="brand" href="#top" data-i="brand">ATS Resume Templates</a>
       <p data-i="foot.tag">Free one-page resume templates and an ATS check that never uploads your file.</p>
     </div>
     <nav class="foot-col" aria-label="Templates">
       <h3 data-i="foot.h.templates">Templates</h3>
-      <a href="#templates" data-i="software-web.n">Software Engineering</a>
-      <a href="#templates" data-i="business-finance.n">Business &amp; Finance</a>
-      <a href="#templates" data-i="network-cloud.n">Network &amp; Cloud</a>
-      <a href="#templates" data-i="embedded-ece.n">Embedded &amp; ECE</a>
-      <a href="#templates" data-i="mobile-apps.n">Mobile Apps</a>
+      <a href="#tpl-software-web" data-i="software-web.n">Software Engineering</a>
+      <a href="#tpl-business-finance" data-i="business-finance.n">Business &amp; Finance</a>
+      <a href="#tpl-network-cloud" data-i="network-cloud.n">Network &amp; Cloud</a>
+      <a href="#tpl-embedded-ece" data-i="embedded-ece.n">Embedded &amp; ECE</a>
+      <a href="#tpl-mobile-apps" data-i="mobile-apps.n">Mobile Apps</a>
     </nav>
     <nav class="foot-col" aria-label="Resources">
       <h3 data-i="foot.h.res">Resources</h3>

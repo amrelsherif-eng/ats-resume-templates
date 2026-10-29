@@ -29,23 +29,18 @@ def test_template_cards(page):
     cards = page.locator("#grid .card:not(.request)")
     expect(cards).to_have_count(5)
     for template_id in TEMPLATE_IDS:
-        card = page.locator(f'#grid .card[data-g]:has(.tag:text-is("{template_id}"))')
-        overleaf = card.get_by_role("link", name="Open in Overleaf")
+        card = page.locator(f"#tpl-{template_id}")
+        overleaf = card.get_by_role("link", name="Edit on Overleaf")
         href = overleaf.get_attribute("href")
         raw_path = f"https://raw.githubusercontent.com/amrelsherif-eng/ats-resume-templates/main/templates/{template_id}/resume.tex"
         assert href.startswith("https://www.overleaf.com/docs?snip_uri=")
         assert quote(raw_path, safe="") in href
-        expect(card.get_by_role("link", name="Preview")).to_have_attribute("href", re.compile("overleaf.com"))
-        pdf = card.get_by_role("link", name="PDF", exact=True)
+        expect(card.get_by_role("link", name="View sample PDF")).to_have_attribute("href", re.compile("overleaf.com"))
+        expect(card.locator("[data-ai]")).to_have_count(1)
+        expect(card.get_by_role("link", name="PDF", exact=True)).to_have_count(0)
+        pdf = card.locator(".shot")
         response = page.request.get(f"{page.url.rsplit('/', 1)[0]}/{pdf.get_attribute('href')}")
         assert response.status == 200
-
-
-def test_filters(page):
-    for group, expected in [("biz", 1), ("eng", 2), ("sw", 2), ("all", 5)]:
-        page.locator(f'.chip[data-f="{group}"]').click()
-        expect(page.locator("#grid .card:not(.request):visible")).to_have_count(expected)
-        expect(page.locator("#grid .card.request:visible")).to_have_count(1)
 
 
 def test_language_switch(page):
@@ -61,6 +56,27 @@ def test_language_switch(page):
     page.locator("#lang").click()
     expect(page.locator("html")).to_have_attribute("dir", "ltr")
     expect(page.locator("html")).to_have_attribute("lang", "en")
+    expect(page.locator("#tpl-software-web h3")).to_have_text("Software Engineering")
+
+
+def test_arabic_template_titles_and_brand(page):
+    page.locator("#lang").click()
+    expect(page.locator("nav .brand")).to_have_text("نماذج سيرة ذاتية ATS")
+    expect(page.locator("#tpl-software-web h3")).to_have_text("هندسة البرمجيات")
+    expect(page.locator("#tpl-software-web .tag")).to_have_text("Software Engineering")
+    expect(page.locator("nav a[aria-label='نجمة على GitHub']")).to_be_visible()
+
+
+@pytest.mark.parametrize("width", [360, 390])
+@pytest.mark.parametrize("lang", ["en", "ar"])
+def test_template_actions_fit_on_mobile(page, width, lang):
+    page.set_viewport_size({"width": width, "height": 900})
+    if lang == "ar":
+        page.locator("#lang").click()
+    for actions in page.locator("#grid .card:not(.request) .actions").all():
+        assert actions.evaluate("(e) => e.scrollWidth <= e.clientWidth")
+        for action in actions.locator(".btn").all():
+            assert action.evaluate("(e) => e.scrollWidth <= e.clientWidth")
 
 
 def test_tabs_keyboard(page):
@@ -295,8 +311,8 @@ def test_keyboard_skip_link_and_focus(page):
     page.keyboard.press("Enter")
     assert page.evaluate("location.hash") == "#templates"
     # Focus rings must be visible on interactive elements.
-    page.locator(".chip").first.focus()
-    outline = page.locator(".chip").first.evaluate("e => getComputedStyle(e).outlineStyle")
+    page.locator("#lang").focus()
+    outline = page.locator("#lang").evaluate("e => getComputedStyle(e).outlineStyle")
     assert outline != "none"
 
 
