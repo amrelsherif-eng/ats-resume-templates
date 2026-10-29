@@ -1231,11 +1231,12 @@ footer nav{
   .video-chips{gap:4px}
   .video-chips li,.video-chips>span{padding:3px 6px;font-size:10px}
   .video-description{font-size:12px}
-  .li-text{gap:7px}
 }
 @media(max-width:720px){
   .vid-new.has-video{grid-template-columns:minmax(0,1fr);grid-template-rows:auto auto}
   .vid-new.has-video .video-frame{width:100%;height:auto;min-height:0;aspect-ratio:4/5}
+  .vid-tut{grid-template-columns:minmax(0,1fr);grid-template-rows:auto auto}
+  .vid-tut .video-frame{width:100%;height:auto;min-height:0;aspect-ratio:16/9}
 }
 .vid-card{
   min-width:0;
@@ -1253,6 +1254,14 @@ footer nav{
   transform:translateY(-2px)}
 .vid-new{
   margin:0}
+.vid-tut{
+  margin:0}
+.vid-tut .video-frame{
+  aspect-ratio:16/9;
+  background:#000}
+@media(min-width:721px){
+  .vid-grid:has(.vid-tut){grid-template-columns:minmax(0,340px) minmax(0,640px)}
+}
 .video-content{
   display:grid;
   align-content:start;
@@ -1346,28 +1355,6 @@ html[dir=rtl] .soon-badge{
   background:var(--surface);
   color:var(--text);
   font:11px var(--mono)}
-.li-video{
-  cursor:pointer}
-.li-play{
-  position:absolute;
-  inset:0;
-  z-index:2;
-  margin:auto;
-  display:grid;
-  place-items:center;
-  width:64px;
-  height:64px;
-  border-radius:50%;
-  background:var(--accent);
-  color:var(--surface)}
-.li-text{
-  display:grid;
-  gap:10px;
-  min-width:0}
-.li-go{
-  justify-self:start;
-  color:var(--accent);
-  font-size:12px}
 @media(prefers-reduced-motion:reduce){.vid-card{transition:none}.vid-card:hover{transform:none}}
 .notfound{
   display:flex;
