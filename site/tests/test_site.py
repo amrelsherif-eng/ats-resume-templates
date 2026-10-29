@@ -307,6 +307,10 @@ def test_checker_ai_prompt(page, tmp_path):
     upload(page, ROOT / "templates/business-finance/resume.pdf")
     assert score_of(page) == 100
     expect(page.locator("#chk-out .issues-h")).to_have_text("No problems. 2 small tips:")
+    # The work-link tip is optional and not tied to tech (an accountant has no GitHub).
+    tip = page.locator("#chk-out .issue", has_text="No link to your work found (optional).")
+    expect(tip).to_be_visible()
+    assert "GitHub" not in tip.locator(".issue-t").text_content()
     expect(page.locator("#chk-out .chk-tools")).to_have_count(0)
     # A CV with problems gets the button, and the prompt carries its text and the issues.
     lines = ["Sara Hassan", "Experience", "Support Specialist, Example Co"] + [
