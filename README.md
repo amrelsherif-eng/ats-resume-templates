@@ -27,38 +27,20 @@
 <a id="what-you-get"></a>
 <a id="-table-of-contents"></a>
 <a id="table-of-contents"></a>
-<picture>
-  <source media="(max-width: 767px)" srcset="assets/h-what-mobile.svg">
-  <img src="assets/h-what.svg#gh-dark-mode-only" width="100%" alt="What you get">
-</picture>
-<picture>
-  <source media="(max-width: 767px)" srcset="assets/h-what-mobile-light.svg">
-  <img src="assets/h-what-light.svg#gh-light-mode-only" width="100%" alt="What you get">
-</picture>
+<img src="assets/h-what.svg#gh-dark-mode-only" width="100%" alt="What you get">
+<img src="assets/h-what-light.svg#gh-light-mode-only" width="100%" alt="What you get">
 
-<a href="https://amrelsherif-eng.github.io/ats-resume-templates/">
-<picture>
-  <source media="(max-width: 767px)" srcset="assets/cards-mobile.svg">
-  <img src="assets/cards.svg#gh-dark-mode-only" width="100%" alt="01 Templates: 5 one-page LaTeX CVs for tech and business tracks. 02 Three ways to edit: Overleaf, any AI chat, or your own computer. 03 CV checker: runs in your browser, your PDF is never uploaded. 04 Video tutorials: English and Egyptian Arabic, 5 minutes, with chapters.">
-</picture>
-<picture>
-  <source media="(max-width: 767px)" srcset="assets/cards-mobile-light.svg">
-  <img src="assets/cards-light.svg#gh-light-mode-only" width="100%" alt="01 Templates: 5 one-page LaTeX CVs for tech and business tracks. 02 Three ways to edit: Overleaf, any AI chat, or your own computer. 03 CV checker: runs in your browser, your PDF is never uploaded. 04 Video tutorials: English and Egyptian Arabic, 5 minutes, with chapters.">
-</picture>
-</a>
+<p align="center">
+  <a href="https://amrelsherif-eng.github.io/ats-resume-templates/"><img src="assets/cards-mobile.svg#gh-dark-mode-only" width="760" alt="01 Templates: 5 one-page LaTeX CVs for tech and business tracks. 02 Three ways to edit: Overleaf, any AI chat, or your own computer. 03 CV checker: runs in your browser, your PDF is never uploaded. 04 Video tutorials: English and Egyptian Arabic, 5 minutes, with chapters."></a>
+  <a href="https://amrelsherif-eng.github.io/ats-resume-templates/"><img src="assets/cards-mobile-light.svg#gh-light-mode-only" width="760" alt="01 Templates: 5 one-page LaTeX CVs for tech and business tracks. 02 Three ways to edit: Overleaf, any AI chat, or your own computer. 03 CV checker: runs in your browser, your PDF is never uploaded. 04 Video tutorials: English and Egyptian Arabic, 5 minutes, with chapters."></a>
+</p>
 
 **Jump to:** [Templates](#-pick-your-template) · [Start in 3 steps](#-start-in-3-steps) · [Three ways to edit](#three-ways-to-edit) · [Check your CV](#check-your-cv) · [Videos](#-video-tutorials) · [ATS-friendly?](#-is-it-really-ats-friendly) · [Customize](#customize) · [Build locally](#-build-locally) · [Developers](#for-developers) · [FAQ](#faq) · [Changelog](#-changelog)
 
 <a id="-pick-your-template"></a>
 <a id="pick-your-template"></a>
-<picture>
-  <source media="(max-width: 767px)" srcset="assets/h-templates-mobile.svg">
-  <img src="assets/h-templates.svg#gh-dark-mode-only" width="100%" alt="Pick your template">
-</picture>
-<picture>
-  <source media="(max-width: 767px)" srcset="assets/h-templates-mobile-light.svg">
-  <img src="assets/h-templates-light.svg#gh-light-mode-only" width="100%" alt="Pick your template">
-</picture>
+<img src="assets/h-templates.svg#gh-dark-mode-only" width="100%" alt="Pick your template">
+<img src="assets/h-templates-light.svg#gh-light-mode-only" width="100%" alt="Pick your template">
 
 Choose the track closest to the job you want. Every template is one page, uses fictional sample data, and comes as a `.tex` source, a ready PDF, and an Overleaf project.
 
@@ -129,14 +111,8 @@ Choose the track closest to the job you want. Every template is one page, uses f
 
 <a id="-start-in-3-steps"></a>
 <a id="start-in-3-steps"></a>
-<picture>
-  <source media="(max-width: 767px)" srcset="assets/h-start-mobile.svg">
-  <img src="assets/h-start.svg#gh-dark-mode-only" width="100%" alt="Start in 3 steps">
-</picture>
-<picture>
-  <source media="(max-width: 767px)" srcset="assets/h-start-mobile-light.svg">
-  <img src="assets/h-start-light.svg#gh-light-mode-only" width="100%" alt="Start in 3 steps">
-</picture>
+<img src="assets/h-start.svg#gh-dark-mode-only" width="100%" alt="Start in 3 steps">
+<img src="assets/h-start-light.svg#gh-light-mode-only" width="100%" alt="Start in 3 steps">
 
 No LaTeX knowledge and nothing to install. [Overleaf](https://www.overleaf.com) turns the template into a PDF in your browser.
 
@@ -150,14 +126,8 @@ No LaTeX knowledge and nothing to install. [Overleaf](https://www.overleaf.com) 
 > Prefer a blank project? Create one in Overleaf, open the template's **.tex** link above, and paste everything into `main.tex`.
 
 <a id="three-ways-to-edit"></a>
-<picture>
-  <source media="(max-width: 767px)" srcset="assets/h-edit-mobile.svg">
-  <img src="assets/h-edit.svg#gh-dark-mode-only" width="100%" alt="Three ways to edit">
-</picture>
-<picture>
-  <source media="(max-width: 767px)" srcset="assets/h-edit-mobile-light.svg">
-  <img src="assets/h-edit-light.svg#gh-light-mode-only" width="100%" alt="Three ways to edit">
-</picture>
+<img src="assets/h-edit.svg#gh-dark-mode-only" width="100%" alt="Three ways to edit">
+<img src="assets/h-edit-light.svg#gh-light-mode-only" width="100%" alt="Three ways to edit">
 
 | | Way | Best for | You need |
 |:---:|:---|:---|:---|
@@ -183,14 +153,8 @@ My information:
 
 <a id="check-your-cv"></a>
 <a id="check-your-cv-on-the-website"></a>
-<picture>
-  <source media="(max-width: 767px)" srcset="assets/h-check-mobile.svg">
-  <img src="assets/h-check.svg#gh-dark-mode-only" width="100%" alt="Check your CV">
-</picture>
-<picture>
-  <source media="(max-width: 767px)" srcset="assets/h-check-mobile-light.svg">
-  <img src="assets/h-check-light.svg#gh-light-mode-only" width="100%" alt="Check your CV">
-</picture>
+<img src="assets/h-check.svg#gh-dark-mode-only" width="100%" alt="Check your CV">
+<img src="assets/h-check-light.svg#gh-light-mode-only" width="100%" alt="Check your CV">
 
 Drop any PDF into the [**CV checker**](https://amrelsherif-eng.github.io/ats-resume-templates/#check). You get a score out of 100, what passed, what to fix first, and the exact text an ATS would extract. One click turns the report into a fix-it prompt for an AI chat.
 
@@ -211,14 +175,8 @@ Drop any PDF into the [**CV checker**](https://amrelsherif-eng.github.io/ats-res
 <a id="video-tutorials"></a>
 <a id="-video-tutorial-2-min"></a>
 <a id="video-tutorial-2-min"></a>
-<picture>
-  <source media="(max-width: 767px)" srcset="assets/h-video-mobile.svg">
-  <img src="assets/h-video.svg#gh-dark-mode-only" width="100%" alt="Video tutorials">
-</picture>
-<picture>
-  <source media="(max-width: 767px)" srcset="assets/h-video-mobile-light.svg">
-  <img src="assets/h-video-light.svg#gh-light-mode-only" width="100%" alt="Video tutorials">
-</picture>
+<img src="assets/h-video.svg#gh-dark-mode-only" width="100%" alt="Video tutorials">
+<img src="assets/h-video-light.svg#gh-light-mode-only" width="100%" alt="Video tutorials">
 
 | Video | Length | Language |
 |:---|:---:|:---|
@@ -233,14 +191,8 @@ The full tutorial has chapter buttons on the site: **Pick a template · Edit on 
 <a id="-is-it-really-ats-friendly"></a>
 <a id="is-it-really-ats-friendly"></a>
 <a id="-why-these-templates"></a>
-<picture>
-  <source media="(max-width: 767px)" srcset="assets/h-ats-mobile.svg">
-  <img src="assets/h-ats.svg#gh-dark-mode-only" width="100%" alt="Is it really ATS-friendly?">
-</picture>
-<picture>
-  <source media="(max-width: 767px)" srcset="assets/h-ats-mobile-light.svg">
-  <img src="assets/h-ats-light.svg#gh-light-mode-only" width="100%" alt="Is it really ATS-friendly?">
-</picture>
+<img src="assets/h-ats.svg#gh-dark-mode-only" width="100%" alt="Is it really ATS-friendly?">
+<img src="assets/h-ats-light.svg#gh-light-mode-only" width="100%" alt="Is it really ATS-friendly?">
 
 An ATS (applicant tracking system) reads your PDF as text before a person sees it. If it cannot read the text, or the text comes out in the wrong order, your CV can be skipped.
 
@@ -258,14 +210,8 @@ An ATS (applicant tracking system) reads your PDF as text before a person sees i
 
 <a id="customize"></a>
 <a id="-customize"></a>
-<picture>
-  <source media="(max-width: 767px)" srcset="assets/h-custom-mobile.svg">
-  <img src="assets/h-custom.svg#gh-dark-mode-only" width="100%" alt="Make it yours">
-</picture>
-<picture>
-  <source media="(max-width: 767px)" srcset="assets/h-custom-mobile-light.svg">
-  <img src="assets/h-custom-light.svg#gh-light-mode-only" width="100%" alt="Make it yours">
-</picture>
+<img src="assets/h-custom.svg#gh-dark-mode-only" width="100%" alt="Make it yours">
+<img src="assets/h-custom-light.svg#gh-light-mode-only" width="100%" alt="Make it yours">
 
 <details>
 <summary><b>Customize the template</b> (paper size, font, role line, sections)</summary>
@@ -316,14 +262,8 @@ An ATS (applicant tracking system) reads your PDF as text before a person sees i
 
 <a id="-build-locally"></a>
 <a id="build-locally"></a>
-<picture>
-  <source media="(max-width: 767px)" srcset="assets/h-build-mobile.svg">
-  <img src="assets/h-build.svg#gh-dark-mode-only" width="100%" alt="Build it locally">
-</picture>
-<picture>
-  <source media="(max-width: 767px)" srcset="assets/h-build-mobile-light.svg">
-  <img src="assets/h-build-light.svg#gh-light-mode-only" width="100%" alt="Build it locally">
-</picture>
+<img src="assets/h-build.svg#gh-dark-mode-only" width="100%" alt="Build it locally">
+<img src="assets/h-build-light.svg#gh-light-mode-only" width="100%" alt="Build it locally">
 
 ```bash
 git clone https://github.com/amrelsherif-eng/ats-resume-templates.git
@@ -367,14 +307,8 @@ docker run --rm -v "$PWD":/work -w /work/templates/network-cloud texlive/texlive
 
 <a id="for-developers"></a>
 <a id="-project-structure"></a>
-<picture>
-  <source media="(max-width: 767px)" srcset="assets/h-dev-mobile.svg">
-  <img src="assets/h-dev.svg#gh-dark-mode-only" width="100%" alt="For developers">
-</picture>
-<picture>
-  <source media="(max-width: 767px)" srcset="assets/h-dev-mobile-light.svg">
-  <img src="assets/h-dev-light.svg#gh-light-mode-only" width="100%" alt="For developers">
-</picture>
+<img src="assets/h-dev.svg#gh-dark-mode-only" width="100%" alt="For developers">
+<img src="assets/h-dev-light.svg#gh-light-mode-only" width="100%" alt="For developers">
 
 ```text
 templates/           5 templates: resume.tex, resume.pdf, preview.png
@@ -405,14 +339,8 @@ Bash syntax (Linux, macOS, Git Bash). In PowerShell, set each variable first, fo
 
 <a id="faq"></a>
 <a id="-faq"></a>
-<picture>
-  <source media="(max-width: 767px)" srcset="assets/h-faq-mobile.svg">
-  <img src="assets/h-faq.svg#gh-dark-mode-only" width="100%" alt="Questions and answers">
-</picture>
-<picture>
-  <source media="(max-width: 767px)" srcset="assets/h-faq-mobile-light.svg">
-  <img src="assets/h-faq-light.svg#gh-light-mode-only" width="100%" alt="Questions and answers">
-</picture>
+<img src="assets/h-faq.svg#gh-dark-mode-only" width="100%" alt="Questions and answers">
+<img src="assets/h-faq-light.svg#gh-light-mode-only" width="100%" alt="Questions and answers">
 
 <details>
 <summary><b>US Letter or A4?</b></summary>
@@ -466,14 +394,8 @@ If you put your CV in a public GitHub repository, replace your phone number and 
 <a id="changelog"></a>
 <a id="-license--credits"></a>
 <a id="license--credits"></a>
-<picture>
-  <source media="(max-width: 767px)" srcset="assets/h-more-mobile.svg">
-  <img src="assets/h-more.svg#gh-dark-mode-only" width="100%" alt="Changelog and credits">
-</picture>
-<picture>
-  <source media="(max-width: 767px)" srcset="assets/h-more-mobile-light.svg">
-  <img src="assets/h-more-light.svg#gh-light-mode-only" width="100%" alt="Changelog and credits">
-</picture>
+<img src="assets/h-more.svg#gh-dark-mode-only" width="100%" alt="Changelog and credits">
+<img src="assets/h-more-light.svg#gh-light-mode-only" width="100%" alt="Changelog and credits">
 
 <details>
 <summary><b>Changelog</b></summary>
