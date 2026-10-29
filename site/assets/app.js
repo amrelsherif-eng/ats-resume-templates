@@ -183,7 +183,9 @@ function init() {
   const fan = document.getElementById('fan');
   const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
   if ('IntersectionObserver' in window && !reduceMotion.matches) {
-    const targets = document.querySelectorAll('main section, .hero .wrap > div, .grid .card');
+    // Only animate what starts below the fold: content visible on load must paint at once (LCP).
+    const targets = [...document.querySelectorAll('main section, .grid .card')]
+      .filter(node => node.getBoundingClientRect().top > innerHeight);
     targets.forEach((node, index) => { node.classList.add('reveal'); if (node.matches('.grid .card')) node.style.setProperty('--reveal-index', index % 5); });
     const observer = new IntersectionObserver(entries => entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('is-visible'); observer.unobserve(entry.target); } }), { rootMargin: '0px 0px -6% 0px' });
     targets.forEach(node => observer.observe(node));
