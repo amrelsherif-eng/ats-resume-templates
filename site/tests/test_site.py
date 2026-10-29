@@ -137,13 +137,16 @@ def test_checker_framing_and_footer_links(page):
 
 def test_video_cards_are_compact_rows_on_mobile(page):
     page.set_viewport_size({"width": 390, "height": 844})
-    for card in page.locator("#video .vid-card").all():
-        frame = card.locator(".video-frame")
-        box = frame.bounding_box()
-        assert 108 <= box["width"] <= 116
-    expect(page.locator(".vid-new .video-duration")).to_have_text("1:00")
+    # The LinkedIn card stays a compact row; the playable demo gets the full width at 4:5.
+    box = page.locator("#video .li-video .video-frame").bounding_box()
+    assert 108 <= box["width"] <= 116
+    demo = page.locator("#video .vid-new .video-frame").bounding_box()
+    section = page.locator("#video .vid-grid").bounding_box()
+    assert demo["width"] >= section["width"] - 4
+    assert abs(demo["height"] / demo["width"] - 1.25) < 0.02
+    expect(page.locator(".vid-new .video-duration")).to_have_text("0:46")
     page.locator("#lang").click()
-    expect(page.locator(".vid-new .video-duration")).to_have_text("1:00")
+    expect(page.locator(".vid-new .video-duration")).to_have_text("0:46")
 
 
 def capture_clipboard(page):
@@ -341,13 +344,30 @@ def test_unknown_path_is_404(page, site_url):
     assert response.status == 404
 
 
-def test_unconfigured_features_stay_hidden(page):
-    # The demo video shows only when configured in app.js; the support link points at GitHub Sponsors.
+def test_support_link_and_demo_video(page, site_url):
+    # The support link points at GitHub Sponsors.
     expect(page.locator("#support")).to_be_visible()
     expect(page.locator("#support")).to_have_attribute("href", "https://github.com/sponsors/amrelsherif-eng")
-    # Until the new demo is set in app.js, its frame shows a "coming soon" placeholder next to the LinkedIn post.
-    expect(page.locator("#video-soon")).to_be_visible()
-    expect(page.locator("#demo-video")).to_be_hidden()
+    # The demo video is configured in app.js: it replaces the "coming soon" placeholder,
+    # is served from this site (CSP media-src 'self'), never preloads, and has EN + AR captions.
+    video = page.locator("#demo-video")
+    expect(video).to_be_visible()
+    expect(page.locator("#video-soon")).to_have_count(0)
+    expect(video).to_have_attribute("preload", "none")
+    expect(video).to_have_attribute("poster", re.compile(r"assets/video/demo-poster\.webp$"))
+    src = video.locator("source").get_attribute("src")
+    assert src == "assets/video/demo.mp4"
+    tracks = video.locator("track")
+    expect(tracks).to_have_count(2)
+    assert sorted(t.get_attribute("srclang") for t in tracks.all()) == ["ar", "en"]
+    base = site_url.rstrip("/") + "/"
+    mp4 = page.request.get(base + src)
+    assert mp4.status == 200
+    assert mp4.headers["content-type"].startswith("video/mp4")
+    assert len(mp4.body()) < 6 * 1024 * 1024, "keep the site video small for performance"
+    for name in ("demo-poster.webp", "demo.en.vtt", "demo.ar.vtt"):
+        assert page.request.get(base + "assets/video/" + name).status == 200
+    assert page.request.get(base + "assets/video/demo.en.vtt").text().startswith("WEBVTT")
     expect(page.locator("#video .li-video")).to_have_attribute("href", re.compile(r"^https://www\.linkedin\.com/"))
     assert page.locator("footer nav").first.evaluate("n => getComputedStyle(n).position") == "static"
 

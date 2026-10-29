@@ -1,0 +1,55 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:02.400
+Looks perfect.
+
+00:00:02.450 --> 00:00:04.300
+The checker on the live site: 25 out of 100.
+"Very little selectable text was found."
+
+00:00:04.300 --> 00:00:06.000
+0 words of selectable text.
+Mohamed's CV is a picture. An ATS may misread it.
+
+00:00:06.000 --> 00:00:08.800
+Start from a CV built to be read.
+
+00:00:08.800 --> 00:00:11.500
+5 templates: Network & Cloud, Embedded & ECE, Mobile Apps,
+Software Engineering, Business & Finance. Free, MIT licensed.
+
+00:00:11.500 --> 00:00:13.500
+No LaTeX skills needed. 3 ways to edit:
+Overleaf, with AI, or locally.
+
+00:00:13.500 --> 00:00:17.500
+01 On Overleaf: click "Edit on Overleaf".
+Free account, nothing to install.
+
+00:00:17.500 --> 00:00:21.500
+Change the text inside the { }, then Recompile.
+
+00:00:21.500 --> 00:00:24.000
+02 With AI: click "Copy for ChatGPT".
+
+00:00:24.000 --> 00:00:27.500
+Paste it into ChatGPT, Gemini or Claude.
+The prompt says: one page, no invented numbers.
+
+00:00:27.500 --> 00:00:29.500
+Read every line before you send it.
+You will be asked about it in the interview.
+
+00:00:29.500 --> 00:00:33.500
+03 Already use LaTeX? Build it locally:
+latexmk -pdf resume.tex
+
+00:00:33.500 --> 00:00:36.700
+Check it again with the same checker.
+
+00:00:36.700 --> 00:00:40.000
+25 → 100. Mohamed's CV, rebuilt from a template.
+
+00:00:40.000 --> 00:00:46.000
+Free, open source, no sign-up.
+amrelsherif-eng.github.io/ats-resume-templates

@@ -1233,6 +1233,10 @@ footer nav{
   .video-description{font-size:12px}
   .li-text{gap:7px}
 }
+@media(max-width:720px){
+  .vid-new.has-video{grid-template-columns:minmax(0,1fr);grid-template-rows:auto auto}
+  .vid-new.has-video .video-frame{width:100%;height:auto;min-height:0;aspect-ratio:4/5}
+}
 .vid-card{
   min-width:0;
   overflow:hidden;

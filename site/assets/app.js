@@ -8,7 +8,8 @@ const ISSUE_TEMPLATE_URL = `${REPO}/issues/new?title=Template%20request%3A%20&bo
 // Optional support link (for example GitHub Sponsors). Leave empty to hide the button.
 const SUPPORT_URL = 'https://github.com/sponsors/amrelsherif-eng';
 // Optional demo video, self-hosted under site/assets/video/. Leave src empty to hide the section.
-const VIDEO = { src: '', poster: '', captionsEn: '', captionsAr: '' };
+const VIDEO = { src: 'assets/video/demo.mp4', poster: 'assets/video/demo-poster.webp',
+  captionsEn: 'assets/video/demo.en.vtt', captionsAr: 'assets/video/demo.ar.vtt' };
 
 const TEMPLATES = [
   { id: 'software-web', color: '#c084fc', skills: ['NestJS', 'PostgreSQL', 'Redis', 'Docker', 'React'],
@@ -290,6 +291,7 @@ function init() {
       if (src) video.append(el('track', { kind: 'captions', src, srclang: code, label }));
     }
     video.hidden = false;
+    video.closest('.vid-card').classList.add('has-video');
     document.getElementById('video-soon').remove();
   }
 
