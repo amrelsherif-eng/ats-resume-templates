@@ -296,14 +296,29 @@ def test_checker_ai_prompt(page, tmp_path):
     assert score_of(page) == 100
     expect(page.locator("#chk-out .issues-h")).to_have_text("Nothing to fix. Nice work.")
     expect(page.locator("#chk-out .chk-tools")).to_have_count(0)
-    # A CV with problems gets the button, and the prompt carries its text.
+    # "resume.pdf" only gets a file-name tip: an AI chat cannot fix that, so still no button,
+    # and a top score is not followed by "things to improve".
+    upload(page, ROOT / "templates/mobile-apps/resume.pdf")
+    assert score_of(page) == 100
+    expect(page.locator("#chk-out .issues-h")).to_have_text("No problems. 1 small tip:")
+    expect(page.locator("#chk-out .issue", has_text="file name is generic")).to_be_visible()
+    expect(page.locator("#chk-out .chk-tools")).to_have_count(0)
+    # Missing contact links are tips you act on yourself: no AI button either.
+    upload(page, ROOT / "templates/business-finance/resume.pdf")
+    assert score_of(page) == 100
+    expect(page.locator("#chk-out .issues-h")).to_have_text("No problems. 2 small tips:")
+    expect(page.locator("#chk-out .chk-tools")).to_have_count(0)
+    # A CV with problems gets the button, and the prompt carries its text and the issues.
     lines = ["Sara Hassan", "Experience", "Support Specialist, Example Co"] + [
         "- Responsible for helping users with computer problems in the office every day" for _ in range(8)
     ] + ["Education", "BSc, Example University", "Skills", "Windows"]
     upload(page, make_pdf(tmp_path / "fix.pdf", 1, lines))
     assert score_of(page) < 100
     page.locator("#chk-out .chk-tools button").click()
-    assert "Responsible for helping users" in copied_text(page, "MY RESUME")
+    prompt = copied_text(page, "MY RESUME")
+    assert "Responsible for helping users" in prompt
+    assert "no major issues" not in prompt and "file name" not in prompt
+    assert re.search(r"^- \S", prompt, re.M), "the prompt lists the issues it found"
 
 
 def test_checker_not_pdf(page, tmp_path):

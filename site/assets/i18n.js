@@ -319,8 +319,10 @@ Object.assign(AR, {
   'vid.ch.check': 'افحص الـ CV'
 });
 
-Object.assign(EN, { 'chk.toFix1': '1 thing to improve', 'chk.passed1': '1 check passed' });
-Object.assign(AR, { 'chk.toFix1': 'نقطة واحدة للتحسين', 'chk.passed1': 'نجح فحص واحد' });
+Object.assign(EN, { 'chk.toFix1': '1 thing to improve', 'chk.passed1': '1 check passed',
+  'chk.tips1': 'No problems. 1 small tip:', 'chk.tips': 'No problems. {n} small tips:' });
+Object.assign(AR, { 'chk.toFix1': 'نقطة واحدة للتحسين', 'chk.passed1': 'نجح فحص واحد',
+  'chk.tips1': 'لا توجد مشكلات. نصيحة صغيرة واحدة:', 'chk.tips': 'لا توجد مشكلات. {n} نصائح صغيرة:' });
 
 Object.assign(EN, {
   'brand': 'ATS Resume Templates',
