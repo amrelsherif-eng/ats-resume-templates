@@ -144,9 +144,9 @@ def test_video_cards_are_compact_rows_on_mobile(page):
     section = page.locator("#video .vid-grid").bounding_box()
     assert demo["width"] >= section["width"] - 4
     assert abs(demo["height"] / demo["width"] - 1.25) < 0.02
-    expect(page.locator(".vid-new .video-duration")).to_have_text("0:46")
+    expect(page.locator(".vid-new .video-duration")).to_have_text("0:41")
     page.locator("#lang").click()
-    expect(page.locator(".vid-new .video-duration")).to_have_text("0:46")
+    expect(page.locator(".vid-new .video-duration")).to_have_text("0:41")
 
 
 def capture_clipboard(page):
