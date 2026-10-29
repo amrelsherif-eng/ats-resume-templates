@@ -45,6 +45,18 @@ const ACTION_VERBS = new Set(
   "solder soldered measure flash flashed port ported tune tuned simulate assemble wrote led ran grew grow travel traveled cofounded co-founded").split(" ")
 );
 
+// "-ed" words that usually describe a person rather than start an achievement.
+const NOT_VERBS = new Set(('experienced skilled dedicated motivated talented certified licensed qualified interested ' +
+  'based related required expected seasoned accomplished focused oriented versed advanced limited united detailed ' +
+  'distinguished respected registered worked helped assisted participated involved tasked used utilized').split(' '));
+
+// Common verbs from every field (nursing, teaching, sales, accounting, design), added after testing real CVs.
+for (const v of ('provide support contribute communicate partner demonstrate own examine observe treat nurse care ' +
+  'respond receive complete contact craft illustrate photograph film render animate sketch draw drew drawn prospect ' +
+  'onboard source grade lecture study visualize query report compile submit post book invoice volunteer award obtain ' +
+  'achieve attain liaise counsel triage dispense chart inspire speak spoke begin began make made teach bring brought ' +
+  'keep kept take took give gave hold held oversee built win').split(' ')) ACTION_VERBS.add(v);
+
 const BUZZWORDS = [
   { name: 'hard-working', re: /\bhard[- ]working\b/i },
   { name: 'team player', re: /\bteam[- ]player\b/i },
@@ -55,7 +67,7 @@ const BUZZWORDS = [
   { name: 'results-driven', re: /\bresults?[- ]driven\b/i },
   { name: 'self-motivated', re: /\bself[- ]motivated\b/i },
   { name: 'passionate', re: /\bpassionate\b/i },
-  { name: 'dynamic', re: /\bdynamic\b/i },
+  { name: 'dynamic', re: /\bdynamic\b(?!\s+(?:programming|pricing|routing|analysis|range|systems?|content|web|pages?|memory|allocation|positioning|simulation|modell?ing|load|ip|dns|host|hedging|equilibrium|testing|typing)\b)/i },
   { name: 'rockstar', re: /\brockstar\b/i },
   { name: 'ninja', re: /\bninja\b/i },
   { name: 'guru', re: /\bguru\b/i },
@@ -64,10 +76,64 @@ const BUZZWORDS = [
   { name: 'fast learner', re: /\bfast[- ]learner\b/i }
 ];
 
+// Headings people really use, in every field: "Clinical Experience", "Graduation Project",
+// "Licenses & Certifications", "Military Status". A line is a heading when it is short and every
+// word comes from this vocabulary, with at least one core word that names the section.
+const HEADING_CORE = {
+  exp: ['experience', 'employment', 'internships', 'internship'],
+  proj: ['projects', 'project'],
+  edu: ['education', 'academic', 'academics', 'degrees'],
+  skills: ['skills', 'competencies', 'expertise', 'proficiencies', 'technologies', 'tools'],
+  leadership: ['leadership', 'activities', 'volunteer', 'volunteering', 'community', 'extracurricular'],
+  other: ['summary', 'profile', 'objective', 'certifications', 'certificates', 'licenses', 'licences', 'courses',
+    'training', 'trainings', 'languages', 'awards', 'honors', 'honours', 'publications', 'references', 'interests',
+    'hobbies', 'military', 'achievements', 'qualifications', 'details', 'information']
+};
+const HEADING_FILLER = new Set(('and of the relevant professional technical core key selected personal clinical teaching ' +
+  'research industry work other additional soft hard computer it related career background recent areas ' +
+  'status service history graduation capstone final senior year university').split(' '));
+const HEADING_ORDER = ['exp', 'proj', 'edu', 'skills', 'leadership', 'other'];
+
+// Arabic headings: the first word (or two) names the section; a few describing words may follow.
+const AR_HEADINGS = {
+  exp: ['الخبرات', 'الخبرة', 'التدريب العملي', 'الوظائف'],
+  proj: ['المشاريع', 'المشروعات', 'مشروع التخرج', 'مشاريع'],
+  edu: ['التعليم', 'المؤهلات', 'المؤهل', 'الدراسة'],
+  skills: ['المهارات', 'المهارة'],
+  leadership: ['الأنشطة', 'العمل التطوعي', 'التطوع'],
+  other: ['الملخص', 'نبذة', 'الهدف', 'الدورات', 'الشهادات', 'اللغات', 'البيانات', 'الموقف من التجنيد',
+    'الخدمة العسكرية', 'الاهتمامات', 'معلومات']
+};
+const AR_EXTRA = new Set(['العملية', 'المهنية', 'التدريبية', 'الدراسية', 'الشخصية', 'الفنية', 'التقنية', 'الأكاديمية',
+  'الوظيفي', 'المهني', 'عني', 'السابقة', 'التواصل', 'و']);
+
+function arabicHeading(clean) {
+  const words = clean.replace(/ـ/g, '').replace(/[:：]+$/, '').trim().split(/\s+/);
+  if (words.length > 4) return null;
+  for (const cat of HEADING_ORDER) {
+    for (const start of AR_HEADINGS[cat]) {
+      const n = start.split(' ').length;
+      const rest = words.slice(n);
+      if (words.slice(0, n).join(' ') === start && rest.every(w => AR_EXTRA.has(w) || AR_EXTRA.has(w.replace(/^و/, '')))) return cat;
+    }
+  }
+  return null;
+}
+
+function vocabularyHeading(clean) {
+  if (/[؀-ۿ]/.test(clean)) return arabicHeading(clean);
+  const words = clean.toLowerCase().replace(/&/g, ' and ').replace(/[^a-z\s]/g, ' ').split(/\s+/).filter(Boolean);
+  if (!words.length || words.length > 6) return null;
+  const isCore = w => HEADING_ORDER.some(cat => HEADING_CORE[cat].includes(w));
+  if (!words.every(w => HEADING_FILLER.has(w) || isCore(w))) return null;
+  return HEADING_ORDER.find(cat => words.some(w => HEADING_CORE[cat].includes(w))) || null;
+}
+
 function detectHeading(text) {
-  const clean = text.trim().replace(/^[\d.\s•–—\-\*|:]+/, '').replace(/[:\-_—|]+$/, '').trim();
-  if (!clean || clean.length > 35 || clean.split(/\s+/).length > 4) return null;
-  if (!HEADINGS_RE.test(clean)) return null;
+  const clean = text.trim().replace(/^[\d.\s•–—\-\*|:-]+/, '').replace(/[:\-_—|]+$/, '').trim();
+  if (!clean || clean.length > 45) return null;
+  if (!HEADINGS_RE.test(clean)) return clean.split(/\s+/).length <= 6 ? vocabularyHeading(clean) : null;
+  if (clean.split(/\s+/).length > 4) return null;
   const lower = clean.toLowerCase();
   if (lower.includes('education') || lower.includes('academic')) return 'edu';
   if (lower.includes('experience') || lower.includes('employment') || lower.includes('work history')) return 'exp';
@@ -77,6 +143,8 @@ function detectHeading(text) {
   if (lower.includes('education') || lower.includes('academic')) return 'edu';
   return 'other';
 }
+
+const asciiDigits = s => s.replace(/[٠-٩]/g, d => String(d.charCodeAt(0) - 0x660)).replace(/[۰-۹]/g, d => String(d.charCodeAt(0) - 0x6F0));
 
 function trimEx(str) {
   const s = String(str || '').trim().replace(/\s+/g, ' ');
@@ -117,13 +185,14 @@ export function contentIssues(doc, opts = {}) {
     issues.push({ id: 'sections', cat: 'contact', level: 'ok', key: 'r.sec-ok', vars: { list: foundSec.join(', ') }, weight: 6 });
   }
 
-  // 2. Contact info
-  const emailMatch = text.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/);
+  // 2. Contact info (Arabic-Indic digits read as ASCII digits: ٠١٠٠ is 0100)
+  const contactText = asciiDigits(text);
+  const emailMatch = contactText.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/);
   issues.push(emailMatch
     ? { id: 'contact-email', cat: 'contact', level: 'ok', key: 'r.email-ok', weight: 5 }
     : { id: 'contact-email', cat: 'contact', level: 'warn', key: 'r.email-miss', fix: 'r.email-miss.fix', weight: 5 });
 
-  const phoneMatch = text.match(/(?:\(\+20\)|\+20)\s*1[0125](?:[\s.-]?\d){8}(?!\d)|\b01[0125](?:[\s.-]?\d){8}\b|(?:\+\d{1,3}[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}\b|\b(?:\+\d{1,3}[-.\s]?)?\d{2,4}[-.\s]?\d{3,4}[-.\s]?\d{3,5}\b/);
+  const phoneMatch = contactText.match(/(?:\(\+20\)|\+20)\s*1[0125](?:[\s.-]?\d){8}(?!\d)|\b01[0125](?:[\s.-]?\d){8}\b|(?:\+\d{1,3}[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}\b|\b(?:\+\d{1,3}[-.\s]?)?\d{2,4}[-.\s]?\d{3,4}[-.\s]?\d{3,5}\b/);
   issues.push(phoneMatch
     ? { id: 'contact-phone', cat: 'contact', level: 'ok', key: 'r.phone-ok', weight: 4 }
     : { id: 'contact-phone', cat: 'contact', level: 'warn', key: 'r.phone-miss', fix: 'r.phone-miss.fix', weight: 4 });
@@ -133,9 +202,12 @@ export function contentIssues(doc, opts = {}) {
     ? { id: 'contact-linkedin', cat: 'contact', level: 'ok', key: 'r.linkedin-ok', weight: 3 }
     : { id: 'contact-linkedin', cat: 'contact', level: 'warn', key: 'r.linkedin-miss', fix: 'r.linkedin-miss.fix', weight: 3 });
 
-  const topText = lines.slice(0, 15).map(l => l.text).join('\n');
-  const locRe = /\b(?:[A-Z][a-zA-Z]+(?:\s+[A-Z][a-zA-Z]+)?),\s*(?:[A-Z]{2}\b|[A-Z][a-zA-Z]+(?:\s+[A-Z][a-zA-Z]+)?)|(?:[A-Z][a-zA-Z]+,\s*(?:USA|UK|UAE|Canada|Germany|France|India|Australia|Singapore|Netherlands|Egypt|KSA|Saudi Arabia|Qatar|Kuwait|Jordan|Oman|Bahrain|Morocco|Tunisia|Lebanon|Country))\b|\b(?:New York|San Francisco|London|Seattle|Austin|Boston|Chicago|Toronto|Vancouver|Berlin|Paris|Amsterdam|Singapore|Sydney|Melbourne|Remote|Cairo|Giza|Alexandria|Mansoura|Tanta|Zagazig|Assiut|Aswan|Luxor|Ismailia|Suez|Port Said|Damanhour|Minya|Sohag|Hurghada|6th of October|Riyadh|Jeddah|Dammam|Dubai|Abu Dhabi|Sharjah|Doha|Amman|Muscat|Manama|Casablanca|Tunis|Beirut|Egypt)\b/i;
-  issues.push(locRe.test(topText)
+  // 25 lines: a sidebar with the contact details can come after the first block of text.
+  const topText = lines.slice(0, 25).map(l => l.text).join('\n');
+  const locRe = /\b(?:[A-Z][a-zA-Z]+(?:\s+[A-Z][a-zA-Z]+)?),\s*(?:[A-Z]{2}\b|[A-Z][a-zA-Z]+(?:\s+[A-Z][a-zA-Z]+)?)|(?:[A-Z][a-zA-Z]+,\s*(?:USA|UK|UAE|Canada|Germany|France|India|Australia|Singapore|Netherlands|Egypt|KSA|Saudi Arabia|Qatar|Kuwait|Jordan|Oman|Bahrain|Morocco|Tunisia|Lebanon|Country))\b|\b(?:New York|San Francisco|London|Seattle|Austin|Boston|Chicago|Toronto|Vancouver|Berlin|Paris|Amsterdam|Singapore|Sydney|Melbourne|Remote|Cairo|Giza|Alexandria|Mansoura|Tanta|Zagazig|Assiut|Aswan|Luxor|Ismailia|Suez|Port Said|Damanhour|Minya|Sohag|Hurghada|6th of October|Riyadh|Jeddah|Dammam|Dubai|Abu Dhabi|Sharjah|Doha|Amman|Muscat|Manama|Casablanca|Tunis|Beirut|Egypt|Nasr City|New Cairo|Maadi|Heliopolis|Sheikh Zayed|10th of Ramadan|Kuwait City|Al Khobar|Medina|Mecca|Ras Al Khaimah|Ajman|Istanbul|Munich|Dublin|Madrid|Milan|Warsaw)\b/i;
+  // Arabic place names (\b does not work next to Arabic letters, so no word boundaries here).
+  const arLocRe = /القاهرة|الجيزة|الإسكندرية|الاسكندرية|المنصورة|طنطا|الزقازيق|أسيوط|أسوان|الأقصر|الإسماعيلية|السويس|بورسعيد|دمنهور|المنيا|سوهاج|الغردقة|مصر|الرياض|جدة|الدمام|دبي|أبوظبي|أبو ظبي|الشارقة|الدوحة|عمّان|عمان|مسقط|المنامة|الكويت|السعودية|الإمارات|قطر/;
+  issues.push(locRe.test(topText) || arLocRe.test(topText)
     ? { id: 'contact-location', cat: 'contact', level: 'ok', key: 'r.location-ok', weight: 2 }
     : { id: 'contact-location', cat: 'contact', level: 'warn', key: 'r.location-miss', fix: 'r.location-miss.fix', weight: 2 });
 
@@ -174,31 +246,55 @@ export function contentIssues(doc, opts = {}) {
   }
 
   // Extract bullets for content checks
-  const cleanBullet = b => b.replace(/^[\s•–—\-\*\u2022\u2212\u25E6\u2023\u25AA\u25BA\u27A4\u2713]+/, '').replace(/^\d+[.)]\s*/, '').trim();
+  const cleanBullet = b => b.replace(/^[\s•–—\-\*\u2022\u2212\u25E6\u2023\u25AA\u25BA\u27A4\u2713\u2714\u00B7\u25A0\u25CF\u25CB\u25C6\u2756\u27A2\u25B6\uE000-\uF8FF]+/, '').replace(/^\d+[.)]\s*/, '').trim();
   const hasGlyphs = lines.some(l => l.bullet);
   let bullets = [];
   const achievementBullets = [];
   const dateToken = String.raw`(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:t(?:ember)?)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?\.?)\s+(?:19|20)\d{2}|\d{1,2}[/.]\d{2,4}|(?:19|20)\d{2}[-/.]\d{1,2}`;
   const dateRange = new RegExp(String.raw`\b${dateToken}\b\s*(?:-|–|—|to)\s*(?:\b${dateToken}\b|present|current|now)\b`, 'i');
   let section = 'other';
+  // Where the text of a bulleted line starts (after the glyph), to spot its wrapped second line.
+  const textStart = l => {
+    const items = l.items || [];
+    const glyph = items[0] && items[0].text.trim().length === 1 && !/[\p{L}\p{N}]/u.test(items[0].text);
+    return glyph && items[1] ? items[1].x : l.x;
+  };
+  let last = null; // the bullet a wrapped line would belong to: { line, inAll, inAchievement }
+  const extendLast = add => {
+    if (last.inAll) bullets[bullets.length - 1] += ' ' + add;
+    if (last.inAchievement) achievementBullets[achievementBullets.length - 1] += ' ' + add;
+  };
   for (const line of lines) {
     const heading = detectHeading(line.text);
     if (heading) {
       section = heading;
+      last = null;
       continue;
     }
     const achievementSection = section === 'exp' || section === 'proj' || section === 'leadership';
     const clean = cleanBullet(line.text);
+    const metadata = dateRange.test(line.text) || (line.text.match(/ \| /g) || []).length >= 2;
     if (hasGlyphs) {
-      if (!line.bullet || !clean) continue;
-      if (!/^(?:relevant\s+)?(?:coursework|courses|skills|tools|technologies|languages)\s*:/i.test(clean)) bullets.push(clean);
+      if (!line.bullet) {
+        // A wrapped bullet: no glyph, not a date/title line, and indented like the bullet's text.
+        const wrapped = last && clean && !metadata && Number.isFinite(line.x) &&
+          Math.abs(line.x - textStart(last.line)) <= 8 && line.page === last.line.page;
+        if (wrapped) extendLast(clean); else last = null;
+        continue;
+      }
+      if (!clean) continue;
+      const inAll = !/^(?:relevant\s+)?(?:coursework|courses|skills|tools|technologies|languages)\s*:/i.test(clean);
+      if (inAll) bullets.push(clean);
       if (achievementSection) achievementBullets.push(clean);
+      last = { line, inAll, inAchievement: achievementSection };
     } else if (achievementSection) {
       const wordCount = line.text.trim().split(/\s+/).filter(Boolean).length;
-      const metadata = dateRange.test(line.text) || (line.text.match(/ \| /g) || []).length >= 2;
-      if (wordCount >= 6 && !metadata && clean) {
+      if (wordCount >= 6 && !metadata && clean && !/^[a-z]/.test(clean)) {
         bullets.push(clean);
         achievementBullets.push(clean);
+        last = { line, inAll: true, inAchievement: true };
+      } else if (last && clean && !metadata && /^[a-z]/.test(clean)) {
+        extendLast(clean); // starts in lower case: the rest of the previous sentence
       }
     }
   }
@@ -208,17 +304,39 @@ export function contentIssues(doc, opts = {}) {
 
   // 3. Action verbs
   let verbCount = 0;
+  /** The base verb of a word ("manages", "teaching", "planned", "supplied"), or null when it is not a verb. */
+  const verbStem = w => {
+    if (!w) return null;
+    const tries = [];
+    if (w.endsWith('ies')) tries.push(w.slice(0, -3) + 'y');
+    if (w.endsWith('es')) tries.push(w.slice(0, -2), w.slice(0, -1));
+    if (w.endsWith('s') && !w.endsWith('ss')) tries.push(w.slice(0, -1));
+    if (w.endsWith('ing')) { const r = w.slice(0, -3); tries.push(r, r + 'e', r.replace(/(.)\1$/, '$1')); }
+    if (w.endsWith('ied')) tries.push(w.slice(0, -3) + 'y');
+    if (w.endsWith('ed')) { const r = w.slice(0, -2); tries.push(r, r + 'e', r.replace(/(.)\1$/, '$1')); }
+    // Prefer the base form, so "Managed" and "Manages" both count as "manage".
+    const hit = tries.find(t => ACTION_VERBS.has(t)) || (ACTION_VERBS.has(w) ? w : null);
+    if (hit) return hit;
+    // Any other past-tense verb ("Reconciled", "Onboarded") counts, except words that are usually adjectives.
+    return /^[a-z]{3,}ed$/.test(w) && !NOT_VERBS.has(w) ? w : null;
+  };
   const nonVerbEx = [];
   const stripLabel = b => b.replace(/^(?:[\p{L}\p{N}][\p{L}\p{N}+.#&/-]*(?:\s+[\p{L}\p{N}][\p{L}\p{N}+.#&/-]*){0,3}):\s*/u, '');
   const openingText = b => stripLabel(b).trim();
   const normalizeVerb = word => word
     .replace(/isation$/, 'ization').replace(/ising$/, 'izing').replace(/ised$/, 'ized')
     .replace(/ysing$/, 'yzing').replace(/ysed$/, 'yzed').replace(/lling$/, 'ling').replace(/lled$/, 'led');
-  const openingWord = b => normalizeVerb((openingText(b).replace(/^[^a-zA-Z]+/, '').split(/\s+/)[0] || '').toLowerCase().replace(/[^a-z]/g, ''));
+  // First word of a bullet, skipping one adverb: "Successfully reduced" -> "reduced".
+  const openingWord = b => {
+    const words = openingText(b).normalize('NFKC').replace(/^[^a-zA-Z]+/, '').split(/\s+/)
+      .map(w => w.toLowerCase().replace(/[^a-z]/g, ''));
+    const first = words[0] && /^[a-z]{4,}ly$/.test(words[0]) && words[1] ? words[1] : words[0];
+    return normalizeVerb(first || '');
+  };
   const verbBullets = achievementBullets.filter(b => !/^[+−-]?(?:\d|%)/.test(openingText(b)));
   for (const b of verbBullets) {
     const first = openingWord(b);
-    if (ACTION_VERBS.has(first)) {
+    if (verbStem(first)) {
       verbCount++;
     } else {
       nonVerbEx.push(b);
@@ -237,7 +355,9 @@ export function contentIssues(doc, opts = {}) {
     : { id: 'weak-openers', cat: 'content', level: 'ok', key: 'r.weak-ok', weight: 6 });
 
   // 5. Quantified impact
-  const numRe = /(?:\b(?:EGP|SAR|AED|USD|EUR)\b|[\$€£¥₹]\s*\d+|\d+[\d,.]*\s*(?:%|k\b|m\b|b\b|x\b)?|\b\d+\b|%|[\$€£¥₹]|\b(?:zero|one|two|three|four|five|six|seven|eight|nine|ten|hundred|thousand|million|billion)\b|\b(?:hours?|days?|weeks?|months?|years?|seconds?|minutes?|quarterly|annually)\b)/i;
+  // Numbers, money (incl. LE / L.E. / E£ and Arabic currency words) and Arabic-Indic digits. A time word
+  // alone ("within hours") is not a measured result; "within 2 hours" is (the digit already matches).
+  const numRe = /(?:\b(?:EGP|SAR|AED|USD|EUR|GBP|KWD|QAR|LE|L\.E)\b|E£|[\$€£¥₹]\s*\d+|\d+[\d,.]*\s*(?:%|k\b|m\b|b\b|x\b)?|\b\d+\b|%|[\$€£¥₹]|[٠-٩۰-۹]|جنيه|ريال|درهم|\b(?:zero|one|two|three|four|five|six|seven|eight|nine|ten|dozens?|hundreds?|thousands?|millions?|billions?)\b)/i;
   let numCount = 0;
   const nonNumEx = [];
   for (const b of achievementBullets) {
@@ -264,7 +384,7 @@ export function contentIssues(doc, opts = {}) {
   }
 
   // 7. First-person pronouns
-  const pronounRe = /\b(?:I|me|my|we|our|myself|ourselves)\b/i;
+  const pronounRe = /\bI\b(?![/&-]|\.\p{L})|\b(?:[Mm]e|[Mm]y|[Ww]e|[Oo]ur|[Mm]yself|[Oo]urselves)\b/u;
   const pronounEx = bullets.filter(b => pronounRe.test(b));
   issues.push(pronounEx.length > 0
     ? { id: 'pronouns', cat: 'content', level: 'warn', key: 'r.pronouns', vars: { n: pronounEx.length }, fix: 'r.pronouns.fix', examples: pronounEx.slice(0, 3).map(trimEx), weight: 3 }
@@ -289,10 +409,11 @@ export function contentIssues(doc, opts = {}) {
   const verbExMap = {};
   for (const b of achievementBullets) {
     const first = openingWord(b);
-    if (first.length >= 3 && ACTION_VERBS.has(first)) {
-      verbTally[first] = (verbTally[first] || 0) + 1;
-      if (!verbExMap[first]) verbExMap[first] = [];
-      verbExMap[first].push(b);
+    const stem = first.length >= 3 && verbStem(first);
+    if (stem) {
+      verbTally[stem] = (verbTally[stem] || 0) + 1;
+      if (!verbExMap[stem]) verbExMap[stem] = [];
+      verbExMap[stem].push(b);
     }
   }
   let maxVerb = null;
@@ -321,9 +442,14 @@ export function contentIssues(doc, opts = {}) {
     : { id: 'repeated-verbs', cat: 'content', level: 'ok', key: 'r.repeat-ok', weight: 2 });
 
   // 10. Date formats
+  // AP style mixes "Sept 2020" with "June 2023" (March-July are never shortened), so when short months
+  // are present, March-July spelled out are not a second format. Without short months, every full month counts.
+  const hasShortMonth = /\b(?:Jan|Feb|Mar|Apr|Jun|Jul|Aug|Sep|Sept|Oct|Nov|Dec)\.?\s+(?:19|20)\d{2}\b/i.test(text);
   const datePatterns = [
     /\b(?:Jan|Feb|Mar|Apr|Jun|Jul|Aug|Sep|Sept|Oct|Nov|Dec)\.?\s+(?:19|20)\d{2}\b/gi,
-    /\b(?:January|February|March|April|June|July|August|September|October|November|December)\s+(?:19|20)\d{2}\b/gi,
+    hasShortMonth
+      ? /\b(?:January|February|August|September|October|November|December)\s+(?:19|20)\d{2}\b/gi
+      : /\b(?:January|February|March|April|May|June|July|August|September|October|November|December)\s+(?:19|20)\d{2}\b/gi,
     /\b(?:0?[1-9]|1[0-2])[\/.](?:19|20)\d{2}\b/g,
     /\b(?:19|20)\d{2}-(?:0[1-9]|1[0-2])\b/g
   ];
