@@ -8,126 +8,102 @@
 </picture>
 
 <p align="center">
-  <a href="#-start-in-3-steps"><img src="assets/btn-overleaf.svg" height="44" alt="Start in 3 Steps"></a>
-  <a href="https://amrelsherif-eng.github.io/ats-resume-templates/#video"><img src="assets/btn-video.svg" height="44" alt="Watch Video Tutorial"></a>
-  <a href="#-pick-your-template"><img src="assets/btn-pdf.svg" height="44" alt="Pick Your Template"></a>
-  <a href="https://github.com/amrelsherif-eng/ats-resume-templates"><img src="assets/btn-star.svg" height="44" alt="Star on GitHub"></a>
+  <a href="#-start-in-3-steps"><img src="assets/btn-overleaf.svg" height="44" alt="Open in Overleaf"></a>
+  <a href="https://amrelsherif-eng.github.io/ats-resume-templates/#video"><img src="assets/btn-video.svg" height="44" alt="Video Tutorials"></a>
+  <a href="#-pick-your-template"><img src="assets/btn-pdf.svg" height="44" alt="Download PDFs"></a>
+  <a href="https://github.com/amrelsherif-eng/ats-resume-templates"><img src="assets/btn-star.svg" height="44" alt="Star the repo"></a>
 </p>
 
 [![Build templates](https://github.com/amrelsherif-eng/ats-resume-templates/actions/workflows/build.yml/badge.svg)](https://github.com/amrelsherif-eng/ats-resume-templates/actions/workflows/build.yml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-cyan?style=for-the-badge&logo=opensourceinitiative&logoColor=black)](https://opensource.org/licenses/MIT)
-[![Language: LaTeX](https://img.shields.io/badge/Language-LaTeX-blueviolet?style=for-the-badge&logo=latex&logoColor=white)](https://www.latex-project.org/)
-[![Overleaf Ready](https://img.shields.io/badge/Overleaf-Ready-47A141?style=for-the-badge&logo=overleaf&logoColor=white)](#-start-in-3-steps)
-[![One Page](https://img.shields.io/badge/Layout-One--Page-ff79c6?style=for-the-badge&logo=readthedocs&logoColor=black)](#-pick-your-template)
-[![ATS readable](https://img.shields.io/badge/ATS-readable-00ccaa?style=for-the-badge)](#-is-it-really-ats-friendly)
-[![Sponsor](https://img.shields.io/badge/Sponsor-GitHub%20Sponsors-ea4aaa?style=for-the-badge&logo=githubsponsors&logoColor=white)](https://github.com/sponsors/amrelsherif-eng)
+[![Site tests](https://github.com/amrelsherif-eng/ats-resume-templates/actions/workflows/site.yml/badge.svg)](https://github.com/amrelsherif-eng/ats-resume-templates/actions/workflows/site.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-00f0ff?style=flat-square)](LICENSE)
 
-<p align="center">
-Free, one-page LaTeX resume templates for students and early-career candidates, plus a website where you can edit them three ways and check your own CV in the browser. Nothing to install, nothing uploaded.
-<br><br>
-<a href="https://amrelsherif-eng.github.io/ats-resume-templates/">Website</a> · <a href="https://amrelsherif-eng.github.io/ats-resume-templates/ar.html">Arabic</a> · <a href="https://amrelsherif-eng.github.io/ats-resume-templates/#video">Video tutorial</a> · <a href="#pick-your-template">Templates</a>
-</p>
+**Free one-page LaTeX resumes for students and early-career candidates,<br>plus a website to edit them three ways and check your CV in the browser.**
+
+[**Website**](https://amrelsherif-eng.github.io/ats-resume-templates/) · [**بالعربي**](https://amrelsherif-eng.github.io/ats-resume-templates/ar.html) · [**Video tutorials**](https://amrelsherif-eng.github.io/ats-resume-templates/#video) · [**CV checker**](https://amrelsherif-eng.github.io/ats-resume-templates/#check)
 
 </div>
 
----
-
+<a id="what-you-get"></a>
 <a id="-table-of-contents"></a>
 <a id="table-of-contents"></a>
-## Table of contents
+<img src="assets/h-what.svg#gh-dark-mode-only" width="100%" alt="What you get">
+<img src="assets/h-what-light.svg#gh-light-mode-only" width="100%" alt="What you get">
 
-- [What you get](#what-you-get)
-- [Pick your template](#pick-your-template)
-- [Start in 3 steps](#start-in-3-steps)
-- [Three ways to edit](#three-ways-to-edit)
-- [Check your CV](#check-your-cv-on-the-website)
-- [Video tutorials](#video-tutorials)
-- [Is it really ATS-friendly?](#-is-it-really-ats-friendly)
-- [Customize](#customize)
-- [Writing tips](#writing-tips)
-- [Build locally](#build-locally)
-- [For developers](#for-developers)
-- [FAQ](#faq)
-- [Changelog](#-changelog)
-- [Support](#support)
-- [Contributing](#contributing)
-- [License & Credits](#-license--credits)
+<p align="center">
+  <img src="assets/cards-mobile.svg#gh-dark-mode-only" width="760" alt="01 Templates: 5 one-page LaTeX CVs for tech and business tracks. 02 Three ways to edit: Overleaf, any AI chat, or your own computer. 03 CV checker: runs in your browser, your PDF is never uploaded. 04 Video tutorials: English and Egyptian Arabic, 5 minutes, with chapters.">
+  <img src="assets/cards-mobile-light.svg#gh-light-mode-only" width="760" alt="01 Templates: 5 one-page LaTeX CVs for tech and business tracks. 02 Three ways to edit: Overleaf, any AI chat, or your own computer. 03 CV checker: runs in your browser, your PDF is never uploaded. 04 Video tutorials: English and Egyptian Arabic, 5 minutes, with chapters.">
+</p>
 
-## What you get
-
-- Five one-page LaTeX resume templates for students and early-career candidates.
-- A website with a template gallery, three ways to edit, an in-browser CV checker, and video tutorials.
-- English and Arabic website pages. The Arabic page uses a full right-to-left layout.
-- Free templates under the MIT License.
+**Jump to:** [Templates](#-pick-your-template) · [Start in 3 steps](#-start-in-3-steps) · [Three ways to edit](#three-ways-to-edit) · [Check your CV](#check-your-cv) · [Videos](#-video-tutorials) · [ATS-friendly?](#-is-it-really-ats-friendly) · [Customize](#customize) · [Build locally](#-build-locally) · [Developers](#for-developers) · [FAQ](#faq) · [Changelog](#-changelog)
 
 <a id="-pick-your-template"></a>
 <a id="pick-your-template"></a>
-## Pick your template
+<img src="assets/h-templates.svg#gh-dark-mode-only" width="100%" alt="Pick your template">
+<img src="assets/h-templates-light.svg#gh-light-mode-only" width="100%" alt="Pick your template">
 
-Choose a track close to the job you want. Each template includes sample content, a source file, a PDF, and an Overleaf project. The sample details are fictional.
+Choose the track closest to the job you want. Every template is one page, uses fictional sample data, and comes as a `.tex` source, a ready PDF, and an Overleaf project.
+
 <table>
   <tr>
     <td align="center" valign="top" width="33%">
 
-**Network & Cloud**  
-**Best for:** Network, NOC, Cloud, SysAdmin, Junior DevOps  
-**Sample highlights:** Terraform, Zabbix, BGP lab
+**Network & Cloud**<br>
+<sub>Network, NOC, Cloud, SysAdmin, Junior DevOps</sub>
 
 <img src="templates/network-cloud/preview.png" width="260" alt="Network & Cloud template preview">
 
-[.tex](templates/network-cloud/resume.tex) · [PDF](templates/network-cloud/resume.pdf) · [Overleaf](https://www.overleaf.com/read/wxvvcdjzxnng#d23995)
+[.tex](templates/network-cloud/resume.tex) · [PDF](templates/network-cloud/resume.pdf) · [**Overleaf**](https://www.overleaf.com/read/wxvvcdjzxnng#d23995)
 
 </td>
     <td align="center" valign="top" width="33%">
 
-**Embedded & ECE**  
-**Best for:** Embedded, IoT, Instrumentation & Control, electronics students  
-**Sample highlights:** STM32, PID, LoRaWAN
+**Embedded & ECE**<br>
+<sub>Embedded, IoT, Instrumentation & Control</sub>
 
 <img src="templates/embedded-ece/preview.png" width="260" alt="Embedded & ECE template preview">
 
-[.tex](templates/embedded-ece/resume.tex) · [PDF](templates/embedded-ece/resume.pdf) · [Overleaf](https://www.overleaf.com/read/rjnzhhzrhffz#dd0591)
+[.tex](templates/embedded-ece/resume.tex) · [PDF](templates/embedded-ece/resume.pdf) · [**Overleaf**](https://www.overleaf.com/read/rjnzhhzrhffz#dd0591)
 
 </td>
     <td align="center" valign="top" width="33%">
 
-**Mobile Apps**  
-**Best for:** Flutter / mobile developers, student team leads  
-**Sample highlights:** Flutter, BLoC, widget tests
+**Mobile Apps**<br>
+<sub>Flutter / mobile developers, student team leads</sub>
 
 <img src="templates/mobile-apps/preview.png" width="260" alt="Mobile Apps template preview">
 
-[.tex](templates/mobile-apps/resume.tex) · [PDF](templates/mobile-apps/resume.pdf) · [Overleaf](https://www.overleaf.com/read/ytqxjshntmfb#335363)
+[.tex](templates/mobile-apps/resume.tex) · [PDF](templates/mobile-apps/resume.pdf) · [**Overleaf**](https://www.overleaf.com/read/ytqxjshntmfb#335363)
 
 </td>
   </tr>
   <tr>
     <td align="center" valign="top" width="33%">
 
-**Software Engineering**  
-**Best for:** Backend, full-stack and web developers, CS students  
-**Sample highlights:** NestJS, PostgreSQL, Redis, k6
+**Software Engineering**<br>
+<sub>Backend, full-stack and web developers, CS students</sub>
 
 <img src="templates/software-web/preview.png" width="260" alt="Software Engineering template preview">
 
-[.tex](templates/software-web/resume.tex) · [PDF](templates/software-web/resume.pdf) · [Overleaf](https://www.overleaf.com/project/6ae24cbbb91643c3433bdf53/share#5c212b281201e2cd4d1433f0877a918fec537672141ba0e4)
+[.tex](templates/software-web/resume.tex) · [PDF](templates/software-web/resume.pdf) · [**Overleaf**](https://www.overleaf.com/project/6ae24cbbb91643c3433bdf53/share#5c212b281201e2cd4d1433f0877a918fec537672141ba0e4)
 
 </td>
     <td align="center" valign="top" width="33%">
 
-**Business & Finance**  
-**Best for:** Accounting, finance, audit, banking, Faculty of Commerce students  
-**Sample highlights:** Reconciliations, Power BI, DCF
+**Business & Finance**<br>
+<sub>Accounting, finance, audit, banking, Commerce students</sub>
 
 <img src="templates/business-finance/preview.png" width="260" alt="Business & Finance template preview">
 
-[.tex](templates/business-finance/resume.tex) · [PDF](templates/business-finance/resume.pdf) · [Overleaf](https://www.overleaf.com/project/6ae24d2b537127bac7e70376/share#5cc2e5131e359736c6fb784a325e766dd439be52c846f976)
+[.tex](templates/business-finance/resume.tex) · [PDF](templates/business-finance/resume.pdf) · [**Overleaf**](https://www.overleaf.com/project/6ae24d2b537127bac7e70376/share#5cc2e5131e359736c6fb784a325e766dd439be52c846f976)
 
 </td>
-    <td align="center" valign="top" width="33%">
+    <td align="center" valign="middle" width="33%">
 
-**Your field next?**  
-Missing your track? [Open an issue](https://github.com/amrelsherif-eng/ats-resume-templates/issues/new) and tell us which one.
+**Your field next?**<br>
+<sub>Missing your track?</sub>
+
+[Request a template](https://github.com/amrelsherif-eng/ats-resume-templates/issues/new) and tell me which one.
 
 </td>
   </tr>
@@ -135,25 +111,32 @@ Missing your track? [Open an issue](https://github.com/amrelsherif-eng/ats-resum
 
 <a id="-start-in-3-steps"></a>
 <a id="start-in-3-steps"></a>
-## Start in 3 steps (no LaTeX needed)
+<img src="assets/h-start.svg#gh-dark-mode-only" width="100%" alt="Start in 3 steps">
+<img src="assets/h-start-light.svg#gh-light-mode-only" width="100%" alt="Start in 3 steps">
 
-LaTeX is a way to write documents using plain text commands. You do not need to learn those commands to use these templates. Overleaf runs in your browser and turns the template into a PDF for you.
+No LaTeX knowledge and nothing to install. [Overleaf](https://www.overleaf.com) turns the template into a PDF in your browser.
 
-1. Choose a template above.
-2. Open its Overleaf link and sign in to your free Overleaf account. The public project is read-only. Make your own editable copy: **File → Make a copy** (in the older Overleaf layout: **Menu → Copy Project**).
-3. Replace the sample details, click **Recompile**, then download your PDF.
+| Step | What to do |
+|:---:|:---|
+| **1** | Pick a template above and open its **Overleaf** link. Sign in with a free Overleaf account. |
+| **2** | The shared project is read-only, so make your own copy: **File → Make a copy** (older layout: **Menu → Copy Project**). |
+| **3** | Replace the sample text with yours, click **Recompile**, and download the PDF. |
 
-Prefer a blank project? Create one in Overleaf, open the template's **.tex** link from the table above, and paste its full contents into `main.tex`.
+> [!TIP]
+> Prefer a blank project? Create one in Overleaf, open the template's **.tex** link above, and paste everything into `main.tex`.
 
-## Three ways to edit
+<a id="three-ways-to-edit"></a>
+<img src="assets/h-edit.svg#gh-dark-mode-only" width="100%" alt="Three ways to edit">
+<img src="assets/h-edit-light.svg#gh-light-mode-only" width="100%" alt="Three ways to edit">
 
-### Overleaf
+| | Way | Best for | You need |
+|:---:|:---|:---|:---|
+| ☁️ | **Overleaf** | Most people | A free Overleaf account ([steps above](#-start-in-3-steps)) |
+| 🤖 | **Any AI chat** | Filling the template fast from your old CV | ChatGPT, Gemini or Claude, then Overleaf to compile |
+| 💻 | **Locally** | People who already use LaTeX | A LaTeX install, or Docker ([setup below](#-build-locally)) |
 
-Use the steps above. No LaTeX installation is needed. Overleaf requires a free account.
-
-### With AI
-
-Copy the full contents of your chosen `resume.tex`, paste it into Gemini, ChatGPT, or Claude, and use this prompt:
+<a id="-let-ai-fill-it-in"></a>
+**Let AI fill it in.** Copy the whole `resume.tex`, paste it into the chat with this prompt, then paste the code it returns into Overleaf:
 
 ```text
 Fill this LaTeX resume template with my information below.
@@ -165,93 +148,93 @@ My information:
 [paste your details, old CV, or LinkedIn "About" and "Experience" here]
 ```
 
-Paste the result into Overleaf and click **Recompile**. Review every line. You are responsible for the details in your resume and should be ready to discuss them in an interview.
+> [!IMPORTANT]
+> Read every line before you send the CV. You will be asked about it in the interview.
 
-### Build it locally
+<a id="check-your-cv"></a>
+<a id="check-your-cv-on-the-website"></a>
+<img src="assets/h-check.svg#gh-dark-mode-only" width="100%" alt="Check your CV">
+<img src="assets/h-check-light.svg#gh-light-mode-only" width="100%" alt="Check your CV">
 
-If you already use LaTeX, edit `resume.tex` in your editor and compile it on your computer. See [Build locally](#build-locally) for setup and commands.
+Drop any PDF into the [**CV checker**](https://amrelsherif-eng.github.io/ats-resume-templates/#check). You get a score out of 100, what passed, what to fix first, and the exact text an ATS would extract. One click turns the report into a fix-it prompt for an AI chat.
 
-## Check your CV on the website
+| It checks | For example |
+|:---|:---|
+| **Text** | Can the text be extracted at all, and in a sensible reading order? |
+| **Length** | Page count against the experience level you choose |
+| **Layout** | Columns, table-like layouts, images, icons, contact details hidden in headers or footers |
+| **File** | Font variety, file name, file size |
+| **Content** | Standard sections, email, phone, LinkedIn, location |
+| **Bullets** | Action verbs, weak openings, length, measurable results |
 
-Open the [CV checker](https://amrelsherif-eng.github.io/ats-resume-templates/#check) and select a PDF. It shows a score out of 100, the checks that passed, issues to fix, and the text it extracted from your file. You can choose an experience level so the page-length check uses an appropriate guide. The score is a format and readability guide, not a hiring prediction.
-
-The checker reads the PDF in your browser and looks at:
-
-- **Text:** can the text be extracted, and in a sensible reading order?
-- **Length:** page count compared with the experience level you choose.
-- **Layout:** columns, table-like layouts, images, decorative symbols, and contact details hidden in headers or footers.
-- **File:** font variety, file name, and file size.
-- **Sections and contact details:** standard sections, email, phone, LinkedIn, and location.
-- **Bullets:** action verbs, weak openings, length, and measurable results.
-
-It also warns when a resume is mostly Arabic, because its content checks are designed for English resumes.
-
-This is a format and readability checker. It does **not** compare your CV with a job description or match keywords. For job matching, the website points to tools such as [Jobscan](https://www.jobscan.co/) or [Resume Worded](https://resumeworded.com/); those services upload your file to their servers.
-
-**Privacy:** the PDF is never uploaded. There are no accounts, trackers, or analytics. The site makes no third-party requests. It uses a strict Content Security Policy, self-hosted fonts, and pdf.js.
+> [!NOTE]
+> **Private by design.** The PDF is read inside your browser and never uploaded. No accounts, no trackers, no third-party requests.
+> It checks how readable your PDF is. It does **not** match you to a job post; for that, try [Jobscan](https://www.jobscan.co/) or [Resume Worded](https://resumeworded.com/) (they upload your file).
 
 <a id="-video-tutorials"></a>
 <a id="video-tutorials"></a>
 <a id="-video-tutorial-2-min"></a>
 <a id="video-tutorial-2-min"></a>
-## Video tutorials
+<img src="assets/h-video.svg#gh-dark-mode-only" width="100%" alt="Video tutorials">
+<img src="assets/h-video-light.svg#gh-light-mode-only" width="100%" alt="Video tutorials">
 
-[Watch the tutorials on the website](https://amrelsherif-eng.github.io/ats-resume-templates/#video).
+| Video | Length | Language |
+|:---|:---:|:---|
+| [**Full tutorial**](https://amrelsherif-eng.github.io/ats-resume-templates/#video) | 5:15 | English voice-over + on-screen subtitles |
+| [**الشرح الكامل**](https://amrelsherif-eng.github.io/ats-resume-templates/ar.html#video) | 5:02 | Egyptian Arabic voice-over + subtitles |
+| [**Quick demo**](https://amrelsherif-eng.github.io/ats-resume-templates/#video) | 0:41 | English + Arabic captions |
 
-- **Full tutorial in English (5:15):** English voice-over and on-screen subtitles.
-- **Full tutorial in Egyptian Arabic (5:02):** Egyptian Arabic voice-over and on-screen subtitles.
-- Both tutorials have chapter buttons for **Pick a template**, **Edit on Overleaf**, **Edit with AI**, **Build it locally**, and **Check your CV**. A language switch lets you choose the tutorial language.
-- **41-second demo:** a short look at the website, templates, and checker.
+The full tutorial has chapter buttons on the site: **Pick a template · Edit on Overleaf · Edit with AI · Build it locally · Check your CV**.
 
-> 📣 The project launched on LinkedIn, where the release post reached **12K+ impressions**. [Read the release post](https://www.linkedin.com/feed/update/urn:li:share:7463276669491937281) and share it with anyone preparing for internships or their first job.
+> 📣 The project launched on LinkedIn, where the [release post](https://www.linkedin.com/feed/update/urn:li:share:7463276669491937281) reached **12K+ impressions**.
 
 <a id="-is-it-really-ats-friendly"></a>
 <a id="is-it-really-ats-friendly"></a>
-## Is it really ATS-friendly?
+<a id="-why-these-templates"></a>
+<img src="assets/h-ats.svg#gh-dark-mode-only" width="100%" alt="Is it really ATS-friendly?">
+<img src="assets/h-ats-light.svg#gh-light-mode-only" width="100%" alt="Is it really ATS-friendly?">
 
-ATS software tries to extract information from resumes. These templates use a single-column layout, standard text, and `\pdfgentounicode=1` to help keep PDF text selectable and in reading order. No template can guarantee how every ATS will handle a file.
+An ATS (applicant tracking system) reads your PDF as text before a person sees it. If it cannot read the text, or the text comes out in the wrong order, your CV can be skipped.
 
-Every change runs GitHub Actions checks that build all five templates. The build checks that each PDF is one page and that its text can be extracted, includes more than 200 words, and contains expected sample text. The website test suite also checks the checker against real and generated PDFs.
+| Common trap | How these templates avoid it |
+|:---|:---|
+| **Unreadable PDF** | `\pdfgentounicode=1`, standard fonts, single column. No layout tables, text boxes, images or icons. |
+| **Two pages too soon** | Margins and spacing tuned so an early-career background fits on exactly one page. |
+| **Messy code** | Reusable commands (`\resumeItem`, `\resumeSubheading`) and labelled sections, so you edit text, not layout. |
+| **Wrong things stand out** | Five tracks, each ordering sections and projects for that kind of role. |
 
-You can check your own PDF with the [website checker](https://amrelsherif-eng.github.io/ats-resume-templates/#check), or inspect extracted text from a terminal:
+**Checked on every change:** GitHub Actions builds all five templates and fails if a PDF is longer than one page, has fewer than 200 extractable words, or loses its sample text. No template can promise how every ATS behaves, so check your own PDF on the [website](https://amrelsherif-eng.github.io/ats-resume-templates/#check) or with `pdftotext -layout resume.pdf -`.
 
-```bash
-pdftotext -layout resume.pdf - | less
-```
+> [!WARNING]
+> Avoid photos, columns, text inside images, contact details in headers or footers, and decorative fonts.
 
-Avoid photos, columns, tables used to position content, text inside images, contact details in headers or footers, and decorative or non-standard fonts. Keep important details as selectable text.
+<a id="customize"></a>
+<a id="-customize"></a>
+<img src="assets/h-custom.svg#gh-dark-mode-only" width="100%" alt="Make it yours">
+<img src="assets/h-custom-light.svg#gh-light-mode-only" width="100%" alt="Make it yours">
 
-## Customize
+<details>
+<summary><b>Customize the template</b> (paper size, font, role line, sections)</summary>
 
-The templates use clearly labelled sections and reusable commands. You can change the content without changing the layout code.
-
-### Change paper size
-
-The templates default to US Letter. For A4, change the document class line:
+**A4 instead of US Letter**
 
 ```latex
 \documentclass[a4paper,11pt]{article}
 ```
 
-### Change the font
-
-The default is Latin Modern (`\usepackage{lmodern}`). To use Charter instead, replace it in the preamble:
+**Another font** (default is Latin Modern, `\usepackage{lmodern}`):
 
 ```latex
 \usepackage{charter}
 ```
 
-### Change the target role
-
-Edit the role line under your name, for example:
+**The role line under your name** (write `&` as `\&` in LaTeX):
 
 ```latex
 \small \textbf{Cloud Infrastructure \& Network Engineer}
 ```
 
-### Edit sections and entries
-
-Rename a section by changing `\section{New Section Name}`. To reorder or remove a section, move or delete the block between its `%-----------` markers. To add an entry, use the provided commands:
+**Sections:** rename with `\section{New Name}`; move or delete the block between its `%-----------` markers. Add an entry with the existing commands:
 
 ```latex
 \section{Volunteer Experience}
@@ -263,47 +246,44 @@ Rename a section by changing `\section{New Section Name}`. To reorder or remove 
 \resumeSubHeadingListEnd
 ```
 
-Useful commands include `\resumeSubheading{Title}{Dates}{Organization}{Location}`, `\resumeProjectHeading{...}{Dates}`, and `\resumeItem{...}`.
+</details>
 
-## Writing tips
+<details>
+<summary><b>Writing tips</b></summary>
 
-- Keep one main idea in each bullet: action, task, and result or scope.
-- Use only numbers you can explain.
-- Use job-post wording for skills and tools when it accurately describes your experience.
-- List experience newest first. Keep the PDF text selectable.
-- Keep a separate tailored copy for each kind of role you apply for.
-- For students and early-career candidates, keep the resume to one page when your experience allows it.
+- One idea per bullet: action, task, and result or scope.
+- Use only numbers you can explain in an interview.
+- Use the job post's wording for skills and tools when it is true for you.
+- Newest experience first. Keep the PDF text selectable.
+- Keep a tailored copy for each kind of role.
+- Students and early-career candidates: one page.
+
+</details>
 
 <a id="-build-locally"></a>
 <a id="build-locally"></a>
-## Build locally
+<img src="assets/h-build.svg#gh-dark-mode-only" width="100%" alt="Build it locally">
+<img src="assets/h-build-light.svg#gh-light-mode-only" width="100%" alt="Build it locally">
 
-You can compile a template on your computer using VS Code and LaTeX, a terminal, or Docker.
+```bash
+git clone https://github.com/amrelsherif-eng/ats-resume-templates.git
+cd ats-resume-templates/templates/network-cloud
+latexmk -pdf resume.tex
+```
 
-### Prerequisites
+<details>
+<summary><b>Setup: VS Code + LaTeX</b> (Windows, Linux, macOS)</summary>
 
 | Tool | Purpose |
 |:---|:---|
 | [VS Code](https://code.visualstudio.com/) | Editor |
-| [LaTeX Workshop](https://marketplace.visualstudio.com/items?itemName=James-Yu.latex-workshop) | VS Code extension to build and preview PDFs |
-| [MiKTeX](https://miktex.org/download) | LaTeX compiler and package manager for Windows |
+| [LaTeX Workshop](https://marketplace.visualstudio.com/items?itemName=James-Yu.latex-workshop) | Builds and previews the PDF inside VS Code |
+| [MiKTeX](https://miktex.org/download) | LaTeX for Windows (allow it to install missing packages) |
 | [Strawberry Perl](https://strawberryperl.com/) | Needed by `latexmk` on Windows |
 
-On Linux, install TeX Live and `latexmk` (for example, `sudo apt install texlive-latex-extra latexmk`). On macOS, install MacTeX (for example, `brew install --cask mactex-no-gui`).
+Linux: `sudo apt install texlive-latex-extra latexmk`. macOS: `brew install --cask mactex-no-gui`.
 
-### VS Code
-
-Clone the repository and open it in VS Code:
-
-```bash
-git clone https://github.com/amrelsherif-eng/ats-resume-templates.git
-cd ats-resume-templates
-code .
-```
-
-Open the template folder you want, such as `templates/network-cloud/resume.tex`, and build it. On Windows, configure MiKTeX to install missing packages automatically and install Strawberry Perl. In VS Code, install LaTeX Workshop. Its default shortcuts are **Ctrl+Alt+B** to build and **Ctrl+Alt+V** to open the PDF preview.
-
-Recommended VS Code settings:
+In VS Code, **Ctrl+Alt+B** builds and **Ctrl+Alt+V** opens the PDF. Recommended settings:
 
 ```jsonc
 {
@@ -312,143 +292,131 @@ Recommended VS Code settings:
 }
 ```
 
-The first MiKTeX build may download missing packages and needs an internet connection.
+The first MiKTeX build downloads missing packages, so it needs an internet connection.
 
-### Terminal
+</details>
 
-```bash
-cd templates/network-cloud
-latexmk -pdf resume.tex
-```
-
-You can also use `pdflatex resume.tex`.
-
-### Docker
-
-With Docker installed, compile without installing LaTeX locally:
+<details>
+<summary><b>No install: Docker</b></summary>
 
 ```bash
 docker run --rm -v "$PWD":/work -w /work/templates/network-cloud texlive/texlive:latest latexmk -pdf resume.tex
 ```
 
-## For developers
+</details>
 
-### Project structure
+<a id="for-developers"></a>
+<a id="-project-structure"></a>
+<img src="assets/h-dev.svg#gh-dark-mode-only" width="100%" alt="For developers">
+<img src="assets/h-dev-light.svg#gh-light-mode-only" width="100%" alt="For developers">
 
 ```text
-.github/workflows/   GitHub Actions workflows for template builds, site tests, and deployment
-assets/              README banner and buttons
-site/                Website source, assets, checker, build.py, and tests/
-templates/           Five template folders with resume.tex, resume.pdf, and preview.png
-LICENSE              MIT license and copyright notices
-README.md            This guide
+templates/           5 templates: resume.tex, resume.pdf, preview.png
+site/                the website: index.html, assets/ (checker in assets/ats/), build.py, tests/
+.github/workflows/   build.yml (templates), site.yml (site tests), pages.yml (deploy)
+assets/              README graphics
 ```
 
-### Build and test the website locally
+| Quality check | Result |
+|:---|:---|
+| Lighthouse (English page) | 100 performance · accessibility · best practices · SEO, mobile and desktop |
+| Accessibility | WCAG AA, tested with axe-core on every change |
+| Security | Strict Content-Security-Policy, no third-party requests, self-hosted fonts and pdf.js |
+| Browsers | Tested in Chromium (Edge), Firefox and WebKit |
+| Tests | Layout at phone, tablet and desktop sizes, links, the checker on real PDFs, English and Arabic pages |
 
-From the repository root, install site dependencies, build the site, and run the tests:
+<details>
+<summary><b>Build and test the website locally</b></summary>
 
 ```bash
 npm ci --prefix site && python site/build.py _site
 SITE_DIR=_site BROWSER_CHANNEL=msedge AXE_PATH=site/node_modules/axe-core/axe.min.js python -m pytest site/tests -q
 ```
 
-These commands use bash syntax (Linux, macOS, Git Bash). In PowerShell, set each variable first, for example `$env:SITE_DIR = "_site"`. The tests need Python with Playwright and pytest. `BROWSER_CHANNEL=msedge` uses Microsoft Edge; leave it out to use Playwright's own Chromium.
+Bash syntax (Linux, macOS, Git Bash). In PowerShell, set each variable first, for example `$env:SITE_DIR = "_site"`. The tests need Python with Playwright and pytest. Leave out `BROWSER_CHANNEL` to use Playwright's own Chromium.
 
-GitHub Actions builds all five templates and runs the website test suite on changes. The site tests cover layout at phone, tablet, and desktop sizes; links; the checker using real PDFs; accessibility with axe-core; and Content Security Policy. The tests also cover Arabic and English pages and the checker regression corpus.
+</details>
 
-Lighthouse scores 100 for performance, accessibility, best practices, and SEO on the English page, on mobile and desktop. The site has been tested in Chromium (Edge), Firefox, and WebKit.
-
-## FAQ
+<a id="faq"></a>
+<a id="-faq"></a>
+<img src="assets/h-faq.svg#gh-dark-mode-only" width="100%" alt="Questions and answers">
+<img src="assets/h-faq-light.svg#gh-light-mode-only" width="100%" alt="Questions and answers">
 
 <details>
-<summary>Should I use US Letter or A4?</summary>
+<summary><b>US Letter or A4?</b></summary>
 
-US Letter is common in the United States and Canada. A4 is common in the UK, Europe, the Middle East, and many other regions. Change the document class to `a4paper` as shown in [Customize](#customize).
+US Letter for the United States and Canada; A4 for the UK, Europe, the Middle East and most other places. Switch with `a4paper` (see [Customize](#customize)).
 </details>
 
 <details>
-<summary>Can I add a photo?</summary>
+<summary><b>Can I add a photo?</b></summary>
 
-Photos, columns, and text boxes can confuse ATS software. If a job post asks for a photo, upload the resume PDF to the application portal and send a photo only if a recruiter asks.
+Photos, columns and text boxes can confuse an ATS. If a job post asks for a photo, upload the PDF to the portal and send a photo only if a recruiter asks.
 </details>
 
 <details>
-<summary>Can my resume be two pages?</summary>
+<summary><b>Can my resume be two pages?</b></summary>
 
-For students, interns, and early-career candidates, one page is a common target. If your experience calls for more space, keep the extra page useful and readable. For the checker, choose the experience level that fits you.
+For students, interns and early-career candidates, aim for one page. With more experience, a second page is fine if every line earns its place. Pick your experience level in the checker.
 </details>
 
 <details>
-<summary>What if my name has non-English characters or accents?</summary>
+<summary><b>My name has accents or non-English letters.</b></summary>
 
-Common accents work as they are (for example `\'e` gives é). For other scripts, switch the compiler to XeLaTeX (Overleaf: **Menu → Settings → Compiler**; locally: `latexmk -xelatex`), then add `\usepackage{fontspec}` to the preamble. `fontspec` does not work with the default pdfLaTeX compiler.
+Common accents work as they are (`\'e` gives é). For other scripts, switch the compiler to XeLaTeX (Overleaf: **Menu → Settings → Compiler**; locally: `latexmk -xelatex`) and add `\usepackage{fontspec}`. `fontspec` does not work with the default pdfLaTeX.
 </details>
 
 <details>
-<summary>Can I use the templates commercially?</summary>
+<summary><b>Is there an Arabic version?</b></summary>
 
-Yes. The templates are under the MIT License. You may use, modify, and distribute them for personal or commercial use, subject to the license terms below.
+The website, yes: a full right-to-left [Arabic page](https://amrelsherif-eng.github.io/ats-resume-templates/ar.html) that Arabic-language browsers open automatically, and a full tutorial in Egyptian Arabic. The templates are English, left-to-right, for jobs that hire in English.
 </details>
 
 <details>
-<summary>Why use LaTeX instead of Word or Google Docs?</summary>
+<summary><b>Why LaTeX instead of Word or Google Docs?</b></summary>
 
-LaTeX gives you direct control over spacing and page layout. It can take some getting used to, but the Overleaf steps let you edit the sample text without learning LaTeX first.
+LaTeX gives exact control over spacing and page layout, and the PDF it produces is clean text. With Overleaf you edit the sample text without learning LaTeX first.
 </details>
 
 <details>
-<summary>How do I keep my phone number private in public copies?</summary>
+<summary><b>Can I use the templates commercially?</b></summary>
 
-If you commit a resume to a public GitHub repository, use a placeholder or omit your phone number and street address. You can show your city and professional links instead.
+Yes. They are MIT licensed: use, change and share them, for personal or commercial use, keeping the license notice.
 </details>
 
 <details>
-<summary>Is there an Arabic version?</summary>
+<summary><b>How do I keep my phone number private?</b></summary>
 
-Yes. The [website has a full right-to-left Arabic page](https://amrelsherif-eng.github.io/ats-resume-templates/ar.html). Arabic-language browsers open it automatically. The templates themselves are in English and use a left-to-right layout for English-language jobs.
+If you put your CV in a public GitHub repository, replace your phone number and street address with placeholders, or show only your city and professional links.
 </details>
 
 <a id="-changelog"></a>
 <a id="changelog"></a>
-## Changelog
-
-- **v2.5 (Oct 2026):** Redesigned video section (full tutorial in English and Arabic with chapters, language switch), pre-rendered Arabic page (`ar.html`) with `hreflang`, faster Arabic first load.
-- **v2.4 (Oct 2026):** Full video tutorial on the website (5 min, English and Arabic, follows the site language), replacing the old 2-minute walkthrough.
-- **v2.3 (Oct 2026):** Website redesign (calmer visual system, smoother motion, animated score gauge), a 20-case test corpus for the ATS checker, GitHub Sponsors.
-- **v2.2 (Oct 2026):** Website with a template gallery, an in-browser ATS check (scored report, fixes, experience-aware page rules), English and Arabic, and automated site tests.
-- **v2.1 (Oct 2026):** Two new templates: Software Engineering (Web & Backend) and Business & Finance for Faculty of Commerce students. Overleaf links for both. Mobile Apps sample filled to a full page.
-- **v2.0 (Oct 2026):** Three role-focused templates, inline quick-guide comments, Leadership & Activities section, GitHub Actions CI build checks, and rewritten documentation.
-- **v1.0 (May 2026):** First public release of the single template with Overleaf integration, GitHub repository, and AI prompt.
-
-## Support
-
-The templates, website, and checker are free. If they helped you, you can support the work on [GitHub Sponsors](https://github.com/sponsors/amrelsherif-eng). A star on the repository or sharing it with a friend also helps.
-
-### Supporters
-
-Monthly backers ($5+ a month) are thanked here by name.
-
-<!-- When the first $5+ monthly backer joins, replace the next line with their name or @handle. Add more backers comma-separated. -->
-
-*No supporters yet. [Be the first!](https://github.com/sponsors/amrelsherif-eng)* 💙
-
-## Contributing
-
-Suggestions and contributions are welcome. Open an issue or submit a pull request. To add a role template:
-
-1. Copy an existing folder under `templates/`.
-2. Keep the preamble and custom commands consistent.
-3. Use fictional sample details such as `Your Name` and `example.com`.
-4. Check that the PDF is one page and passes the GitHub Actions build checks.
-
 <a id="-license--credits"></a>
 <a id="license--credits"></a>
-## License & Credits
+<img src="assets/h-more.svg#gh-dark-mode-only" width="100%" alt="Changelog and credits">
+<img src="assets/h-more-light.svg#gh-light-mode-only" width="100%" alt="Changelog and credits">
 
-The templates are released under the MIT License. The license permits use, copying, modification, merging, publishing, distribution, sublicensing, and sale, provided the copyright and permission notice are included. The software is provided without warranty. See [LICENSE](LICENSE) for the full text.
+<details>
+<summary><b>Changelog</b></summary>
 
-Copyright © 2026 Amr Fathy Elsherif. The templates are based on the original open-source [sb2nov/resume](https://github.com/sb2nov/resume) by Sourabh Bajaj, also under the MIT License.
+- **v2.5 (Oct 2026):** Redesigned video section (full tutorial in English and Arabic, chapters, language switch), pre-rendered Arabic page with `hreflang`, faster Arabic first load.
+- **v2.4 (Oct 2026):** Full video tutorial on the website (5 min, English and Arabic), replacing the old 2-minute walkthrough.
+- **v2.3 (Oct 2026):** Website redesign (calmer visuals, smoother motion, animated score gauge), a 20-case test corpus for the checker, GitHub Sponsors.
+- **v2.2 (Oct 2026):** Website with a template gallery, the in-browser ATS check (scored report, fixes, experience-aware page rules), English and Arabic, automated site tests.
+- **v2.1 (Oct 2026):** Software Engineering and Business & Finance templates, with Overleaf links. Mobile Apps sample filled to a full page.
+- **v2.0 (Oct 2026):** Three role-focused templates, inline quick-guide comments, Leadership & Activities section, CI build checks, rewritten documentation.
+- **v1.0 (May 2026):** First public release: one template, Overleaf link, AI prompt.
+
+</details>
+
+**Support.** Everything here is free. If it helped you, you can [sponsor the work on GitHub](https://github.com/sponsors/amrelsherif-eng), star the repo, or share it with a friend. Monthly backers ($5+) are thanked here by name.
+<!-- When the first $5+ monthly backer joins, replace the next line with their name or @handle. Add more backers comma-separated. -->
+*No supporters yet. [Be the first!](https://github.com/sponsors/amrelsherif-eng)* 💙
+
+**Contributing.** Issues and pull requests are welcome. To add a role template: copy a folder under `templates/`, keep the preamble and commands, use fictional data (`Your Name`, `example.com`), and make sure the PDF stays one page and passes the CI build.
+
+**License & credits.** MIT, see [LICENSE](LICENSE). Copyright © 2026 Amr Fathy Elsherif. Built on the open-source [sb2nov/resume](https://github.com/sb2nov/resume) by Sourabh Bajaj (MIT).
 
 ---
 
