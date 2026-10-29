@@ -14,7 +14,7 @@ const TUTORIAL = {
   ar: { src: 'assets/video/tutorial-ar.mp4', poster: 'assets/video/tutorial-poster-ar.webp', duration: '5:02', chapters: [23.8, 50.9, 140.9, 207.8, 232.7] }
 };
 const VIDEO = { src: 'assets/video/demo.mp4', poster: 'assets/video/demo-poster.webp',
-  captionsEn: 'assets/video/demo.en.vtt', captionsAr: 'assets/video/demo.ar.vtt' };
+  subtitlesAr: 'assets/video/demo.ar.vtt' };
 
 const TEMPLATES = [
   { id: 'software-web', color: '#c084fc', skills: ['NestJS', 'PostgreSQL', 'Redis', 'Docker', 'React'],
@@ -305,8 +305,9 @@ function init() {
       } else video.poster = VIDEO.poster;
     }
     video.append(el('source', { src: VIDEO.src, type: 'video/mp4' }));
-    for (const [src, code, label] of [[VIDEO.captionsEn, 'en', 'English'], [VIDEO.captionsAr, 'ar', 'العربية']]) {
-      if (src) video.append(el('track', { kind: 'captions', src, srclang: code, label }));
+    // No voice in the promo and its English text is on screen: only an Arabic translation track.
+    for (const [src, code, label] of [[VIDEO.subtitlesAr, 'ar', 'العربية']]) {
+      if (src) video.append(el('track', { kind: 'subtitles', src, srclang: code, label }));
     }
     video.hidden = false;
     video.closest('.vid-card').classList.add('has-video');

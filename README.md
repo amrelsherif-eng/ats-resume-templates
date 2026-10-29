@@ -182,7 +182,7 @@ Drop any PDF into the [**CV checker**](https://amrelsherif-eng.github.io/ats-res
 |:---|:---:|:---|
 | [**Full tutorial**](https://amrelsherif-eng.github.io/ats-resume-templates/#video) | 5:15 | English voice-over + on-screen subtitles |
 | [**الشرح الكامل**](https://amrelsherif-eng.github.io/ats-resume-templates/ar.html#video) | 5:02 | Egyptian Arabic voice-over + subtitles |
-| [**Quick demo**](https://amrelsherif-eng.github.io/ats-resume-templates/#video) | 0:41 | English + Arabic captions |
+| [**Quick demo**](https://amrelsherif-eng.github.io/ats-resume-templates/#video) | 0:38 | No voice-over, Arabic subtitles |
 
 The full tutorial has chapter buttons on the site: **Pick a template · Edit on Overleaf · Edit with AI · Build it locally · Check your CV**.
 
