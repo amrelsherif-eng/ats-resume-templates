@@ -36,8 +36,17 @@ export async function extract(pdfjs, file) {
       const pageItems = [];
       // A real resume page has a few hundred text runs; cap crafted PDFs so the tab never freezes.
       for (const item of content.items.slice(0, MAX_ITEMS_PER_PAGE)) {
-        if (item.str) stream.push(item.str + (item.hasEOL ? '\n' : ''));
-        if (!item.str || !item.str.trim()) continue;
+        if (typeof item.str !== 'string') continue; // marked-content items carry no text
+        const str = cleanText(item.str);
+        if (str) stream.push(str + (item.hasEOL ? '\n' : ''));
+        if (!str || !str.trim()) {
+          // Word writes some spaces as their own runs ("Mar 2022", " ", "–", " ", "Present"): keep the
+          // space on the run before it, on the same baseline (left-to-right text; Arabic gaps are measured).
+          const prev = pageItems[pageItems.length - 1];
+          if (str && prev && !/\s$/.test(prev.text) && !hasArabic(prev.text) &&
+              Math.abs(prev.baseline - (viewport.height - item.transform[5])) < 1) prev.text += ' ';
+          continue;
+        }
         const transform = item.transform;
         const size = Math.round(Math.abs(transform[3]) * 10) / 10;
         const h = item.height || size;
@@ -45,7 +54,7 @@ export async function extract(pdfjs, file) {
         const font = `${family}|${item.fontName}`;
         if (family) fonts.add(family);
         pageItems.push({
-          text: item.str, x: transform[4], y: viewport.height - transform[5] - h,
+          text: str, x: transform[4], y: viewport.height - transform[5] - h,
           w: item.width, h, font, size,
           baseline: viewport.height - transform[5],
         });
@@ -73,21 +82,30 @@ export async function extract(pdfjs, file) {
         target.baseline = target.sum / target.items.length;
       }
 
+      // On a mostly Arabic page, every line with Arabic in it is a right-to-left paragraph
+      // (a contact line with an email and a phone included).
+      const pageRtl = isRtl(pageItems);
       for (const line of pageLines) {
         line.items.sort((a, b) => a.x - b.x);
-        const first = line.items[0];
+        const rtl = isRtl(line.items) || (pageRtl && line.items.some(i => hasArabic(i.text)));
+        const ordered = rtl ? logicalRtlOrder(line.items) : logicalLtrOrder(line.items);
         let text = '';
-        for (const item of line.items) {
-          const previous = line.items[line.items.indexOf(item) - 1];
-          if (previous && item.x - (previous.x + previous.w) > 0.25 * item.size &&
-              !/\s$/.test(text) && !/^\s/.test(item.text)) text += ' ';
+        ordered.forEach((item, i) => {
+          const previous = ordered[i - 1];
+          // Gap between neighbours on the page (right-to-left runs read from the right).
+          const gap = previous && (previous.x > item.x ? previous.x - (item.x + item.w) : item.x - (previous.x + previous.w));
+          // Never put a space before a diacritic (shadda, tanween) that some PDF makers write as its own run.
+          if (previous && gap > 0.25 * item.size && !/\s$/.test(text) && !/^[\s\p{M}]/u.test(item.text)) text += ' ';
           text += item.text;
-        }
+        });
+        const first = ordered[0];
         const bullet = /^(?:[•●▪◦‣–—\-*·−])\s/.test(text) ||
           (first.text.length === 1 && !/[\p{L}\p{N}\s]/u.test(first.text));
+        const right = Math.max(...line.items.map(part => part.x + part.w));
         lines.push({
           page: pageNumber, y: Math.min(...line.items.map(part => part.y)),
-          x: first.x, text, items: line.items.map(({ baseline, ...part }) => part), bullet,
+          h: Math.max(...line.items.map(part => part.h || 0)),
+          x: line.items[0].x, right, rtl, text, items: line.items.map(({ baseline, ...part }) => part), bullet,
         });
       }
 
@@ -118,6 +136,66 @@ export async function extract(pdfjs, file) {
     await pdf.destroy();
   }
 }
+
+// Word exports list bullets from the Symbol/Wingdings fonts as Private Use Area characters.
+// These are bullets, not icons: map them to "•". Other PUA characters (icon fonts) stay as they are.
+const PUA_BULLETS = /[]/g;
+
+/** Typographic ligatures (ﬁ, ﬂ) and Arabic presentation forms (the joined letter shapes some
+ * PDF makers write) become plain letters, so words read as words. */
+export function cleanText(s) {
+  let t = s.replace(PUA_BULLETS, '•');
+  if (/[ﬀ-﷿ﹰ-﻿]/.test(t)) {
+    // Some fonts map Arabic yeh, heh and kaf shapes to their Persian code points (ی ھ ک): use the Arabic letters.
+    t = t.normalize('NFKC').replace(/ی/g, 'ي').replace(/ھ/g, 'ه').replace(/ک/g, 'ك');
+  }
+  return t;
+}
+
+const ARABIC = /[؀-ۿݐ-ݿࢠ-ࣿ]/g; // global: used with match() only
+const LATIN_OR_DIGIT = /[A-Za-z0-9]/g;
+
+/** A line is right-to-left when it has more Arabic letters than Latin letters and digits. */
+export function isRtl(items) {
+  const text = items.map(i => i.text).join('');
+  return (text.match(ARABIC) || []).length > (text.match(LATIN_OR_DIGIT) || []).length;
+}
+
+/** Items of a right-to-left line, sorted by x, put into reading order: right to left, with runs of
+ * left-to-right text (emails, numbers, English words) kept in their own left-to-right order. */
+export function logicalRtlOrder(itemsByX) {
+  const rev = [...itemsByX].reverse();
+  const out = [];
+  for (let i = 0; i < rev.length;) {
+    if (!ltrStrong(rev[i].text)) { out.push(rev[i]); i += 1; continue; }
+    // Collect a left-to-right run; spaces and punctuation inside it belong to it.
+    let j = i;
+    while (j < rev.length && !hasArabic(rev[j].text)) j += 1;
+    let end = j;
+    while (end > i && !ltrStrong(rev[end - 1].text)) end -= 1; // trailing neutrals stay outside
+    out.push(...rev.slice(i, end).reverse(), ...rev.slice(end, j));
+    i = j;
+  }
+  return out;
+}
+const ltrStrong = s => /[A-Za-z0-9@]/.test(s) && !hasArabic(s);
+
+/** Items of a left-to-right line, sorted by x: an Arabic name or phrase inside it is written right to
+ * left on the page, so reverse each Arabic run (spaces between Arabic words belong to the run). */
+export function logicalLtrOrder(itemsByX) {
+  const out = [];
+  for (let i = 0; i < itemsByX.length;) {
+    if (!hasArabic(itemsByX[i].text)) { out.push(itemsByX[i]); i += 1; continue; }
+    let j = i;
+    while (j < itemsByX.length && !ltrStrong(itemsByX[j].text)) j += 1;
+    let end = j;
+    while (end > i && !hasArabic(itemsByX[end - 1].text)) end -= 1; // trailing neutrals stay outside
+    out.push(...itemsByX.slice(i, end).reverse(), ...itemsByX.slice(end, j));
+    i = j;
+  }
+  return out;
+}
+const hasArabic = s => /[؀-ۿݐ-ݿࢠ-ࣿ]/.test(s);
 
 /** Join extracted line text in document visual order. @param {Line[]} lines */
 export function linesToText(lines) {

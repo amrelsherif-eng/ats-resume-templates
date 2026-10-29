@@ -214,7 +214,13 @@ function render() {
 
   const text = el('details', 'chk-text');
   text.append(el('summary', '', ui('chk.preview')));
-  text.append(el('pre', '', doc.streamText.slice(0, 6000)));
+  // The raw content stream shows reading-order problems in left-to-right CVs. Right-to-left text is
+  // often stored letter by letter in page order, so for an Arabic CV show the rebuilt lines instead.
+  const rtlLines = doc.lines.filter(l => l.rtl).length;
+  const shown = rtlLines > doc.lines.length / 2 ? doc.text : doc.streamText;
+  const pre = el('pre', '', shown.slice(0, 6000));
+  if (shown === doc.text) pre.style.unicodeBidi = 'plaintext'; // each line takes its own direction
+  text.append(pre);
 
   // The fix-it prompt only makes sense when there is text for an AI to fix.
   const parts = textIssues(issues).length ? [head, list, ok, tools, text] : [head, list, ok, text];

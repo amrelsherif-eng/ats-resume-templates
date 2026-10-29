@@ -45,6 +45,19 @@ export const I18N_EN = {
 };
 
 const words = s => (s.match(/[\p{L}\p{N}]+(?:['’][\p{L}\p{N}]+)*/gu) || []).length;
+/** Arabic-Indic digits as ASCII, so "٠١٠٠..." reads as a phone number or a year. */
+const asciiDigits = s => s.replace(/[٠-٩]/g, d => String(d.charCodeAt(0) - 0x660)).replace(/[۰-۹]/g, d => String(d.charCodeAt(0) - 0x6F0));
+/** Right-to-left lines start at the right margin: mirror them so the column checks read them like left-to-right lines. */
+const mirror = (line, W) => !line.rtl ? line : {
+  ...line, x: W - (line.right ?? line.x), items: (line.items || []).map(it => ({ ...it, x: W - it.x - it.w }))
+};
+// Arabic dates (months, "حتى الآن") and short Arabic place names on the far side of a line are fine.
+const AR_DATE = /(?:يناير|فبراير|مارس|أبريل|ابريل|مايو|يونيو|يوليو|أغسطس|اغسطس|سبتمبر|أكتوبر|اكتوبر|نوفمبر|ديسمبر|الآن|حاليا|حالياً)/;
+function arabicDateOrPlace(s) {
+  const t = asciiDigits(s).trim();
+  if (!/[؀-ۿ]/.test(t)) return false;
+  return AR_DATE.test(t) || /(?:19|20)\d{2}/.test(t) || t.split(/\s+/).length <= 3;
+}
 const snippet = s => s.replace(/\s+/g, ' ').trim().slice(0, 90);
 const issue = (id, level, key, weight, vars, examples) => ({
   id, cat: 'parse', level, key, ...(vars && { vars }), ...(fix[key] && level !== 'ok' && { fix: `${key}.fix` }),
@@ -77,9 +90,9 @@ export function layoutIssues(doc, opts = {}) {
 
   // Columns: the extractor merges side-by-side text into one line, so look for a wide gap inside
   // a line (or a line that starts mid-page) whose right part is real content, not a date or place.
-  const body = first.filter(l => l.text?.trim());
+  const body = first.filter(l => l.text?.trim()).map(l => mirror(l, doc.width || 612));
   const W = doc.width || 612;
-  const dateOrPlace = s => /\b(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:t(?:ember)?)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?|Present|Remote|Expected)\b|\b(?:19|20)\d{2}\b|\b(?:0?[1-9]|1[0-2])[/.](?:\d{2}|(?:19|20)\d{2})\b|\b(?:19|20)\d{2}[-/.](?:0?[1-9]|1[0-2])\b/i.test(s) ||
+  const dateOrPlace = s => arabicDateOrPlace(s) || /\b(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:t(?:ember)?)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?|Present|Remote|Expected)\b|\b(?:19|20)\d{2}\b|\b(?:0?[1-9]|1[0-2])[/.](?:\d{2}|(?:19|20)\d{2})\b|\b(?:19|20)\d{2}[-/.](?:0?[1-9]|1[0-2])\b/i.test(s) ||
     (s.length < 32 && /^[A-Z][\w.'-]*(?:\s+[A-Z][\w.'-]*)*(?:,\s*[A-Z][\w.'-]*(?:\s+[A-Z][\w.'-]*)*)?$/.test(s));
   const overlaps = body.filter(line => {
     const items = [...(line.items || [])].sort((a, b) => a.x - b.x);
@@ -99,16 +112,21 @@ export function layoutIssues(doc, opts = {}) {
   out.push(issue('columns', multi ? 'warn' : 'ok', multi ? 'l.columns' : 'l.columns-ok', 8, undefined, overlaps.map(l => snippet(l.text))));
 
   const symbolRe = /[\uE000-\uF8FF\u2600-\u27BF]|[\u{1F300}-\u{1FAFF}]/gu;
-  const symMatches = [...text.matchAll(symbolRe)];
-  out.push(issue('icons', symMatches.length ? 'warn' : 'ok', symMatches.length ? 'l.icons' : 'l.icons-ok', 5, { n: symMatches.length }, symMatches.slice(0, 3).map(m => snippet(text.slice(Math.max(0, m.index - 25), m.index + 35)))));
+  // A symbol used as a line's bullet (\u2713 \u27A4 \u2756) is a bullet, not an icon that hides information.
+  const symText = lines.map(l => (l.bullet ? l.text.replace(/^\s*\S/u, '') : l.text)).join('\n');
+  const symMatches = [...symText.matchAll(symbolRe)];
+  out.push(issue('icons', symMatches.length ? 'warn' : 'ok', symMatches.length ? 'l.icons' : 'l.icons-ok', 5, { n: symMatches.length }, symMatches.slice(0, 3).map(m => snippet(symText.slice(Math.max(0, m.index - 25), m.index + 35)))));
 
-  const bad = (text.match(/\(cid:/gi) || []).length + (text.match(/\uFFFD/g) || []).length + (text.match(/(?:[^\p{L}\p{N}\s]){4,}/gu) || []).length;
+  // Runs of 4+ symbols look like broken text, except divider lines (\u2500\u2500\u2500\u2500 ---- ....) and "://".
+  const symbolRuns = (text.match(/(?:[^\p{L}\p{N}\s]){4,}/gu) || [])
+    .filter(m => !/^[-_=.\u00B7\u2022*~\u2500\u2501\u2550\u2014\u2013|]+$/u.test(m) && !/^[^:]*:\/\/[^:]*$/u.test(m));
+  const bad = (text.match(/\(cid:/gi) || []).length + (text.match(/\uFFFD/g) || []).length + symbolRuns.length;
   out.push(issue('garbled-text', bad > 3 ? 'fail' : 'ok', bad > 3 ? 'l.garbled' : 'l.garbled-ok', 9));
   out.push(issue('images', doc.images > 0 ? 'info' : 'ok', doc.images > 0 ? 'l.images' : 'l.images-ok', 3, { n: doc.images }));
 
   const contact = /[\w.+-]+@[\w.-]+\.[A-Z]{2,}|(?:\+?\d[\d().\s-]{7,}\d)/i;
-  const hasMain = first.some(l => contact.test(l.text || '') && l.y > doc.height * .04 && l.y + (l.h || 0) < doc.height * .96);
-  const edge = !hasMain && lines.some(l => contact.test(l.text || '') && (l.y <= doc.height * .04 || l.y + (l.h || 0) >= doc.height * .96));
+  const hasMain = first.some(l => contact.test(asciiDigits(l.text || '')) && l.y > doc.height * .04 && l.y + (l.h || 0) < doc.height * .96);
+  const edge = !hasMain && lines.some(l => contact.test(asciiDigits(l.text || '')) && (l.y <= doc.height * .04 || l.y + (l.h || 0) >= doc.height * .96));
   out.push(issue('contact-edge', edge ? 'warn' : 'ok', edge ? 'l.contact-edge' : 'l.contact-edge-ok', 4));
   const fontCount = (doc.fonts || []).filter(Boolean).length;
   out.push(issue('fonts', fontCount > 4 ? 'info' : 'ok', fontCount > 4 ? 'l.fonts' : 'l.fonts-ok', 2, { n: fontCount }));
