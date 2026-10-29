@@ -280,14 +280,17 @@ Object.assign(EN, {
   'vid.new.s': 'See the site, templates and CV checker.',
   'vid.soon': 'Coming soon',
   'vid.tut.t': 'The full tutorial, step by step',
-  'vid.tut.durEn': '5:15',
-  'vid.tut.durAr': '5:02',
-  'vid.tut.pick': 'Tutorial language',
-  'vid.tut.time': '5 minutes',
+  'vid.tut.s': 'Every click, zoomed in. No code needed.',
+  'vid.tut.pick': 'Choose the tutorial language',
+  'vid.tut.pickShort': 'Tutorial language',
   'vid.tut.voiceEn': 'English voice-over + on-screen subtitles',
   'vid.tut.voiceAr': 'Egyptian Arabic voice-over + on-screen subtitles',
-  'vid.tut.steps': 'Overleaf, AI and the checker',
-  'vid.tut.s': 'Every click, zoomed in. No code needed.'
+  'vid.ch.h': 'Chapters',
+  'vid.ch.pick': 'Pick a template',
+  'vid.ch.overleaf': 'Edit on Overleaf',
+  'vid.ch.ai': 'Edit with AI',
+  'vid.ch.local': 'Build it locally',
+  'vid.ch.check': 'Check your CV'
 });
 Object.assign(AR, {
   'vid.kicker': 'شاهد',
@@ -301,14 +304,17 @@ Object.assign(AR, {
   'vid.new.s': 'شاهد الموقع والنماذج وفاحص السيرة.',
   'vid.soon': 'قريباً',
   'vid.tut.t': 'الشرح الكامل خطوة بخطوة',
-  'vid.tut.durEn': '5:15',
-  'vid.tut.durAr': '5:02',
-  'vid.tut.pick': 'لغة الشرح',
-  'vid.tut.time': '5 دقائق',
+  'vid.tut.s': 'كل ضغطة بزوم واضح، ومن غير أي كود.',
+  'vid.tut.pick': 'اختار لغة الشرح',
+  'vid.tut.pickShort': 'لغة الشرح',
   'vid.tut.voiceEn': 'صوت إنجليزي + ترجمة على الشاشة',
   'vid.tut.voiceAr': 'صوت مصري + ترجمة على الشاشة',
-  'vid.tut.steps': 'Overleaf والذكاء الاصطناعي والفاحص',
-  'vid.tut.s': 'كل ضغطة بزوم واضح، ومن غير أي كود.'
+  'vid.ch.h': 'الفصول',
+  'vid.ch.pick': 'اختار القالب',
+  'vid.ch.overleaf': 'التعديل على Overleaf',
+  'vid.ch.ai': 'التعديل بالذكاء الاصطناعي',
+  'vid.ch.local': 'على جهازك',
+  'vid.ch.check': 'افحص الـ CV'
 });
 
 Object.assign(EN, { 'chk.toFix1': '1 thing to improve', 'chk.passed1': '1 check passed' });

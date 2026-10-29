@@ -96,6 +96,23 @@
     <h2 id="vid-h" data-i="vid.title">Watch how it works</h2>
     <p class="sub" data-i="vid.sub">Pick a template, edit it three ways, and check the result.</p>
     <div class="vid-grid">
+      <figure class="vid-card vid-tut">
+        <div class="tut-head">
+          <div><h3 class="tut-title" id="tut-title" data-i="vid.tut.t">The full tutorial, step by step</h3><p class="tut-sub" data-i="vid.tut.s">Every click, zoomed in. No code needed.</p></div>
+          <div class="tut-switch-wrap"><span class="tut-pick" data-i="vid.tut.pickShort">Tutorial language</span><div class="tut-switch" role="group" aria-label="Choose the tutorial language" data-i-aria="vid.tut.pick">
+            <button type="button" class="tut-lang" data-tl="en" aria-pressed="true"><span lang="en">English</span><span class="tut-len" dir="ltr">5:15</span></button>
+            <button type="button" class="tut-lang" data-tl="ar" aria-pressed="false"><span lang="ar">العربية</span><span class="tut-len" dir="ltr">5:02</span></button>
+          </div></div>
+        </div>
+        <div class="video-frame"><video id="tut-video" controls playsinline preload="none" aria-labelledby="tut-title"></video></div>
+        <div class="tut-bottom"><h4 class="tut-ch-heading" data-i="vid.ch.h">Chapters</h4><ol class="tut-chapters">
+          <li><button type="button" class="tut-ch" data-ch="0"><span class="tut-ch-n">1</span><span class="tut-ch-t" data-i="vid.ch.pick">Pick a template</span><span class="tut-ch-time" dir="ltr">0:21</span></button></li>
+          <li><button type="button" class="tut-ch" data-ch="1"><span class="tut-ch-n">2</span><span class="tut-ch-t" data-i="vid.ch.overleaf">Edit on Overleaf</span><span class="tut-ch-time" dir="ltr">0:48</span></button></li>
+          <li><button type="button" class="tut-ch" data-ch="2"><span class="tut-ch-n">3</span><span class="tut-ch-t" data-i="vid.ch.ai">Edit with AI</span><span class="tut-ch-time" dir="ltr">2:22</span></button></li>
+          <li><button type="button" class="tut-ch" data-ch="3"><span class="tut-ch-n">4</span><span class="tut-ch-t" data-i="vid.ch.local">Build it locally</span><span class="tut-ch-time" dir="ltr">3:35</span></button></li>
+          <li><button type="button" class="tut-ch" data-ch="4"><span class="tut-ch-n">5</span><span class="tut-ch-t" data-i="vid.ch.check">Check your CV</span><span class="tut-ch-time" dir="ltr">4:02</span></button></li>
+        </ol><ul class="video-chips"><li data-i="vid.tut.voiceEn">English voice-over + on-screen subtitles</li></ul></div>
+      </figure>
       <figure class="vid-card vid-new">
         <div class="video-frame" id="video-frame">
           <img src="templates/software-web/preview-640.webp" width="640" height="800" loading="lazy" decoding="async" alt="">
@@ -114,25 +131,6 @@
             <li data-i="vid.new.checker">Website + CV checker</li>
           </ul>
           <span class="video-description" data-i="vid.new.s">See the website, templates and CV checker in action.</span>
-        </figcaption>
-      </figure>
-      <figure class="vid-card vid-tut">
-        <div class="video-frame">
-          <video id="tut-video" controls playsinline preload="none"></video>
-          <span class="video-duration" dir="ltr" data-i="vid.tut.durEn">5:15</span>
-        </div>
-        <figcaption class="video-content">
-          <b data-i="vid.tut.t">The full tutorial, step by step</b>
-          <div class="tut-language" role="group" aria-label="Tutorial language" data-i-aria="vid.tut.pick">
-            <button type="button" class="tut-lang" data-tl="en" lang="en" aria-pressed="true">English</button>
-            <button type="button" class="tut-lang" data-tl="ar" lang="ar" aria-pressed="false">عربي</button>
-          </div>
-          <ul class="video-chips">
-            <li data-i="vid.tut.time">5 minutes</li>
-            <li data-i="vid.tut.voiceEn">English voice-over + on-screen subtitles</li>
-            <li data-i="vid.tut.steps">Overleaf, AI and the checker</li>
-          </ul>
-          <span class="video-description" data-i="vid.tut.s">Every click, zoomed in. No code needed.</span>
         </figcaption>
       </figure>
     </div>
