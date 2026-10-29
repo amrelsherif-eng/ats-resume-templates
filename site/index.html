@@ -103,30 +103,45 @@
     <h2 id="vid-h" data-i="vid.title">Watch how it works</h2>
     <p class="sub" data-i="vid.sub">Pick a template, edit it three ways, and check the result.</p>
     <div class="vid-grid">
-      <figure class="vid-new">
+      <figure class="vid-card vid-new">
         <div class="video-frame" id="video-frame">
+          <img src="templates/software-web/preview-640.webp" width="640" height="800" loading="lazy" decoding="async" alt="">
           <video id="demo-video" controls playsinline preload="none" hidden></video>
           <div class="video-soon" id="video-soon">
             <span class="soon-badge" data-i="vid.soon">Coming soon</span>
-            <span class="soon-play" aria-hidden="true"><svg viewBox="0 0 24 24" width="28" height="28"><path d="M8 5v14l11-7z" fill="currentColor"/></svg></span>
+            <span class="soon-play" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24"><path d="M8 5v14l11-7z" fill="currentColor"/></svg></span>
           </div>
+          <span class="video-duration" dir="ltr" data-i="vid.new.duration">0:60</span>
         </div>
-        <figcaption>
-          <b data-i="vid.new.t">The new 60-second demo</b>
-          <span data-i="vid.new.s">The whole site in one minute: pick a template, edit it with AI, on Overleaf or locally, then check your CV here. Silent-friendly, English captions, Arabic end card.</span>
+        <figcaption class="video-content">
+          <b data-i="vid.new.t">The 60-second website + CV demo</b>
+          <ul class="video-chips">
+            <li data-i="vid.new.time">60 seconds</li>
+            <li data-i="vid.new.captions">English captions</li>
+            <li data-i="vid.new.checker">Website + CV checker</li>
+          </ul>
+          <span class="video-description" data-i="vid.new.s">See the website, templates and CV checker in action.</span>
         </figcaption>
       </figure>
-      <div class="vid-old">
-        <a class="li-video" href="https://www.linkedin.com/feed/update/urn:li:activity:7500210405068144640/" target="_blank" rel="noopener noreferrer">
-      <span class="li-play" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22"><path d="M8 5v14l11-7z" fill="currentColor"/></svg></span>
-      <span class="li-text"><b data-i="vid.li.t">Watch the 2-minute walkthrough on LinkedIn</b><small data-i="vid.li.s">Spoken in Arabic · three ways to edit, step by step · 119 reactions</small></span>
-      <span class="li-go" aria-hidden="true">&#8599;</span>
+      <a class="vid-card vid-old li-video" href="https://www.linkedin.com/feed/update/urn:li:activity:7500210405068144640/" target="_blank" rel="noopener noreferrer">
+        <div class="video-frame">
+          <img src="templates/business-finance/preview-640.webp" width="640" height="800" loading="lazy" decoding="async" alt="">
+          <span class="li-play" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24"><path d="M8 5v14l11-7z" fill="currentColor"/></svg></span>
+          <span class="video-duration" dir="ltr" data-i="vid.li.duration">2:08</span>
+        </div>
+        <span class="video-content">
+          <span class="li-text">
+            <b data-i="vid.li.t">The 2-minute walkthrough</b>
+            <span class="video-chips">
+              <span data-i="vid.li.time">2 minutes</span>
+              <span data-i="vid.li.language">Spoken Egyptian Arabic</span>
+              <span data-i="vid.li.editing">Editing step by step</span>
+            </span>
+            <span class="video-description" data-i="vid.li.s">Follow one template from start to finish.</span>
+          </span>
+          <span class="li-go" data-i="vid.li.go">LinkedIn ↗</span>
+        </span>
         </a>
-        <dl class="vid-diff">
-          <div><dt data-i="vid.d.new">New demo</dt><dd data-i="vid.d.new.s">Short and visual. Shows the website, all five templates and the CV checker.</dd></div>
-          <div><dt data-i="vid.d.old">LinkedIn walkthrough</dt><dd data-i="vid.d.old.s">The original 2-minute explainer, spoken in Egyptian Arabic. Goes slower through editing one template step by step.</dd></div>
-        </dl>
-      </div>
     </div>
   </div>
 </section>
