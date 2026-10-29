@@ -351,6 +351,9 @@ def test_support_link_and_demo_video(page, site_url):
     # The demo video is configured in app.js: it replaces the "coming soon" placeholder,
     # is served from this site (CSP media-src 'self'), never preloads, and has EN + AR captions.
     video = page.locator("#demo-video")
+    # The poster is lazy: nothing under assets/video/ loads with the first screen.
+    assert video.get_attribute("poster") is None
+    video.scroll_into_view_if_needed()
     expect(video).to_be_visible()
     expect(page.locator("#video-soon")).to_have_count(0)
     expect(video).to_have_attribute("preload", "none")

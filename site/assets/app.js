@@ -285,7 +285,15 @@ function init() {
 
   if (VIDEO.src) {
     const video = document.getElementById('demo-video');
-    if (VIDEO.poster) video.poster = VIDEO.poster;
+    // The poster sits far below the fold: fetch it only when the section gets close.
+    if (VIDEO.poster) {
+      if ('IntersectionObserver' in window) {
+        const io = new IntersectionObserver(entries => {
+          if (entries.some(e => e.isIntersecting)) { video.poster = VIDEO.poster; io.disconnect(); }
+        }, { rootMargin: '800px 0px' });
+        io.observe(document.getElementById('video'));
+      } else video.poster = VIDEO.poster;
+    }
     video.append(el('source', { src: VIDEO.src, type: 'video/mp4' }));
     for (const [src, code, label] of [[VIDEO.captionsEn, 'en', 'English'], [VIDEO.captionsAr, 'ar', 'العربية']]) {
       if (src) video.append(el('track', { kind: 'captions', src, srclang: code, label }));
