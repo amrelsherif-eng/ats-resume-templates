@@ -56,6 +56,8 @@ def main():
             shutil.copy2(src / name, dst / name)
         img = Image.open(src / "preview.png").convert("RGB")
         img.save(dst / "preview.webp", "WEBP", quality=82, method=6)
+        img.resize((400, round(400 * img.height / img.width)), Image.LANCZOS).save(
+            dst / "preview-400.webp", "WEBP", quality=78, method=6)
         img.resize((640, round(640 * img.height / img.width)), Image.LANCZOS).save(
             dst / "preview-640.webp", "WEBP", quality=80, method=6)
     vendor = OUT / "assets" / "vendor" / "pdfjs"
