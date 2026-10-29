@@ -106,6 +106,7 @@ const AR={
 
 Object.assign(EN, {
   'meta.title': 'ATS Resume Templates · Free one-page LaTeX resumes',
+  'meta.desc': 'Five free, one-page LaTeX resume templates, checked automatically. Edit with AI, on Overleaf, or locally, and check your own PDF in the browser.',
   'nav.skip': 'Skip to templates',
   'hero.cta3': 'Check my CV',
   'alt.preview': 'template preview',
@@ -153,6 +154,7 @@ Object.assign(EN, {
 
 Object.assign(AR, {
   'meta.title': 'ATS Resume Templates · سير ذاتية مجانية من صفحة واحدة',
+  'meta.desc': 'خمسة نماذج سيرة ذاتية مجانية من صفحة واحدة بـ LaTeX، تُفحص تلقائياً. عدّلها بالذكاء الاصطناعي أو عبر Overleaf أو على جهازك، وافحص ملف PDF في المتصفح.',
   'nav.skip': 'انتقل إلى النماذج',
   'hero.cta3': 'افحص سيرتك الذاتية',
   'alt.preview': 'معاينة النموذج',

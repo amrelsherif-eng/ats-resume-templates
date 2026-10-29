@@ -9,7 +9,10 @@ served from any URL depth and so needs absolute paths.
 """
 import re
 import shutil
+import subprocess
 import sys
+import html
+import json
 from pathlib import Path
 
 from PIL import Image
@@ -30,6 +33,75 @@ FONTS = {
 
 
 ARABIC_RANGE = "U+0600-06FF, U+0750-077F, U+0870-08FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC"
+SITE_URL = "https://amrelsherif-eng.github.io/ats-resume-templates/"
+
+
+def build_arabic_page():
+    """Render Arabic strings into a copy of the built English document."""
+    script = ("const fs=require('fs'),vm=require('vm'); const c={}; "
+              "vm.runInNewContext(fs.readFileSync(process.argv[1],'utf8')+"
+              "'\\nglobalThis.__translations=JSON.stringify({EN,AR});',c); "
+              "process.stdout.write(c.__translations);")
+    result = subprocess.run(["node", "-e", script, str(OUT / "assets" / "i18n.js")],
+                            check=True, capture_output=True, text=True, encoding="utf-8")
+    ar = json.loads(result.stdout)["AR"]
+    source = (OUT / "index.html").read_text(encoding="utf-8")
+
+    # Preserve the original markup and replace only inner content on elements whose source is text-only.
+    pattern = re.compile(r'(<([A-Za-z][\w:-]*)\b[^>]*\bdata-i="([^"]+)"[^>]*>)(.*?)(</\2\s*>)', re.S)
+    def replace_text(m):
+        key = m.group(3)
+        if key not in ar:
+            raise ValueError(f"Missing Arabic translation for data-i key: {key}")
+        value = ar[key]
+        return m.group(1) + (value if "<" in value or ">" in value else html.escape(value)) + m.group(5)
+    source = pattern.sub(replace_text, source)
+
+    def replace_attr(match):
+        tag, key = match.group(0), match.group(1)
+        if key not in ar:
+            raise ValueError(f"Missing Arabic translation for data-i-aria key: {key}")
+        label = html.escape(ar[key], quote=True)
+        return re.sub(r'\baria-label="[^"]*"', f'aria-label="{label}"', tag)
+    source = re.sub(r'<[^>]*\bdata-i-aria="([^"]+)"[^>]*>', replace_attr, source)
+    source = source.replace('<html lang="en" dir="ltr">', '<html lang="ar" dir="rtl" data-prerendered="ar">')
+    # Arabic text is visible at first paint here, so fetch its font with the page (no swap, no layout shift).
+    preload = "".join(
+        f'<link rel="preload" href="assets/fonts/ibm-plex-sans-arabic-arabic-{w}-normal.woff2" as="font" type="font/woff2" crossorigin>' + "\n"
+        for w in ("400", "500", "700"))
+    source = source.replace('<link rel="stylesheet" href="assets/fonts.css">', preload + '<link rel="stylesheet" href="assets/fonts.css">', 1)
+    source = re.sub(r'<title>.*?</title>', f'<title>{html.escape(ar["meta.title"])}</title>', source, count=1, flags=re.S)
+    source = re.sub(r'(<meta name="description" content=")[^"]*(">)', r'\g<1>' + html.escape(ar["meta.desc"], quote=True) + r'\2', source, count=1)
+    source = re.sub(r'(<meta property="og:title" content=")[^"]*(">)', r'\g<1>' + html.escape(ar["meta.title"], quote=True) + r'\2', source, count=1)
+    source = re.sub(r'(<meta property="og:description" content=")[^"]*(">)', r'\g<1>' + html.escape(ar["meta.desc"], quote=True) + r'\2', source, count=1)
+    source = source.replace('<meta property="og:type"', '<meta property="og:locale" content="ar_EG">\n<meta property="og:type"', 1)
+    source = source.replace(f'<link rel="canonical" href="{SITE_URL}">',
+                            f'<link rel="canonical" href="{SITE_URL}ar.html">')
+    source = source.replace(f'<meta property="og:url" content="{SITE_URL}">',
+                            f'<meta property="og:url" content="{SITE_URL}ar.html">')
+    source = re.sub(r'<button\b[^>]*\bid="lang"[^>]*>.*?</button>',
+                    '<button class="btn sm lang" id="lang" type="button" lang="en" aria-label="Switch to English">English</button>',
+                    source, count=1, flags=re.S)
+    (OUT / "ar.html").write_text(source, encoding="utf-8")
+
+
+def add_english_alternates():
+    page = OUT / "index.html"
+    source = page.read_text(encoding="utf-8")
+    alternates = (f'<link rel="alternate" hreflang="en" href="{SITE_URL}">\n'
+                  f'<link rel="alternate" hreflang="ar" href="{SITE_URL}ar.html">\n'
+                  f'<link rel="alternate" hreflang="x-default" href="{SITE_URL}">')
+    source = source.replace(f'<link rel="canonical" href="{SITE_URL}">',
+                            f'<link rel="canonical" href="{SITE_URL}">\n{alternates}', 1)
+    page.write_text(source, encoding="utf-8")
+
+
+def update_sitemap():
+    path = OUT / "sitemap.xml"
+    source = path.read_text(encoding="utf-8")
+    entry = f'  <url><loc>{SITE_URL}ar.html</loc><changefreq>monthly</changefreq></url>\n'
+    source = source.replace('</urlset>', entry + '</urlset>')
+    path.write_text(source, encoding="utf-8")
 
 
 def build_fonts():
@@ -71,6 +143,9 @@ def main():
     for name in ("pdf.min.mjs", "pdf.worker.min.mjs"):
         shutil.copy2(PDFJS / name, vendor / name)
     build_fonts()
+    add_english_alternates()
+    build_arabic_page()
+    update_sitemap()
     page = OUT / "404.html"
     page.write_text(page.read_text(encoding="utf-8").replace("{{BASE}}", BASE), encoding="utf-8")
     (OUT / ".nojekyll").write_text("")

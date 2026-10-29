@@ -9,6 +9,14 @@ from playwright.sync_api import expect
 from conftest import ALLOWED_HOSTS, CHECK_TIMEOUT, LIVE_URL, NO_OVERFLOW, ROOT, TEMPLATE_IDS, assert_no_browser_errors, score_of, upload
 
 
+def switch_lang(page):
+    """Click the header language button: it opens the other language page (index.html <-> ar.html)."""
+    to_ar = page.evaluate("() => document.documentElement.lang") != "ar"
+    page.locator("#lang").click()
+    page.wait_for_function("ar => (document.documentElement.lang === 'ar') === ar && document.readyState === 'complete'", arg=to_ar)
+    page.wait_for_load_state("networkidle")
+
+
 def test_loads_without_errors(page):
     page.set_viewport_size({"width": 1280, "height": 800})
     expect(page).to_have_title(re.compile("ATS Resume Templates"))
@@ -20,7 +28,7 @@ def test_loads_without_errors(page):
 def test_no_horizontal_overflow(page, width):
     page.set_viewport_size({"width": width, "height": 900})
     assert page.evaluate(NO_OVERFLOW)
-    page.locator("#lang").click()
+    switch_lang(page)
     expect(page.locator("html")).to_have_attribute("dir", "rtl")
     assert page.evaluate(NO_OVERFLOW)
 
@@ -46,21 +54,21 @@ def test_template_cards(page):
 def test_language_switch(page):
     heading = page.locator("h1")
     english = heading.inner_text()
-    page.locator("#lang").click()
+    switch_lang(page)
     expect(page.locator("html")).to_have_attribute("dir", "rtl")
     expect(page.locator("html")).to_have_attribute("lang", "ar")
     arabic = heading.inner_text()
     assert arabic != english and re.search(r"[\u0600-\u06ff]", arabic)
     page.reload(wait_until="networkidle")
     expect(page.locator("html")).to_have_attribute("lang", "ar")
-    page.locator("#lang").click()
+    switch_lang(page)
     expect(page.locator("html")).to_have_attribute("dir", "ltr")
     expect(page.locator("html")).to_have_attribute("lang", "en")
     expect(page.locator("#tpl-software-web h3")).to_have_text("Software Engineering")
 
 
 def test_arabic_template_titles_and_brand(page):
-    page.locator("#lang").click()
+    switch_lang(page)
     expect(page.locator("nav .brand")).to_have_text("نماذج سيرة ذاتية ATS")
     expect(page.locator("#tpl-software-web h3")).to_have_text("هندسة البرمجيات")
     expect(page.locator("#tpl-software-web .tag")).to_have_text("Software Engineering")
@@ -72,7 +80,7 @@ def test_arabic_template_titles_and_brand(page):
 def test_template_actions_fit_on_mobile(page, width, lang):
     page.set_viewport_size({"width": width, "height": 900})
     if lang == "ar":
-        page.locator("#lang").click()
+        switch_lang(page)
     for actions in page.locator("#grid .card:not(.request) .actions").all():
         assert actions.evaluate("(e) => e.scrollWidth <= e.clientWidth")
         for action in actions.locator(".btn").all():
@@ -115,7 +123,7 @@ def test_checker_length_guidance_and_mobile_placeholder(page):
 
 
 def test_checker_framing_and_footer_links(page):
-    page.locator("#lang").click()
+    switch_lang(page)
     expect(page.locator("#chk-level legend")).to_have_text("على أي أساس نحكم على الطول؟")
     expect(page.locator("#chk-level-hint")).to_have_text("المتوقع صفحة واحدة.")
     expect(page.locator("#faq-h")).to_have_text("قبل أن تبدأ")
@@ -147,7 +155,7 @@ def test_video_cards_are_compact_rows_on_mobile(page):
     assert page.locator(".vid-grid .vid-card").first.get_attribute("class").endswith("vid-tut")
     assert page.evaluate("() => document.documentElement.scrollWidth <= innerWidth")
     expect(page.locator(".vid-new .video-duration")).to_have_text("0:41")
-    page.locator("#lang").click()
+    switch_lang(page)
     expect(page.locator(".vid-new .video-duration")).to_have_text("0:41")
 
 
@@ -161,7 +169,8 @@ def capture_clipboard(page):
 
 
 def copied_text(page, must_contain):
-    page.wait_for_function("t => (window.__copied || '').includes(t)", arg=must_contain, timeout=15000)
+    page.evaluate("t => { window.__expectedCopy = t; }", must_contain)
+    page.wait_for_function("() => (window.__copied || '').includes(window.__expectedCopy)", timeout=15000)
     return page.evaluate("window.__copied")
 
 
@@ -268,7 +277,7 @@ def test_checker_weak_content(page, tmp_path):
 
 
 def test_checker_arabic_report(page):
-    page.locator("#lang").click()
+    switch_lang(page)
     upload(page, ROOT / "templates/network-cloud/resume.pdf")
     score_of(page)
     expect(page.locator("#chk-out .ring")).to_have_attribute("aria-label", re.compile(r"درجة قابلية القراءة لأنظمة ATS"))
@@ -302,7 +311,7 @@ def test_accessibility_axe(browser, site_url, lang):
     page = context.new_page()
     page.goto(site_url, wait_until="networkidle", timeout=60_000 if LIVE_URL else 30_000)
     if lang == "ar":
-        page.locator("#lang").click()
+        switch_lang(page)
     page.add_script_tag(path=axe_path)
     violations = page.evaluate("""async () => {
       const result = await axe.run(document, {runOnly: ['wcag2a', 'wcag2aa']});
@@ -403,16 +412,25 @@ def test_support_link_and_demo_video(page, site_url):
 
 
 def test_tutorial_language_tracks_site_until_manual_choice(page):
-    page.locator("#video").scroll_into_view_if_needed()
+    # The site toggle opens the other language page; the tutorial follows it until the viewer picks one.
     tut = page.locator("#tut-video")
-    page.locator("#lang").click()
+    switch_lang(page)
+    page.wait_for_url(re.compile(r"/ar\.html"))
+    page.locator("#video").scroll_into_view_if_needed()
     expect(tut.locator("source")).to_have_attribute("src", "assets/video/tutorial-ar.mp4")
     expect(tut).to_have_attribute("poster", re.compile(r"tutorial-poster-ar\.webp$"))
     page.locator('.tut-lang[data-tl="en"]').click()
-    page.locator("#lang").click()
-    expect(tut.locator("source")).to_have_attribute("src", "assets/video/tutorial-en.mp4")
-    expect(tut).to_have_attribute("poster", re.compile(r"tutorial-poster-en\.webp$"))
+    switch_lang(page)
+    page.wait_for_url(re.compile(r"/(#.*)?$"))
     expect(page.locator("html")).to_have_attribute("lang", "en")
+    page.locator("#video").scroll_into_view_if_needed()
+    expect(tut.locator("source")).to_have_attribute("src", "assets/video/tutorial-en.mp4")
+    switch_lang(page)
+    page.wait_for_url(re.compile(r"/ar\.html"))
+    page.locator("#video").scroll_into_view_if_needed()
+    # The manual English pick is kept on the Arabic page too.
+    expect(tut.locator("source")).to_have_attribute("src", "assets/video/tutorial-en.mp4")
+    expect(page.locator('.tut-lang[data-tl="en"]')).to_have_attribute("aria-pressed", "true")
 
 
 def test_tutorial_layout_and_chapters(page):
@@ -515,7 +533,7 @@ def test_english_page_does_not_download_arabic_font(browser, site_url):
 
 
 def test_arabic_browser_gets_arabic_without_layout_shift(browser, site_url):
-    # lang-boot.js picks Arabic before the first paint; the page stays hidden until the text is Arabic.
+    # Arabic visitors are redirected to the pre-rendered page before its first paint.
     context = browser.new_context(locale="ar-EG", viewport={"width": 390, "height": 844})
     page = context.new_page()
     page.goto(site_url + "/")
@@ -529,5 +547,86 @@ def test_arabic_browser_gets_arabic_without_layout_shift(browser, site_url):
             .observe({ type: 'layout-shift', buffered: true });
         setTimeout(() => done(total), 500);
     })""")
-    assert shift < 0.1, shift
+    assert shift < 0.05, shift
+    context.close()
+
+
+def test_prerendered_arabic_page(browser, site_url):
+    page = browser.new_page(reduced_motion="reduce")
+    failures = []
+    page.on("response", lambda response: failures.append(f"{response.status} {response.url}")
+            if response.status >= 400 else None)
+    js_errors = []
+    page.on("pageerror", lambda error: js_errors.append(str(error)))
+    page.goto(site_url + "/ar.html", wait_until="networkidle")
+    expect(page.locator("html")).to_have_attribute("lang", "ar")
+    expect(page.locator("html")).to_have_attribute("dir", "rtl")
+    expect(page.locator("#lang")).to_have_text("English")
+    assert page.locator("h1").inner_text().replace("\n", "") == page.evaluate(
+        "() => `${AR['hero.t1']}${AR['hero.t2']}`")
+    assert not failures, failures
+    assert page.evaluate("() => !document.documentElement.classList.contains('i18n-wait')")
+
+    # Ensure representative translated static strings differ from their English source.
+    keys = page.evaluate("""() => [...new Set([...document.querySelectorAll('[data-i]')].map(e => e.dataset.i))]
+        .filter(k => AR[k] && EN[k] && AR[k] !== EN[k] && !/[<>]/.test(AR[k]))""")
+    assert len(keys) > 40, len(keys)
+    for key in keys[::max(1, len(keys) // 10)]:
+        item = page.locator(f'[data-i="{key}"]').first
+        assert item.text_content().strip() == page.evaluate("k => AR[k]", key).strip(), key
+
+    upload(page, ROOT / "templates/network-cloud/resume.pdf")
+    assert score_of(page) > 0
+    assert not js_errors, js_errors
+    page.close()
+
+
+def test_arabic_seo_alternates_and_sitemap(page, site_url):
+    for path, canonical in [("/", "https://amrelsherif-eng.github.io/ats-resume-templates/"),
+                            ("/ar.html", "https://amrelsherif-eng.github.io/ats-resume-templates/ar.html")]:
+        page.goto(site_url + path, wait_until="networkidle")
+        expect(page.locator('link[rel="canonical"]')).to_have_attribute("href", canonical)
+        links = {item.get_attribute("hreflang"): item.get_attribute("href")
+                 for item in page.locator('link[rel="alternate"]').all()}
+        assert links == {
+            "en": "https://amrelsherif-eng.github.io/ats-resume-templates/",
+            "ar": "https://amrelsherif-eng.github.io/ats-resume-templates/ar.html",
+            "x-default": "https://amrelsherif-eng.github.io/ats-resume-templates/",
+        }
+    assert "https://amrelsherif-eng.github.io/ats-resume-templates/ar.html" in page.request.get(
+        site_url + "/sitemap.xml").text()
+    page.close()
+
+
+def test_language_redirects_and_switch(browser, site_url):
+    arabic = browser.new_context(locale="ar-EG")
+    page = arabic.new_page()
+    page.goto(site_url + "/", wait_until="networkidle")
+    assert page.url.endswith("/ar.html")
+    arabic.close()
+
+    english = browser.new_context(locale="en-US")
+    page = english.new_page()
+    page.goto(site_url + "/", wait_until="networkidle")
+    assert not page.url.endswith("/ar.html")
+    switch_lang(page)
+    expect(page.locator("html")).to_have_attribute("lang", "ar")
+    assert page.url.endswith("/ar.html")
+    switch_lang(page)
+    expect(page.locator("html")).to_have_attribute("lang", "en")
+    assert page.url.endswith("/")
+    english.close()
+
+
+def test_prerendered_arabic_layout_shift(browser, site_url):
+    context = browser.new_context(locale="ar-EG", viewport={"width": 390, "height": 844})
+    page = context.new_page()
+    page.goto(site_url + "/ar.html", wait_until="networkidle")
+    shift = page.evaluate("""() => new Promise(done => {
+        let total = 0;
+        new PerformanceObserver(list => { for (const e of list.getEntries()) if (!e.hadRecentInput) total += e.value; })
+            .observe({ type: 'layout-shift', buffered: true });
+        setTimeout(() => done(total), 500);
+    })""")
+    assert shift < 0.05, shift
     context.close()

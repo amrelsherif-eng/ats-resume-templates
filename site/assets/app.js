@@ -30,7 +30,7 @@ const TEMPLATES = [
 ];
 
 const STRINGS = { en: EN, ar: AR };
-let lang = 'en';
+let lang = document.documentElement.dataset.prerendered === 'ar' ? 'ar' : 'en';
 
 /** Translate a key for the current language, falling back to English. */
 function t(key) {
@@ -175,11 +175,13 @@ function buildFan() {
 }
 
 function init() {
-  try {
-    const saved = localStorage.getItem('lang');
-    if (saved === 'ar' || saved === 'en') lang = saved;
-    else if ((navigator.language || '').toLowerCase().startsWith('ar')) lang = 'ar';
-  } catch { /* storage blocked: keep default */ }
+  if (document.documentElement.dataset.prerendered !== 'ar') {
+    try {
+      const saved = localStorage.getItem('lang');
+      if (saved === 'ar' || saved === 'en') lang = saved;
+      else if ((navigator.language || '').toLowerCase().startsWith('ar')) lang = 'ar';
+    } catch { /* storage blocked: keep default */ }
+  }
 
   buildFan();
 
@@ -282,8 +284,10 @@ function init() {
 
   document.getElementById('lang').addEventListener('click', () => {
     lang = lang === 'ar' ? 'en' : 'ar';
-    try { localStorage.setItem('lang', lang); } catch { /* ignore */ }
-    applyLang();
+    let saved = true;
+    try { localStorage.setItem('lang', lang); } catch { saved = false; }
+    // Storage blocked: carry the choice in the URL so lang-boot.js does not send the visitor back.
+    location.href = (lang === 'ar' ? 'ar.html' : './') + (saved ? '' : '?lang=' + lang) + location.hash;
   });
 
   const support = document.getElementById('support');
@@ -315,8 +319,13 @@ function init() {
   const tutVoice = document.querySelector('.vid-tut [data-i^="vid.tut.voice"]');
   const chapters = [...document.querySelectorAll('.tut-ch')];
   let tutNear = false;
+  // A manual tutorial-language pick survives the switch between the English and Arabic pages.
   let tutManual = false;
   let tutLang = lang;
+  try {
+    const picked = localStorage.getItem('tutLang');
+    if (picked === 'en' || picked === 'ar') { tutManual = true; tutLang = picked; }
+  } catch { /* storage blocked */ }
   const setTutorial = () => {
     tutButtons.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.tl === tutLang)));
     document.querySelectorAll('.tut-len').forEach((label, index) => { label.textContent = TUTORIAL[index === 0 ? 'en' : 'ar'].duration; });
@@ -352,6 +361,7 @@ function init() {
   tutButtons.forEach(button => button.addEventListener('click', () => {
     tutManual = true;
     tutLang = button.dataset.tl;
+    try { localStorage.setItem('tutLang', tutLang); } catch { /* ignore */ }
     setTutorial();
     tutButtons.forEach(item => item.setAttribute('aria-pressed', String(item === button)));
   }));
