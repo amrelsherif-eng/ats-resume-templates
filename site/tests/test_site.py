@@ -81,12 +81,69 @@ def test_template_actions_fit_on_mobile(page, width, lang):
 
 def test_tabs_keyboard(page):
     tabs = page.locator(".tab")
+    expect(tabs.nth(0)).to_have_attribute("aria-selected", "true")
+    expect(tabs.nth(0)).to_contain_text("Overleaf")
+    expect(page.locator("#p-ol")).to_be_visible()
     tabs.first.focus()
     page.keyboard.press("ArrowRight")
     expect(tabs.nth(1)).to_have_attribute("aria-selected", "true")
-    expect(page.locator("#p-ol")).to_be_visible()
-    expect(page.locator("#p-ai")).to_be_hidden()
-    expect(page.locator("#p-lc")).to_be_hidden()
+    expect(tabs.nth(1)).to_contain_text("With AI")
+    expect(page.locator("#p-ai")).to_be_visible()
+    expect(page.locator("#p-ol")).to_be_hidden()
+    page.locator("#local-link").click()
+    expect(page.locator("#p-lc")).to_be_visible()
+    expect(page.locator("#local-link")).to_have_attribute("aria-expanded", "true")
+    expect(tabs).to_have_count(2)
+    expect(tabs.nth(0)).to_have_attribute("aria-selected", "false")
+
+
+def test_checker_length_guidance_and_mobile_placeholder(page):
+    expect(page.locator("#chk-level legend")).to_have_text("How should we judge length?")
+    expect(page.locator("#chk-level-hint")).to_have_text("One page is expected.")
+    page.locator('#chk-level input[value="mid"]').check(force=True)
+    expect(page.locator("#chk-level-hint")).to_have_text("Up to two pages is fine.")
+    page.locator('#chk-level input[value="senior"]').check(force=True)
+    expect(page.locator("#chk-level-hint")).to_have_text("Two pages is normal.")
+    page.locator('#chk-level input[value="academic"]').check(force=True)
+    expect(page.locator("#chk-level-hint")).to_have_text("Length is not limited.")
+
+    page.set_viewport_size({"width": 390, "height": 844})
+    expect(page.locator("#chk-empty")).to_be_hidden()
+    upload(page, ROOT / "templates/software-web/resume.pdf")
+    expect(page.locator("#chk-out .ring-n")).to_be_visible(timeout=CHECK_TIMEOUT)
+    expect(page.locator("#chk-out")).to_be_visible()
+
+
+def test_checker_framing_and_footer_links(page):
+    page.locator("#lang").click()
+    expect(page.locator("#chk-level legend")).to_have_text("على أي أساس نحكم على الطول؟")
+    expect(page.locator("#chk-level-hint")).to_have_text("المتوقع صفحة واحدة.")
+    expect(page.locator("#faq-h")).to_have_text("قبل أن تبدأ")
+    expect(page.locator("#faq details").nth(2)).to_have_attribute("open", "")
+    expect(page.locator("#faq [data-i='a3']")).to_contain_text("إذا طلب إعلان الوظيفة صورة")
+    expect(page.locator("#faq [data-i='a6']")).to_contain_text("النماذج باللغة الإنجليزية")
+    expect(page.locator("footer [data-i='foot.made'] a")).to_have_attribute("href", "https://github.com/sb2nov/resume")
+    expect(page.locator("footer [data-i='foot.checked']")).to_have_attribute(
+        "href", "https://github.com/amrelsherif-eng/ats-resume-templates/actions/workflows/build.yml")
+    expect(page.locator("footer [data-i='foot.issue']")).to_have_attribute(
+        "href", "https://github.com/amrelsherif-eng/ats-resume-templates/issues/new?title=Template%20request%3A%20&body=Which%20career%20track%3F%0A%0AWhat%20should%20the%20template%20emphasise%3F")
+    links = page.locator("#check .ext-note a")
+    expect(links).to_have_count(2)
+    for link in links.all():
+        assert "noopener" in (link.get_attribute("rel") or "").split()
+    expect(links.nth(0)).to_have_attribute("href", "https://www.jobscan.co/")
+    expect(links.nth(1)).to_have_attribute("href", "https://resumeworded.com/")
+
+
+def test_video_cards_are_compact_rows_on_mobile(page):
+    page.set_viewport_size({"width": 390, "height": 844})
+    for card in page.locator("#video .vid-card").all():
+        frame = card.locator(".video-frame")
+        box = frame.bounding_box()
+        assert 108 <= box["width"] <= 116
+    expect(page.locator(".vid-new .video-duration")).to_have_text("1:00")
+    page.locator("#lang").click()
+    expect(page.locator(".vid-new .video-duration")).to_have_text("1:00")
 
 
 def capture_clipboard(page):
@@ -105,6 +162,7 @@ def copied_text(page, must_contain):
 
 def test_copy_prompt(page):
     capture_clipboard(page)
+    page.locator("#t-ai").click()
     page.locator('#p-ai [data-copy="prompt"]').click()
     assert copied_text(page, "Fill this").startswith("Fill this LaTeX resume template")
 
@@ -208,6 +266,7 @@ def test_checker_arabic_report(page):
     page.locator("#lang").click()
     upload(page, ROOT / "templates/network-cloud/resume.pdf")
     score_of(page)
+    expect(page.locator("#chk-out .ring")).to_have_attribute("aria-label", re.compile(r"درجة قابلية القراءة لأنظمة ATS"))
     assert re.search(r"[؀-ۿ]", page.locator("#chk-out .chk-verdict").text_content())
     assert re.search(r"[؀-ۿ]", page.locator("#chk-out .passed .issue-t").first.text_content())
 

@@ -4,6 +4,7 @@ document.documentElement.classList.add('js');
 
 const REPO = 'https://github.com/amrelsherif-eng/ats-resume-templates';
 const RAW = 'https://raw.githubusercontent.com/amrelsherif-eng/ats-resume-templates/main/templates';
+const ISSUE_TEMPLATE_URL = `${REPO}/issues/new?title=Template%20request%3A%20&body=Which%20career%20track%3F%0A%0AWhat%20should%20the%20template%20emphasise%3F`;
 // Optional support link (for example GitHub Sponsors). Leave empty to hide the button.
 const SUPPORT_URL = 'https://github.com/sponsors/amrelsherif-eng';
 // Optional demo video, self-hosted under site/assets/video/. Leave src empty to hide the section.
@@ -81,7 +82,7 @@ function renderCards() {
   grid.append(el('article', { class: 'card request' }, [
     el('h3', { text: t('req.t') }),
     el('p', { text: t('req.p') }),
-    el('a', { class: 'btn sm', href: `${REPO}/issues/new`, target: '_blank', rel: 'noopener', text: t('req.b') })
+    el('a', { class: 'btn sm',     href: ISSUE_TEMPLATE_URL, target: '_blank', rel: 'noopener', text: t('req.b') })
   ]));
 }
 
@@ -126,6 +127,11 @@ function selectTab(tab, focus) {
     document.getElementById(x.getAttribute('aria-controls')).hidden = !on;
     document.getElementById(x.getAttribute('aria-controls')).classList.toggle('active', on);
   });
+  const localPanel = document.getElementById('p-lc');
+  const localLink = document.getElementById('local-link');
+  localPanel.hidden = true;
+  localPanel.classList.remove('active');
+  localLink.setAttribute('aria-expanded', 'false');
   updateTabIndicator(tab);
   if (focus) tab.focus();
 }
@@ -203,6 +209,12 @@ function init() {
   }));
 
   const tabs = [...document.querySelectorAll('.tab')];
+  updateTabIndicator(tabs.find(tab => tab.getAttribute('aria-selected') === 'true'));
+  document.addEventListener('langchange', () => {
+    const selected = tabs.find(tab => tab.getAttribute('aria-selected') === 'true');
+    if (selected) updateTabIndicator(selected);
+  });
+  const localLink = document.getElementById('local-link');
   tabs.forEach((tab, i) => {
     tab.addEventListener('click', () => selectTab(tab));
     tab.addEventListener('keydown', e => {
@@ -212,6 +224,21 @@ function init() {
       e.preventDefault();
       selectTab(tabs[(i + next + tabs.length) % tabs.length], true);
     });
+  });
+  localLink.addEventListener('click', e => {
+    e.preventDefault();
+    for (const tab of tabs) {
+      tab.setAttribute('aria-selected', 'false');
+      tab.tabIndex = tab === tabs[0] ? 0 : -1;
+      const panel = document.getElementById(tab.getAttribute('aria-controls'));
+      panel.hidden = true;
+      panel.classList.remove('active');
+    }
+    const panel = document.getElementById('p-lc');
+    panel.hidden = false;
+    panel.classList.add('active');
+    localLink.setAttribute('aria-expanded', 'true');
+    document.querySelector('.tabs').style.setProperty('--tab-width', '0px');
   });
 
   document.addEventListener('click', async e => {

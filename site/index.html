@@ -62,7 +62,7 @@
       </div>
       <dl class="stats">
         <div class="stat"><dt>5</dt><dd data-i="stat.tracks">career tracks</dd></div>
-        <div class="stat"><dt>1</dt><dd data-i="stat.page">page, checked on every change</dd></div>
+        <div class="stat"><dt>1</dt><dd><a href="https://github.com/amrelsherif-eng/ats-resume-templates/actions/workflows/build.yml" target="_blank" rel="noopener" data-i="stat.page">page, checked on every change</a></dd></div>
         <div class="stat"><dt>0</dt><dd data-i="stat.latex">LaTeX skills needed</dd></div>
       </dl>
     </div>
@@ -104,7 +104,7 @@
             <span class="soon-badge" data-i="vid.soon">Coming soon</span>
             <span class="soon-play" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24"><path d="M8 5v14l11-7z" fill="currentColor"/></svg></span>
           </div>
-          <span class="video-duration" dir="ltr" data-i="vid.new.duration">0:60</span>
+          <span class="video-duration" dir="ltr" data-i="vid.new.duration">1:00</span>
         </div>
         <figcaption class="video-content">
           <b data-i="vid.new.t">The 60-second website + CV demo</b>
@@ -145,19 +145,19 @@
     <h2 id="edit-h" data-i="edit.title">Three ways to make it yours</h2>
     <p class="sub" data-i="edit.sub">Pick the one that fits you.</p>
     <div class="tabs" role="tablist" aria-label="Ways to edit">
-      <button class="tab" type="button" role="tab" id="t-ai" aria-controls="p-ai" aria-selected="true" data-t="ai"><span class="n">01</span><span data-i="tab.ai">With AI</span></button>
-      <button class="tab" type="button" role="tab" id="t-ol" aria-controls="p-ol" aria-selected="false" tabindex="-1" data-t="ol"><span class="n">02</span><span data-i="tab.ol">On Overleaf</span></button>
-      <button class="tab" type="button" role="tab" id="t-lc" aria-controls="p-lc" aria-selected="false" tabindex="-1" data-t="lc"><span class="n">03</span><span data-i="tab.lc">Locally</span></button>
+      <button class="tab" type="button" role="tab" id="t-ol" aria-controls="p-ol" aria-selected="true" data-t="ol"><span class="n">01</span><span data-i="tab.ol">Overleaf</span></button>
+      <button class="tab" type="button" role="tab" id="t-ai" aria-controls="p-ai" aria-selected="false" tabindex="-1" data-t="ai"><span class="n">02</span><span data-i="tab.ai">With AI</span></button>
     </div>
+    <a class="local-link" id="local-link" href="#p-lc" aria-controls="p-lc" aria-expanded="false" data-i="local.link">Already use LaTeX? Build it locally</a>
 
-    <div class="panel active" id="p-ai" role="tabpanel" aria-labelledby="t-ai">
+    <div class="panel" id="p-ai" role="tabpanel" aria-labelledby="t-ai" hidden>
       <div>
+        <p class="note" data-i="ai.note">Read every line before you send it.</p>
         <ol class="steps">
           <li data-i="ai.s1">Copy the template.</li>
           <li data-i="ai.s2">Paste it into an AI chat.</li>
           <li data-i="ai.s3">Paste the result back into Overleaf.</li>
         </ol>
-        <p class="note" data-i="ai.note">Read every line before you send it.</p>
       </div>
       <div class="term">
         <div class="bar"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span>prompt.txt</span><button class="copy" type="button" data-copy="prompt" data-i="copy">Copy</button></div>
@@ -171,7 +171,7 @@ My information:
       </div>
     </div>
 
-    <div class="panel" id="p-ol" role="tabpanel" aria-labelledby="t-ol" hidden>
+    <div class="panel active" id="p-ol" role="tabpanel" aria-labelledby="t-ol">
       <div>
         <ol class="steps">
           <li data-i="ol.s1">Create a free Overleaf account.</li>
@@ -193,7 +193,7 @@ My information:
       </div>
     </div>
 
-    <div class="panel" id="p-lc" role="tabpanel" aria-labelledby="t-lc" hidden>
+    <div class="panel" id="p-lc" role="region" aria-labelledby="local-link" hidden>
       <div>
         <ol class="steps">
           <li data-i="lc.s1">Install a LaTeX distribution.</li>
@@ -227,13 +227,14 @@ docker run --rm -v "$PWD":/work -w /work texlive/texlive:latest latexmk -pdf res
     <div class="checker">
       <div class="chk-in">
       <fieldset class="levels" id="chk-level">
-        <legend data-i="chk.level">Your experience</legend>
+        <legend data-i="chk.level">How should we judge length?</legend>
         <label><input type="radio" name="lvl" value="student" checked><span data-i="chk.level.student">Student / fresh grad</span></label>
         <label><input type="radio" name="lvl" value="junior"><span data-i="chk.level.junior">1–2 years</span></label>
         <label><input type="radio" name="lvl" value="mid"><span data-i="chk.level.mid">3–9 years</span></label>
         <label><input type="radio" name="lvl" value="senior"><span data-i="chk.level.senior">10+ years</span></label>
         <label><input type="radio" name="lvl" value="academic"><span data-i="chk.level.academic">Academic CV</span></label>
       </fieldset>
+      <p class="level-hint" id="chk-level-hint" aria-live="polite" data-i="chk.hint.student">One page is expected.</p>
       <label class="drop" id="chk-drop" for="chk-file" tabindex="0">
         <input type="file" id="chk-file" accept="application/pdf,.pdf">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4m0 0-4 4m4-4 4 4M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -246,34 +247,27 @@ docker run --rm -v "$PWD":/work -w /work texlive/texlive:latest latexmk -pdf res
           <svg viewBox="0 0 120 120" class="ring idle" aria-hidden="true"><circle cx="60" cy="60" r="52" class="track"/><text x="60" y="60" class="ring-n">–</text></svg>
           <div>
             <p class="chk-verdict" data-i="chk.empty.t">Your report appears here</p>
-            <p class="chk-file" data-i="chk.empty.p">Score out of 100, what to fix first, and the exact text an ATS reads.</p>
+            <p class="chk-file" data-i="chk.empty.p">ATS readability score out of 100, what to fix first, and the exact text an ATS reads.</p>
           </div>
         </div>
         <div id="chk-out" class="chk-out" aria-live="polite"></div>
       </div>
     </div>
 
-    <h3 class="ext-h" data-i="ext.title">Want a match score against a job post?</h3>
-    <p class="sub" data-i="ext.sub">These outside tools compare your CV with a job description. Scores differ between tools: there is no official ATS score.</p>
-    <div class="ext">
-      <a class="ext-card" href="https://www.jobscan.co/" target="_blank" rel="noopener"><b>Jobscan</b><span data-i="ext.jobscan">Match rate against a job post, keyword gaps, ATS formatting tips.</span><em data-i="ext.limited">Free scans are limited</em></a>
-      <a class="ext-card" href="https://skillsyncer.com/" target="_blank" rel="noopener"><b>SkillSyncer</b><span data-i="ext.skillsyncer">Keyword match against a job post, similar to Jobscan.</span><em data-i="ext.free">Free tier</em></a>
-      <a class="ext-card" href="https://resumeworded.com/" target="_blank" rel="noopener"><b>Resume Worded</b><span data-i="ext.rw">Overall score with line-by-line feedback on your bullets.</span><em data-i="ext.free">Free tier</em></a>
-      <a class="ext-card" href="https://enhancv.com/resources/resume-checker/" target="_blank" rel="noopener"><b>Enhancv Checker</b><span data-i="ext.enhancv">Content and formatting review of the whole resume.</span><em data-i="ext.free">Free tier</em></a>
-    </div>
-    <p class="ext-note" data-i="ext.note">Unlike the checker above, these sites upload your file to their servers. Remove your phone number if you prefer.</p>
+    <p class="ext-note" data-i="ext.note">This checks how an ATS reads your file. It does not match you to a job post. For that, try <a href="https://www.jobscan.co/" target="_blank" rel="noopener">Jobscan</a> or <a href="https://resumeworded.com/" target="_blank" rel="noopener">Resume Worded</a> (they upload your file to their servers).</p>
   </div>
 </section>
 
 <section id="faq" aria-labelledby="faq-h">
   <div class="wrap narrow">
     <div class="kicker" data-i="faq.kicker">04 · FAQ</div>
-    <h2 id="faq-h" data-i="faq.title">Questions</h2>
+    <h2 id="faq-h" data-i="faq.title">Before you start</h2>
     <details><summary data-i="q1">Is it really free?</summary><p data-i="a1">Yes.</p></details>
     <details><summary data-i="q2">Do I need to know LaTeX?</summary><p data-i="a2">No.</p></details>
-    <details><summary data-i="q3">Can I add a photo or two columns?</summary><p data-i="a3">Not recommended.</p></details>
+    <details open><summary data-i="q3">Can I add a photo or two columns?</summary><p data-i="a3">Not recommended.</p></details>
     <details><summary data-i="q4">My field is not here. What now?</summary><p data-i="a4">Pick the closest template.</p></details>
     <details><summary data-i="q5">Is my PDF uploaded when I use the checker?</summary><p data-i="a5">No.</p></details>
+    <details><summary data-i="q6">Are these Arabic CVs?</summary><p data-i="a6">No.</p></details>
   </div>
 </section>
 
@@ -312,8 +306,9 @@ docker run --rm -v "$PWD":/work -w /work texlive/texlive:latest latexmk -pdf res
     <nav class="foot-col" aria-label="Resources">
       <h3 data-i="foot.h.res">Resources</h3>
       <a href="#check" data-i="nav.check">Check your CV</a>
+      <a href="https://github.com/amrelsherif-eng/ats-resume-templates/actions/workflows/build.yml" target="_blank" rel="noopener" data-i="foot.checked">Checked on every change</a>
       <a href="https://github.com/amrelsherif-eng/ats-resume-templates" target="_blank" rel="noopener">GitHub</a>
-      <a href="https://github.com/amrelsherif-eng/ats-resume-templates/issues/new" target="_blank" rel="noopener" data-i="foot.issue">Request a template</a>
+      <a href="https://github.com/amrelsherif-eng/ats-resume-templates/issues/new?title=Template%20request%3A%20&body=Which%20career%20track%3F%0A%0AWhat%20should%20the%20template%20emphasise%3F" target="_blank" rel="noopener" data-i="foot.issue">Request a template</a>
     </nav>
     <nav class="foot-col" aria-label="Author">
       <h3 data-i="foot.h.author">Author</h3>
@@ -322,7 +317,7 @@ docker run --rm -v "$PWD":/work -w /work texlive/texlive:latest latexmk -pdf res
       <a href="https://amrelsherif-eng.vercel.app" target="_blank" rel="noopener me" data-i="au.portfolio">Portfolio</a>
     </nav>
   </div>
-  <div class="wrap foot-bottom"><span data-i="foot.made">© 2026 Amr Elsherif · Free and open source (MIT)</span></div>
+  <div class="wrap foot-bottom"><span data-i="foot.made">© 2026 Amr Elsherif · Based on <a href="https://github.com/sb2nov/resume" target="_blank" rel="noopener">sb2nov/resume</a> (MIT)</span></div>
 </footer>
 <noscript><p class="nojs">Templates: <a href="https://github.com/amrelsherif-eng/ats-resume-templates">github.com/amrelsherif-eng/ats-resume-templates</a></p></noscript>
 </body>

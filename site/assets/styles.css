@@ -24,9 +24,12 @@
   box-sizing:border-box}
 html{
   scroll-behavior:smooth;
+  overflow-x:clip;
   scroll-padding-top:76px}
 html[dir=rtl]{
-  --sans:"IBM Plex Sans Arabic","Space Grotesk",system-ui,sans-serif}
+  --sans:"IBM Plex Sans Arabic","Space Grotesk",system-ui,sans-serif;
+  /* JetBrains Mono has no Arabic glyphs: let Arabic letters in mono labels fall back to the Arabic face. */
+  --mono:"JetBrains Mono","IBM Plex Sans Arabic",ui-monospace,Consolas,monospace}
 body{
   margin:0;
   background:radial-gradient(ellipse 700px 460px at 75% 8%,rgba(27,91,110,.20),transparent 75%),var(--bg);
@@ -611,6 +614,16 @@ html[dir=rtl] h2{
   margin-inline-end:6px;
   color:var(--accent);
   font-family:var(--mono)}
+.local-link{
+  display:inline-block;
+  margin:-10px 0 22px;
+  color:var(--accent);
+  font-size:13px;
+  text-decoration:none}
+.local-link:hover{
+  text-decoration:underline}
+.panel .note{
+  margin:0 0 18px}
 .panel{
   display:none;
   grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);
@@ -1063,6 +1076,10 @@ html[dir=rtl] .issue-b{
   background:var(--surface)}
 .chk-side:has(.chk-out:not(:empty)) .chk-empty{
   display:none}
+@media(max-width:720px){
+  #check .chk-empty{
+  display:none}
+}
 @media(max-width:520px){
   .chk-head,.chk-empty{
   flex-direction:column;
@@ -1083,48 +1100,14 @@ html[dir=rtl] .issue-b{
   display:none}
 }
 
-.ext-h{
-  margin:56px 0 6px;
-  font-size:24px}
-.ext{
-  display:grid;
-  grid-template-columns:repeat(4,minmax(0,1fr));
-  gap:14px}
-@media(max-width:1000px){
-  .ext{
-  grid-template-columns:repeat(2,minmax(0,1fr))}
-}
-@media(max-width:560px){
-  .ext{
-  grid-template-columns:1fr}
-}
-.ext-card{
-  display:flex;
-  flex-direction:column;
-  gap:6px;
-  padding:18px;
-  border:1px solid var(--line);
-  border-radius:14px;
-  background:var(--surface);
-  text-decoration:none;
-  transition:border-color .2s,transform .2s var(--ease)}
-.ext-card:hover{
-  border-color:#52727d;
-  transform:translateY(-2px)}
-.ext-card b{
-  font-size:17px}
-.ext-card span{
-  color:var(--muted);
-  font-size:13px}
-.ext-card em{
-  margin-top:auto;
-  padding-top:6px;
-  color:var(--muted);
-  font:normal 11px var(--mono)}
 .ext-note{
   margin:14px 0 0;
   color:var(--muted);
   font-size:13px}
+.ext-note a{
+  color:var(--accent);
+  text-decoration:underline;
+  text-underline-offset:2px}
 .author{
   display:flex;
   align-items:flex-start;
@@ -1239,7 +1222,17 @@ footer nav{
   justify-content:center;
   gap:clamp(16px,3vw,28px);
   align-items:stretch}
-@media(max-width:720px){.vid-grid{grid-template-columns:minmax(0,360px)}}
+@media(max-width:720px){
+  .vid-grid{grid-template-columns:minmax(0,1fr);gap:12px}
+  .vid-card{grid-template-columns:112px minmax(0,1fr);grid-template-rows:minmax(112px,1fr);align-items:stretch}
+  .vid-card .video-frame{width:112px;max-width:100%;height:100%;min-height:112px;aspect-ratio:auto}
+  .video-content{align-content:center;gap:7px;padding:12px}
+  .video-content b{font-size:14px;line-height:1.35}
+  .video-chips{gap:4px}
+  .video-chips li,.video-chips>span{padding:3px 6px;font-size:10px}
+  .video-description{font-size:12px}
+  .li-text{gap:7px}
+}
 .vid-card{
   min-width:0;
   overflow:hidden;
@@ -1414,6 +1407,10 @@ html[dir=rtl] .tabs:before{inset-inline-start:5px;transform:translateX(calc(-1 *
 .levels{position:relative}
 .levels label{min-width:0}
 .levels span{transition:background .18s var(--ease),border-color .18s var(--ease),color .18s var(--ease);white-space:normal}
+.level-hint{
+margin:-5px 0 0;
+color:var(--muted);
+font-size:13px}
 .barrow{grid-template-columns:minmax(0,1fr) minmax(42px,1.3fr) 32px;min-width:0;gap:clamp(6px,1.2vw,12px)}
 .bar-l{min-width:0;line-height:1.35}
 .bar-t{min-width:0}
