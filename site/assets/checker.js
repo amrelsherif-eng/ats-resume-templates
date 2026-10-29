@@ -61,7 +61,11 @@ function score(issues) {
     const lost = list.reduce((s, i) => s + i.weight * (i.level === 'fail' ? 1 : i.level === 'warn' ? 0.5 : 0), 0);
     per[c.id] = Math.round(100 * (1 - lost / max));
   }
-  const overall = Math.round(CATS.reduce((s, c) => s + per[c.id] * c.weight, 0));
+  let overall = Math.round(CATS.reduce((s, c) => s + per[c.id] * c.weight, 0));
+  // Clean formatting cannot make weak content look "excellent": keep the total near the content score.
+  if (per.content < 70) overall = Math.min(overall, per.content + 10);
+  // A layout that can scramble the reading order (columns, out-of-order blocks) is never "Excellent".
+  if (issues.some(i => (i.id === 'columns' || i.id === 'reading-order') && i.level !== 'ok')) overall = Math.min(overall, 84);
   // A resume an ATS cannot read at all should never look "good".
   const unreadable = issues.some(i => i.id === 'selectable-text' && i.level === 'fail');
   return { per, overall: unreadable ? Math.min(overall, 25) : overall };

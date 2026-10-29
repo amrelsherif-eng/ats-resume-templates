@@ -208,14 +208,14 @@ export function contentIssues(doc, opts = {}) {
   }
   const verbPct = bullets.length ? Math.round((verbCount / bullets.length) * 100) : 0;
   issues.push(verbPct < 60
-    ? { id: 'action-verbs', cat: 'content', level: 'warn', key: 'r.verbs', vars: { pct: verbPct }, fix: 'r.verbs.fix', examples: nonVerbEx.slice(0, 3).map(trimEx), weight: 7 }
+    ? { id: 'action-verbs', cat: 'content', level: verbPct < 25 && bullets.length >= 3 ? 'fail' : 'warn', key: 'r.verbs', vars: { pct: verbPct }, fix: 'r.verbs.fix', examples: nonVerbEx.slice(0, 3).map(trimEx), weight: 7 }
     : { id: 'action-verbs', cat: 'content', level: 'ok', key: 'r.verbs-ok', vars: { pct: verbPct }, weight: 7 });
 
   // 4. Weak openers
   const weakRe = /^(?:responsible for|worked on|helped(?:\s+with)?|assisted(?:\s+with)?|participated in|involved in|duties included|tasked with)\b/i;
   const weakEx = bullets.filter(b => weakRe.test(b.replace(/^[^a-zA-Z]+/, '')));
   issues.push(weakEx.length > 0
-    ? { id: 'weak-openers', cat: 'content', level: 'warn', key: 'r.weak', vars: { n: weakEx.length }, fix: 'r.weak.fix', examples: weakEx.slice(0, 3).map(trimEx), weight: 6 }
+    ? { id: 'weak-openers', cat: 'content', level: weakEx.length >= 3 && weakEx.length * 2 >= bullets.length ? 'fail' : 'warn', key: 'r.weak', vars: { n: weakEx.length }, fix: 'r.weak.fix', examples: weakEx.slice(0, 3).map(trimEx), weight: 6 }
     : { id: 'weak-openers', cat: 'content', level: 'ok', key: 'r.weak-ok', weight: 6 });
 
   // 5. Quantified impact
@@ -285,6 +285,18 @@ export function contentIssues(doc, opts = {}) {
       maxCount = count;
     }
   }
+  // 9b. Copy-pasted bullets: the same line twice adds nothing and reads as filler.
+  const seenBullets = new Map();
+  for (const b of bullets) {
+    const k = b.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+    if (k.split(' ').length >= 4) seenBullets.set(k, (seenBullets.get(k) || []).concat(b));
+  }
+  const dupes = [...seenBullets.values()].filter(list => list.length > 1);
+  const dupCount = dupes.reduce((s, list) => s + list.length - 1, 0);
+  issues.push(dupCount
+    ? { id: 'duplicate-bullets', cat: 'content', level: dupCount >= 3 ? 'fail' : 'warn', key: 'r.dupe', vars: { n: dupCount }, fix: 'r.dupe.fix', examples: dupes.slice(0, 3).map(list => trimEx(list[0])), weight: 5 }
+    : { id: 'duplicate-bullets', cat: 'content', level: 'ok', key: 'r.dupe-ok', weight: 5 });
+
   issues.push(maxVerb
     ? { id: 'repeated-verbs', cat: 'content', level: 'info', key: 'r.repeat', vars: { verb: maxVerb.charAt(0).toUpperCase() + maxVerb.slice(1), n: maxCount }, fix: 'r.repeat.fix', examples: (verbExMap[maxVerb] || []).slice(0, 3).map(trimEx), weight: 2 }
     : { id: 'repeated-verbs', cat: 'content', level: 'ok', key: 'r.repeat-ok', weight: 2 });
@@ -375,6 +387,9 @@ export const I18N_EN = {
   'r.wordy': 'Resume is quite long ({n} words).',
   'r.wordy.fix': 'Aim for 400–750 words to keep your resume skimmable and focused on your highest-impact work.',
   'r.thin': 'Resume is very short ({n} words).',
+  'r.dupe': '{n} bullet point(s) repeat another bullet word for word.',
+  'r.dupe.fix': 'Give every bullet its own result: what you did, how, and the outcome. Delete copies.',
+  'r.dupe-ok': 'Every bullet point is unique.',
   'r.thin.fix': 'Aim for at least 250–400 words detailing your specific accomplishments, projects, and skills.',
   'r.words-ok': 'Resume length is well balanced ({n} words).',
   'r.personal': 'Personal demographic data detected (DOB, marital status, nationality, etc.).',

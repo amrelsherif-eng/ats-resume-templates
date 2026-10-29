@@ -54,7 +54,8 @@ def browser():
 
 @pytest.fixture
 def page(browser, site_url):
-    page = browser.new_page()
+    # Reduced motion keeps clicks deterministic (scroll reveals move sections for ~0.6 s).
+    page = browser.new_page(reduced_motion="reduce")
     if LIVE_URL:
         page.set_default_timeout(20_000)
     errors = []
