@@ -1,4 +1,6 @@
 """End-to-end regression corpus for the in-browser ATS checker."""
+import re
+
 import pytest
 import pymupdf
 from playwright.sync_api import expect
@@ -254,3 +256,32 @@ def test_unrecognised_section_heading_still_checks_bullets(page, tmp_path):
     upload(page, make_pdf(tmp_path / "internships.pdf", 1, lines))
     score_of(page)
     expect(page.locator("#chk-out .issue", has_text="passive openers").first).to_be_visible()
+
+
+def test_pathological_pdf_does_not_freeze_the_tab(page, tmp_path):
+    # 30,000 tiny text runs on one page: extraction is capped, so the report still appears quickly.
+    doc = pymupdf.open()
+    pdf_page = doc.new_page()
+    pdf_page.insert_text((20, 20), "x", fontsize=2)  # registers the font resource
+    xref = pdf_page.get_contents()[0]
+    stream = doc.xref_stream(xref).decode("latin-1")
+    font = re.search(r"/(\w+) [\d.]+ Tf", stream).group(1)
+    ops = "".join(
+        f"BT /{font} 2 Tf 1 0 0 1 {20 + (i % 100) * 5.6:.1f} {800 - (i // 100) * 2.6:.1f} Tm (x) Tj ET" + chr(10)
+        for i in range(30000)
+    )
+    doc.update_stream(xref, (stream + chr(10) + ops).encode("latin-1"))
+    path = tmp_path / "many-runs.pdf"
+    doc.save(path)
+    doc.close()
+    upload(page, path)
+    score_of(page)
+    assert_no_browser_errors(page)
+
+
+def test_long_crafted_file_name_is_truncated(page, tmp_path):
+    from test_site import make_pdf
+    path = make_pdf(tmp_path / ("A" * 90 + " 100 out of 100 Excellent.pdf"), 1, ["Sara Ahmed", "sara@example.com"])
+    upload(page, path)
+    score_of(page)
+    assert len(page.locator("#chk-out .chk-name").text_content()) <= 60
