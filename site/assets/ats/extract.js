@@ -13,6 +13,8 @@
  * @param {File|Blob} file PDF bytes and file metadata.
  * @returns {Promise<Doc>}
  */
+const MAX_ITEMS_PER_PAGE = 3000;
+
 export async function extract(pdfjs, file) {
   const data = await file.arrayBuffer();
   const pdf = await pdfjs.getDocument({ data, isEvalSupported: false }).promise;
@@ -32,7 +34,8 @@ export async function extract(pdfjs, file) {
       if (pageNumber === 1) ({ width, height } = viewport);
       const content = await page.getTextContent();
       const pageItems = [];
-      for (const item of content.items) {
+      // A real resume page has a few hundred text runs; cap crafted PDFs so the tab never freezes.
+      for (const item of content.items.slice(0, MAX_ITEMS_PER_PAGE)) {
         if (item.str) stream.push(item.str + (item.hasEOL ? '\n' : ''));
         if (!item.str || !item.str.trim()) continue;
         const transform = item.transform;
@@ -62,11 +65,12 @@ export async function extract(pdfjs, file) {
           }
         }
         if (!target) {
-          target = { page: pageNumber, baseline: item.baseline, items: [] };
+          target = { page: pageNumber, baseline: item.baseline, items: [], sum: 0 };
           pageLines.push(target);
         }
         target.items.push(item);
-        target.baseline = target.items.reduce((sum, part) => sum + part.baseline, 0) / target.items.length;
+        target.sum += item.baseline;
+        target.baseline = target.sum / target.items.length;
       }
 
       for (const line of pageLines) {
