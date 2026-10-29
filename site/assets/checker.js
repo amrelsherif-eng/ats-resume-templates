@@ -21,6 +21,7 @@ const drop = document.getElementById('chk-drop');
 const input = document.getElementById('chk-file');
 const out = document.getElementById('chk-out');
 const levels = document.getElementById('chk-level');
+const levelHint = document.getElementById('chk-level-hint');
 
 let pdfjs = null;
 let lastDoc = null;
@@ -29,6 +30,10 @@ let level = 'student';
 
 /** UI strings come from the page dictionary; check messages from the module dictionaries. */
 function ui(key, vars) { return fill((window.i18nT && window.i18nT(key)) || key, vars); }
+function updateLevelHint() {
+  const key = level === 'student' || level === 'junior' ? 'student' : level;
+  if (levelHint) levelHint.textContent = ui('chk.hint.' + key);
+}
 function msg(key, vars) {
   const ar = document.documentElement.lang === 'ar';
   return fill((ar && CHECK_AR[key]) || CHECK_EN[key] || key, vars);
@@ -234,9 +239,11 @@ function init() {
     levels.addEventListener('change', e => {
       level = e.target.value;
       try { localStorage.setItem('chk-level', level); } catch { /* ignore */ }
+      updateLevelHint();
       render();
     });
   }
+  updateLevelHint();
   input.addEventListener('change', () => handle(input.files?.[0]));
   drop.addEventListener('keydown', e => {
     if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); input.click(); }
@@ -252,7 +259,7 @@ function init() {
   // A file dropped outside the zone should not navigate away from the page.
   window.addEventListener('dragover', e => e.preventDefault());
   window.addEventListener('drop', e => { if (!drop.contains(e.target)) e.preventDefault(); });
-  document.addEventListener('langchange', render);
+  document.addEventListener('langchange', () => { updateLevelHint(); render(); });
 
   // Warm up pdf.js (about 1.4 MB) in the background once the checker scrolls into view,
   // so the first check feels instant. The worker file is fetched too so it is cached.

@@ -4,21 +4,22 @@ document.documentElement.classList.add('js');
 
 const REPO = 'https://github.com/amrelsherif-eng/ats-resume-templates';
 const RAW = 'https://raw.githubusercontent.com/amrelsherif-eng/ats-resume-templates/main/templates';
+const ISSUE_TEMPLATE_URL = `${REPO}/issues/new?title=Template%20request%3A%20&body=Which%20career%20track%3F%0A%0AWhat%20should%20the%20template%20emphasise%3F`;
 // Optional support link (for example GitHub Sponsors). Leave empty to hide the button.
 const SUPPORT_URL = 'https://github.com/sponsors/amrelsherif-eng';
 // Optional demo video, self-hosted under site/assets/video/. Leave src empty to hide the section.
 const VIDEO = { src: '', poster: '', captionsEn: '', captionsAr: '' };
 
 const TEMPLATES = [
-  { id: 'software-web', group: 'sw', color: '#c084fc', skills: ['NestJS', 'PostgreSQL', 'Redis', 'Docker', 'React'],
+  { id: 'software-web', color: '#c084fc', skills: ['NestJS', 'PostgreSQL', 'Redis', 'Docker', 'React'],
     view: 'https://www.overleaf.com/project/6ae24cbbb91643c3433bdf53/share#5c212b281201e2cd4d1433f0877a918fec537672141ba0e4' },
-  { id: 'business-finance', group: 'biz', color: '#58a6ff', skills: ['Reconciliations', 'Power BI', 'Excel', 'DCF', 'SAP'],
+  { id: 'business-finance', color: '#58a6ff', skills: ['Reconciliations', 'Power BI', 'Excel', 'DCF', 'SAP'],
     view: 'https://www.overleaf.com/project/6ae24d2b537127bac7e70376/share#5cc2e5131e359736c6fb784a325e766dd439be52c846f976' },
-  { id: 'network-cloud', group: 'eng', color: '#00f0ff', skills: ['AWS', 'Terraform', 'Linux', 'BGP', 'Zabbix'],
+  { id: 'network-cloud', color: '#00f0ff', skills: ['AWS', 'Terraform', 'Linux', 'BGP', 'Zabbix'],
     view: 'https://www.overleaf.com/read/wxvvcdjzxnng#d23995' },
-  { id: 'embedded-ece', group: 'eng', color: '#ffb300', skills: ['STM32', 'C', 'PID', 'LoRaWAN', 'RTOS'],
+  { id: 'embedded-ece', color: '#ffb300', skills: ['STM32', 'C', 'PID', 'LoRaWAN', 'RTOS'],
     view: 'https://www.overleaf.com/read/rjnzhhzrhffz#dd0591' },
-  { id: 'mobile-apps', group: 'sw', color: '#3fb950', skills: ['Flutter', 'Dart', 'Riverpod', 'Firebase', 'Testing'],
+  { id: 'mobile-apps', color: '#3fb950', skills: ['Flutter', 'Dart', 'Riverpod', 'Firebase', 'Testing'],
     view: 'https://www.overleaf.com/read/ytqxjshntmfb#335363' }
 ];
 
@@ -60,37 +61,29 @@ function renderCards() {
   grid.replaceChildren();
   for (const x of TEMPLATES) {
     const name = t(x.id + '.n');
-    const card = el('article', { class: 'card', 'data-g': x.group, style: `--c:${x.color}` });
+    const card = el('article', { id: `tpl-${x.id}`, class: 'card', style: `--c:${x.color}` });
     card.append(
       el('a', { class: 'shot', href: `templates/${x.id}/resume.pdf`, target: '_blank', rel: 'noopener', 'aria-label': `${name} PDF` }, preview(x.id, `${name} — ${t('alt.preview')}`)),
       el('div', { class: 'body' }, [
-        el('span', { class: 'tag', text: x.id }),
         el('h3', { text: name }),
+        el('span', { class: 'tag', text: t(x.id + '.en') }),
+        el('p', { class: 'difference', text: t(x.id + '.d') }),
         el('p', { text: t(x.id + '.b') }),
         el('div', { class: 'skills' }, x.skills.map(s => el('span', { text: s }))),
         el('div', { class: 'actions' }, [
           el('a', { class: 'btn sm primary', href: overleafOpen(x.id), target: '_blank', rel: 'noopener', text: t('btn.ol') }),
-          el('a', { class: 'btn sm', href: x.view, target: '_blank', rel: 'noopener', text: t('btn.view') }),
-          el('a', { class: 'btn sm', href: `templates/${x.id}/resume.pdf`, target: '_blank', rel: 'noopener', text: 'PDF' }),
-          el('button', { class: 'btn sm ai', type: 'button', 'data-ai': x.id, text: t('btn.ai') })
+          el('button', { class: 'btn sm ai', type: 'button', 'data-ai': x.id, 'aria-live': 'polite', text: t('btn.ai') }),
+          el('a', { class: 'btn sm sample', href: x.view, target: '_blank', rel: 'noopener', text: t('btn.view') })
         ])
       ])
     );
     grid.append(card);
   }
-  grid.append(el('article', { class: 'card request', 'data-g': 'all' }, [
+  grid.append(el('article', { class: 'card request' }, [
     el('h3', { text: t('req.t') }),
     el('p', { text: t('req.p') }),
-    el('a', { class: 'btn sm', href: `${REPO}/issues/new`, target: '_blank', rel: 'noopener', text: t('req.b') })
+    el('a', { class: 'btn sm',     href: ISSUE_TEMPLATE_URL, target: '_blank', rel: 'noopener', text: t('req.b') })
   ]));
-  applyFilter(document.querySelector('.chip[aria-pressed="true"]').dataset.f);
-}
-
-function applyFilter(f) {
-  document.querySelectorAll('.chip').forEach(c => c.setAttribute('aria-pressed', String(c.dataset.f === f)));
-  document.querySelectorAll('#grid .card').forEach(c => {
-    c.hidden = !(f === 'all' || c.dataset.g === f || c.dataset.g === 'all');
-  });
 }
 
 async function copyText(text) {
@@ -108,12 +101,12 @@ async function copyText(text) {
   }
 }
 
-function flash(btn, ok) {
+function flash(btn, ok, duration = 1800, success = t('copied')) {
   const label = btn.dataset.label || btn.textContent;
   btn.dataset.label = label;
-  btn.textContent = ok ? t('copied') : t('copy.fail');
+  btn.textContent = ok ? success : t('copy.fail');
   btn.classList.toggle('done', ok);
-  setTimeout(() => { btn.textContent = btn.dataset.label; btn.classList.remove('done'); delete btn.dataset.label; }, 1800);
+  setTimeout(() => { btn.textContent = btn.dataset.label; btn.classList.remove('done'); delete btn.dataset.label; }, duration);
 }
 
 function updateTabIndicator(tab) {
@@ -134,6 +127,11 @@ function selectTab(tab, focus) {
     document.getElementById(x.getAttribute('aria-controls')).hidden = !on;
     document.getElementById(x.getAttribute('aria-controls')).classList.toggle('active', on);
   });
+  const localPanel = document.getElementById('p-lc');
+  const localLink = document.getElementById('local-link');
+  localPanel.hidden = true;
+  localPanel.classList.remove('active');
+  localLink.setAttribute('aria-expanded', 'false');
   updateTabIndicator(tab);
   if (focus) tab.focus();
 }
@@ -151,6 +149,7 @@ function applyLang() {
   btn.textContent = lang === 'ar' ? 'English' : 'عربي';
   btn.lang = lang === 'ar' ? 'en' : 'ar';
   btn.setAttribute('aria-label', lang === 'ar' ? 'Switch to English' : 'التبديل إلى العربية');
+  document.querySelectorAll('[data-i-aria]').forEach(e => e.setAttribute('aria-label', t(e.dataset.iAria)));
   document.title = t('meta.title');
   renderCards();
   document.dispatchEvent(new CustomEvent('langchange', { detail: lang }));
@@ -163,11 +162,8 @@ function buildFan() {
     if (i === 2) page.append(el('div', { class: 'scan' }));
     fan.append(page);
   });
-  // Real results for these templates (see the checker and CI), not marketing numbers.
-  for (const [cls, mark, text] of [['b1', '✓', '1 page'], ['b2', '100', '/ 100 ATS check'], ['b3', '✓', 'text extracts cleanly']]) {
-    const b = el('div', { class: 'badge ' + cls });
-    b.append(el('b', { text: mark }), ' ' + text);
-    fan.append(b);
+  for (const [cls, key] of [['b1', 'fan.sample'], ['b2', 'fan.page'], ['b3', 'fan.readability']]) {
+    fan.append(el('div', { class: 'badge ' + cls, text: t(key) }));
   }
 }
 
@@ -212,9 +208,13 @@ function init() {
     const r = card.getBoundingClientRect(); card.style.setProperty('--mx', (e.clientX-r.left) + 'px'); card.style.setProperty('--my', (e.clientY-r.top) + 'px');
   }));
 
-  document.querySelectorAll('.chip').forEach(c => c.addEventListener('click', () => applyFilter(c.dataset.f)));
-
   const tabs = [...document.querySelectorAll('.tab')];
+  updateTabIndicator(tabs.find(tab => tab.getAttribute('aria-selected') === 'true'));
+  document.addEventListener('langchange', () => {
+    const selected = tabs.find(tab => tab.getAttribute('aria-selected') === 'true');
+    if (selected) updateTabIndicator(selected);
+  });
+  const localLink = document.getElementById('local-link');
   tabs.forEach((tab, i) => {
     tab.addEventListener('click', () => selectTab(tab));
     tab.addEventListener('keydown', e => {
@@ -224,6 +224,21 @@ function init() {
       e.preventDefault();
       selectTab(tabs[(i + next + tabs.length) % tabs.length], true);
     });
+  });
+  localLink.addEventListener('click', e => {
+    e.preventDefault();
+    for (const tab of tabs) {
+      tab.setAttribute('aria-selected', 'false');
+      tab.tabIndex = tab === tabs[0] ? 0 : -1;
+      const panel = document.getElementById(tab.getAttribute('aria-controls'));
+      panel.hidden = true;
+      panel.classList.remove('active');
+    }
+    const panel = document.getElementById('p-lc');
+    panel.hidden = false;
+    panel.classList.add('active');
+    localLink.setAttribute('aria-expanded', 'true');
+    document.querySelector('.tabs').style.setProperty('--tab-width', '0px');
   });
 
   document.addEventListener('click', async e => {
@@ -240,7 +255,7 @@ function init() {
         if (!res.ok) throw new Error(res.status);
         const tex = await res.text();
         const prompt = document.getElementById('prompt').innerText;
-        flash(aiBtn, await copyText(`${prompt}\n\n--- TEMPLATE (resume.tex) ---\n${tex}`));
+        flash(aiBtn, await copyText(`${prompt}\n\n--- TEMPLATE (resume.tex) ---\n${tex}`), 3000, t('copied.ai'));
       } catch {
         flash(aiBtn, false);
       } finally {
