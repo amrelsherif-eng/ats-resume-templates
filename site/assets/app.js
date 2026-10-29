@@ -274,7 +274,8 @@ function init() {
     for (const [src, code, label] of [[VIDEO.captionsEn, 'en', 'English'], [VIDEO.captionsAr, 'ar', 'العربية']]) {
       if (src) video.append(el('track', { kind: 'captions', src, srclang: code, label }));
     }
-    document.getElementById('video-frame').hidden = false;
+    video.hidden = false;
+    document.getElementById('video-soon').remove();
   }
 
   applyLang();
