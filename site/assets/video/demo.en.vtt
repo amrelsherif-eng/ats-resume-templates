@@ -14,42 +14,42 @@ Mohamed's CV is a picture. An ATS may misread it.
 00:00:06.000 --> 00:00:08.800
 Start from a CV built to be read.
 
-00:00:08.800 --> 00:00:11.500
+00:00:08.800 --> 00:00:09.900
 5 templates: Network & Cloud, Embedded & ECE, Mobile Apps,
 Software Engineering, Business & Finance. Free, MIT licensed.
 
-00:00:11.500 --> 00:00:13.500
+00:00:09.900 --> 00:00:11.900
 No LaTeX skills needed. 3 ways to edit:
 Overleaf, with AI, or locally.
 
-00:00:13.500 --> 00:00:17.500
+00:00:11.900 --> 00:00:15.900
 01 On Overleaf: click "Edit on Overleaf".
 Free account, nothing to install.
 
-00:00:17.500 --> 00:00:21.500
+00:00:15.900 --> 00:00:19.900
 Change the text inside the { }, then Recompile.
 
-00:00:21.500 --> 00:00:24.000
+00:00:19.900 --> 00:00:22.400
 02 With AI: click "Copy for ChatGPT".
 
-00:00:24.000 --> 00:00:27.500
+00:00:22.400 --> 00:00:25.900
 Paste it into ChatGPT, Gemini or Claude.
 The prompt says: one page, no invented numbers.
 
-00:00:27.500 --> 00:00:29.500
+00:00:25.900 --> 00:00:27.900
 Read every line before you send it.
 You will be asked about it in the interview.
 
-00:00:29.500 --> 00:00:33.500
+00:00:27.900 --> 00:00:31.000
 03 Already use LaTeX? Build it locally:
 latexmk -pdf resume.tex
 
-00:00:33.500 --> 00:00:36.700
+00:00:31.000 --> 00:00:34.200
 Check it again with the same checker.
 
-00:00:36.700 --> 00:00:40.000
+00:00:34.200 --> 00:00:36.100
 25 → 100. Mohamed's CV, rebuilt from a template.
 
-00:00:40.000 --> 00:00:46.000
+00:00:36.100 --> 00:00:41.100
 Free, open source, no sign-up.
 amrelsherif-eng.github.io/ats-resume-templates
