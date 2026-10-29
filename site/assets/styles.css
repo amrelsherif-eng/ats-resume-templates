@@ -1285,6 +1285,10 @@ footer nav{
   color:var(--muted);
   font-size:11px;
   line-height:1.4}
+.tut-language{display:flex;flex-wrap:wrap;gap:6px}
+.tut-lang{min-height:32px;padding:4px 10px;border:1px solid #64768a;border-radius:999px;background:var(--surface-2);color:var(--text);font:inherit;font-size:12px;cursor:pointer}
+.tut-lang[aria-pressed=true]{border-color:var(--accent);background:rgba(98,201,212,.16);color:var(--text)}
+.tut-lang:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .video-description{
   color:var(--muted);
   font-size:13px;
@@ -1387,7 +1391,8 @@ html[dir=rtl] .stat dd{
 @media(max-width:1079px){nav .wrap{flex-wrap:nowrap}.menu-toggle{display:inline-flex!important}.navlinks{display:none}.navlinks.open{display:flex}}
 .hero{overflow-x:clip}
 .tabs{position:relative;isolation:isolate;width:max-content;max-width:100%;border:1px solid var(--line);border-radius:999px;background:var(--surface);}
-.tabs:before{content:"";position:absolute;z-index:-1;inset:5px auto 5px 5px;width:var(--tab-width,33.333%);border-radius:999px;background:var(--surface-3);box-shadow:0 0 0 1px var(--line);transform:translateX(var(--tab-x,0));transition:transform .22s var(--ease),width .22s var(--ease)}
+.tabs:before{content:"";position:absolute;z-index:-1;inset:5px auto 5px 5px;width:var(--tab-width,33.333%);border-radius:999px;background:var(--surface-3);box-shadow:0 0 0 1px var(--line);transform:translateX(var(--tab-x,0));transition:transform .22s var(--ease),width .22s var(--ease),opacity .22s var(--ease)}
+.tabs.no-sel:before{opacity:0}
 html[dir=rtl] .tabs:before{inset-inline-start:5px;transform:translateX(calc(-1 * var(--tab-x,0)))}
 .tab[aria-selected=true]{background:transparent;box-shadow:none;color:var(--text)}
 .panel.active{animation:panel-in .32s var(--ease) both}
@@ -1432,5 +1437,6 @@ html.js .reveal.is-visible{opacity:1;transform:none}
 .issue-group-h{margin:14px 0 7px;color:var(--muted);font-size:12px;font-weight:600;letter-spacing:.02em}
 
 /* The "عربي" toggle on English pages uses a system face, so the Arabic web font loads only in Arabic mode. */
-html:not([dir=rtl]) .lang{
+html:not([dir=rtl]) .lang,
+html:not([dir=rtl]) .tut-lang[lang=ar]{
   font-family:system-ui,"Segoe UI",Tahoma,Arial,sans-serif}

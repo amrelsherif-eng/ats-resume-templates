@@ -384,11 +384,41 @@ def test_support_link_and_demo_video(page, site_url):
         assert len(r.body()) < 25 * 1024 * 1024, "Cloudflare Pages rejects files over 25 MiB"
     for name in ("tutorial-poster-en.webp", "tutorial-poster-ar.webp"):
         assert page.request.get(base + "assets/video/" + name).status == 200
-    page.locator("#lang").click()
+    buttons = page.locator(".tut-lang")
+    expect(buttons).to_have_count(2)
+    expect(page.locator('.tut-lang[data-tl="en"]')).to_contain_text("English")
+    expect(page.locator('.tut-lang[data-tl="en"]')).to_have_attribute("aria-pressed", "true")
+    page.locator('.tut-lang[data-tl="ar"]').click()
     expect(tut.locator("source")).to_have_attribute("src", "assets/video/tutorial-ar.mp4")
     expect(tut).to_have_attribute("poster", re.compile(r"tutorial-poster-ar\.webp$"))
     expect(page.locator(".vid-tut .video-duration")).to_have_text("5:02")
+    expect(page.locator('.tut-lang[data-tl="ar"]')).to_have_attribute("aria-pressed", "true")
+    expect(page.locator('.tut-lang[data-tl="en"]')).to_have_attribute("aria-pressed", "false")
+    expect(page.locator("html")).to_have_attribute("lang", "en")
     assert page.locator("footer nav").first.evaluate("n => getComputedStyle(n).position") == "static"
+
+
+def test_tutorial_language_tracks_site_until_manual_choice(page):
+    page.locator("#video").scroll_into_view_if_needed()
+    tut = page.locator("#tut-video")
+    page.locator("#lang").click()
+    expect(tut.locator("source")).to_have_attribute("src", "assets/video/tutorial-ar.mp4")
+    expect(tut).to_have_attribute("poster", re.compile(r"tutorial-poster-ar\.webp$"))
+    page.locator('.tut-lang[data-tl="en"]').click()
+    page.locator("#lang").click()
+    expect(tut.locator("source")).to_have_attribute("src", "assets/video/tutorial-en.mp4")
+    expect(tut).to_have_attribute("poster", re.compile(r"tutorial-poster-en\.webp$"))
+    expect(page.locator("html")).to_have_attribute("lang", "en")
+
+
+def test_local_link_hides_tab_indicator(page):
+    tabs = page.locator(".tabs")
+    page.locator("#local-link").click()
+    expect(tabs).to_have_class(re.compile(r"\bno-sel\b"))
+    # The indicator fades (0.22 s), so wait for the end value instead of reading it mid-transition.
+    page.wait_for_function("() => getComputedStyle(document.querySelector('.tabs'), '::before').opacity === '0'")
+    page.get_by_role("tab", name=re.compile("Overleaf")).click()
+    page.wait_for_function("() => getComputedStyle(document.querySelector('.tabs'), '::before').opacity === '1'")
 
 
 def test_seo_basics(page, site_url):
