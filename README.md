@@ -35,7 +35,7 @@
   <img src="assets/cards.svg" width="100%" alt="01 Templates: 5 one-page LaTeX CVs for tech and business tracks. 02 Three ways to edit: Overleaf, any AI chat, or your own computer. 03 CV checker: runs in your browser, your PDF is never uploaded. 04 Video tutorials: English and Egyptian Arabic, 5 minutes, with chapters.">
 </picture>
 
-**Jump to:** [Templates](#-pick-your-template) · [Start in 3 steps](#-start-in-3-steps) · [Three ways to edit](#three-ways-to-edit) · [Check your CV](#check-your-cv) · [Videos](#-video-tutorials) · [ATS-friendly?](#-is-it-really-ats-friendly) · [Customize](#customize) · [Build locally](#-build-locally) · [Developers](#for-developers) · [FAQ](#faq) · [Changelog](#-changelog)
+**Jump to:** [Templates](#-pick-your-template) · [Start in 3 steps](#-start-in-3-steps) · [Three ways to edit](#three-ways-to-edit) · [Check your CV](#check-your-cv) · [Videos](#-video-tutorials) · [ATS-friendly?](#-is-it-really-ats-friendly) · [Customize](#customize) · [Build locally](#-build-locally) · [Developers](#for-developers) · [FAQ](#faq) · [Support](#support) · [Changelog](#-changelog)
 
 <a id="-pick-your-template"></a>
 <a id="pick-your-template"></a>
@@ -390,6 +390,28 @@ Yes. They are MIT licensed: use, change and share them, for personal or commerci
 If you put your CV in a public GitHub repository, replace your phone number and street address with placeholders, or show only your city and professional links.
 </details>
 
+<a id="support"></a>
+<a id="-support-this-project"></a>
+<img src="assets/h-support.svg#gh-dark-mode-only" width="100%" alt="Support the project">
+<img src="assets/h-support-light.svg#gh-light-mode-only" width="100%" alt="Support the project">
+
+Everything here is **free and open source**, and it stays that way. It is built and maintained by one person, in spare time.
+If the templates or the checker helped you land an interview or a job, sponsoring is the most direct way to keep it going. Sponsorships pay for the time to:
+
+- add **new tracks** (the ones people request in issues),
+- keep the **checker** accurate as more real CVs are tested,
+- record more **tutorials**, in English and Arabic.
+
+<p align="center">
+  <a href="https://github.com/sponsors/amrelsherif-eng"><img src="assets/btn-sponsor.svg" height="44" alt="Sponsor on GitHub"></a>
+</p>
+
+**No budget? That helps too:** ⭐ star the repo, share it with a friend who is job hunting, or [request a template](https://github.com/amrelsherif-eng/ats-resume-templates/issues/new) for your field.
+
+**Supporters.** Monthly backers ($5+) are thanked here by name.
+<!-- When the first $5+ monthly backer joins, replace the next line with their name or @handle. Add more backers comma-separated. -->
+*No supporters yet. [Be the first!](https://github.com/sponsors/amrelsherif-eng)* 💙
+
 <a id="-changelog"></a>
 <a id="changelog"></a>
 <a id="-license--credits"></a>
@@ -409,10 +431,6 @@ If you put your CV in a public GitHub repository, replace your phone number and 
 - **v1.0 (May 2026):** First public release: one template, Overleaf link, AI prompt.
 
 </details>
-
-**Support.** Everything here is free. If it helped you, you can [sponsor the work on GitHub](https://github.com/sponsors/amrelsherif-eng), star the repo, or share it with a friend. Monthly backers ($5+) are thanked here by name.
-<!-- When the first $5+ monthly backer joins, replace the next line with their name or @handle. Add more backers comma-separated. -->
-*No supporters yet. [Be the first!](https://github.com/sponsors/amrelsherif-eng)* 💙
 
 **Contributing.** Issues and pull requests are welcome. To add a role template: copy a folder under `templates/`, keep the preamble and commands, use fictional data (`Your Name`, `example.com`), and make sure the PDF stays one page and passes the CI build.
 
