@@ -197,12 +197,15 @@ function init() {
       if (frame) return;
       frame = requestAnimationFrame(() => {
         const r = fan.getBoundingClientRect();
-        fan.style.setProperty('--tilt-y', (Math.max(-5, Math.min(5, ((e.clientX-r.left)/r.width-.5)*10))) + 'deg');
-        fan.style.setProperty('--tilt-x', (Math.max(-3, Math.min(3, (.5-(e.clientY-r.top)/r.height)*6))) + 'deg');
+        // Layered parallax: each page moves by its own depth (--d), which reads as 3D without distortion.
+        const x = Math.max(-1, Math.min(1, ((e.clientX - r.left) / r.width - .5) * 2));
+        const y = Math.max(-1, Math.min(1, ((e.clientY - r.top) / r.height - .5) * 2));
+        fan.style.setProperty('--px', (x * 10).toFixed(2) + 'px');
+        fan.style.setProperty('--py', (y * 6).toFixed(2) + 'px');
         frame = 0;
       });
     });
-    fan.addEventListener('pointerleave', () => { fan.style.setProperty('--tilt-x','0deg'); fan.style.setProperty('--tilt-y','0deg'); });
+    fan.addEventListener('pointerleave', () => { fan.style.setProperty('--px', '0px'); fan.style.setProperty('--py', '0px'); });
   }
   document.querySelectorAll('.grid').forEach(g => g.addEventListener('pointermove', e => {
     const card = e.target.closest('.card'); if (!card || reduceMotion.matches) return;
@@ -271,7 +274,7 @@ function init() {
     for (const [src, code, label] of [[VIDEO.captionsEn, 'en', 'English'], [VIDEO.captionsAr, 'ar', 'العربية']]) {
       if (src) video.append(el('track', { kind: 'captions', src, srclang: code, label }));
     }
-    document.getElementById('video').hidden = false;
+    document.getElementById('video-frame').hidden = false;
   }
 
   applyLang();

@@ -20,6 +20,7 @@
 [![Overleaf Ready](https://img.shields.io/badge/Overleaf-Ready-47A141?style=for-the-badge&logo=overleaf&logoColor=white)](#-start-in-3-steps)
 [![One Page](https://img.shields.io/badge/Layout-One--Page-ff79c6?style=for-the-badge&logo=readthedocs&logoColor=black)](#-pick-your-template)
 [![ATS Friendly](https://img.shields.io/badge/ATS-Friendly%20✓-00ffcc?style=for-the-badge&logo=checkmarx&logoColor=black)](#-is-it-really-ats-friendly)
+[![Sponsor](https://img.shields.io/badge/Sponsor-GitHub%20Sponsors-ea4aaa?style=for-the-badge&logo=githubsponsors&logoColor=white)](https://github.com/sponsors/amrelsherif-eng)
 
 <p align="center">
 Free, one-page, ATS-friendly resumes for students and early-career engineers, developers, and business graduates. Pick a template, copy it on Overleaf, replace the sample text, download your PDF.
@@ -181,6 +182,7 @@ Jump directly to any section below.
 - [📁 Project Structure](#-project-structure)
 - [❓ FAQ](#-faq)
 - [🗒️ Changelog](#-changelog)
+- [💖 Support This Project](#-support)
 - [🤝 Contributing](#-contributing)
 - [📜 License & Credits](#-license--credits)
 
@@ -499,10 +501,19 @@ If you commit your resume to a public GitHub repository, replace your phone numb
 
 Release history and template improvements across versions.
 
+- **v2.3 (Oct 2026):** Website redesign (calmer visual system, smoother motion, animated score gauge), a 20-case test corpus for the ATS checker, GitHub Sponsors.
 - **v2.2 (Oct 2026):** Website with a template gallery, an in-browser ATS check (scored report, fixes, experience-aware page rules), English and Arabic, and automated site tests.
 - **v2.1 (Oct 2026):** Two new templates: Software Engineering (Web & Backend) and Business & Finance for Faculty of Commerce students. Overleaf links for both. Mobile Apps sample filled to a full page.
 - **v2.0 (Oct 2026):** Three role-focused templates, inline quick-guide comments, Leadership & Activities section, GitHub Actions CI build checks, and rewritten documentation.
 - **v1.0 (May 2026):** First public release of the single template with Overleaf integration, GitHub repository, and AI prompt.
+
+---
+
+<a id="-support"></a>
+<a id="support"></a>
+## 💖 Support This Project
+
+These templates, the website and the ATS checker are free and stay free. If they helped you land an interview, you can support the work on **[GitHub Sponsors](https://github.com/sponsors/amrelsherif-eng)**. A ⭐ on the repo and sharing it with a friend help just as much.
 
 ---
 
