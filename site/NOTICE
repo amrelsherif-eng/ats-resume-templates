@@ -1,0 +1,17 @@
+ATS Resume Templates: website and in-browser ATS checker (everything in this site/ folder)
+Copyright (c) 2026 Amr Fathy Elsherif
+
+This folder is licensed under the GNU Affero General Public License, version 3 only
+(AGPL-3.0-only); the full text is in LICENSE in this folder. If you run a modified
+version of this website for other people over a network, you must offer them its
+source code under the same license.
+
+The resume templates (templates/, resume.tex, resume.pdf at the repository root) are
+NOT covered by this notice: they stay under the MIT License in the root LICENSE file.
+
+Third-party code and fonts added at build time keep their own licenses:
+pdf.js (Apache-2.0), Fontsource fonts (SIL Open Font License 1.1).
+
+Under AGPL-3.0 section 7(e), no rights are granted to use the name
+"ATS Resume Templates" or its logo and artwork to promote modified versions:
+please publish forks under a different name.
