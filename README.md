@@ -31,8 +31,8 @@
 <img src="assets/h-what-light.svg#gh-light-mode-only" width="100%" alt="What you get">
 
 <p align="center">
-  <a href="https://amrelsherif-eng.github.io/ats-resume-templates/"><img src="assets/cards-mobile.svg#gh-dark-mode-only" width="760" alt="01 Templates: 5 one-page LaTeX CVs for tech and business tracks. 02 Three ways to edit: Overleaf, any AI chat, or your own computer. 03 CV checker: runs in your browser, your PDF is never uploaded. 04 Video tutorials: English and Egyptian Arabic, 5 minutes, with chapters."></a>
-  <a href="https://amrelsherif-eng.github.io/ats-resume-templates/"><img src="assets/cards-mobile-light.svg#gh-light-mode-only" width="760" alt="01 Templates: 5 one-page LaTeX CVs for tech and business tracks. 02 Three ways to edit: Overleaf, any AI chat, or your own computer. 03 CV checker: runs in your browser, your PDF is never uploaded. 04 Video tutorials: English and Egyptian Arabic, 5 minutes, with chapters."></a>
+  <img src="assets/cards-mobile.svg#gh-dark-mode-only" width="760" alt="01 Templates: 5 one-page LaTeX CVs for tech and business tracks. 02 Three ways to edit: Overleaf, any AI chat, or your own computer. 03 CV checker: runs in your browser, your PDF is never uploaded. 04 Video tutorials: English and Egyptian Arabic, 5 minutes, with chapters.">
+  <img src="assets/cards-mobile-light.svg#gh-light-mode-only" width="760" alt="01 Templates: 5 one-page LaTeX CVs for tech and business tracks. 02 Three ways to edit: Overleaf, any AI chat, or your own computer. 03 CV checker: runs in your browser, your PDF is never uploaded. 04 Video tutorials: English and Egyptian Arabic, 5 minutes, with chapters.">
 </p>
 
 **Jump to:** [Templates](#-pick-your-template) · [Start in 3 steps](#-start-in-3-steps) · [Three ways to edit](#three-ways-to-edit) · [Check your CV](#check-your-cv) · [Videos](#-video-tutorials) · [ATS-friendly?](#-is-it-really-ats-friendly) · [Customize](#customize) · [Build locally](#-build-locally) · [Developers](#for-developers) · [FAQ](#faq) · [Changelog](#-changelog)
