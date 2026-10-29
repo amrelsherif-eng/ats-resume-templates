@@ -16,7 +16,8 @@
 
 [![Build templates](https://github.com/amrelsherif-eng/ats-resume-templates/actions/workflows/build.yml/badge.svg)](https://github.com/amrelsherif-eng/ats-resume-templates/actions/workflows/build.yml)
 [![Site tests](https://github.com/amrelsherif-eng/ats-resume-templates/actions/workflows/site.yml/badge.svg)](https://github.com/amrelsherif-eng/ats-resume-templates/actions/workflows/site.yml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-00f0ff?style=flat-square)](LICENSE)
+[![Templates: MIT](https://img.shields.io/badge/Templates-MIT-00f0ff?style=flat-square)](LICENSE)
+[![Website: AGPL-3.0](https://img.shields.io/badge/Website-AGPL--3.0-00f0ff?style=flat-square)](site/LICENSE)
 
 **Free one-page LaTeX resumes for students and early-career candidates,<br>plus a website to edit them three ways and check your CV in the browser.**
 
@@ -434,7 +435,10 @@ If the templates or the checker helped you land an interview or a job, sponsorin
 
 **Contributing.** Issues and pull requests are welcome. To add a role template: copy a folder under `templates/`, keep the preamble and commands, use fictional data (`Your Name`, `example.com`), and make sure the PDF stays one page and passes the CI build.
 
-**License & credits.** MIT, see [LICENSE](LICENSE). Copyright © 2026 Amr Fathy Elsherif. Built on the open-source [sb2nov/resume](https://github.com/sb2nov/resume) by Sourabh Bajaj (MIT).
+**License & credits.** Copyright © 2026 Amr Fathy Elsherif.
+- **Resume templates** (`templates/`, `resume.tex`): MIT, see [LICENSE](LICENSE). Use, change and share them freely, including for commercial use. Built on the open-source [sb2nov/resume](https://github.com/sb2nov/resume) by Sourabh Bajaj (MIT).
+- **Website and ATS checker** (`site/`): AGPL-3.0, see [site/LICENSE](site/LICENSE) and [site/NOTICE](site/NOTICE). You can study, change and share the code; if you run a modified version for others online, you must publish its source under the same license.
+- **Name and logo:** "ATS Resume Templates" and its artwork are not licensed for forks; please publish modified versions under a different name.
 
 ---
 

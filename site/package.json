@@ -1,6 +1,7 @@
 {
   "name": "ats-resume-templates-site",
   "private": true,
+  "license": "AGPL-3.0-only",
   "description": "Pinned front-end dependencies for the GitHub Pages site (vendored at build time).",
   "dependencies": {
     "@fontsource/ibm-plex-sans-arabic": "5.3.0",
