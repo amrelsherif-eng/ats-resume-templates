@@ -28,18 +28,22 @@
 <a id="-table-of-contents"></a>
 <a id="table-of-contents"></a>
 <picture>
-  <source media="(max-width: 767px) and (prefers-color-scheme: dark)" srcset="assets/h-what-mobile.svg">
+  <source media="(max-width: 767px)" srcset="assets/h-what-mobile.svg">
+  <img src="assets/h-what.svg#gh-dark-mode-only" width="100%" alt="What you get">
+</picture>
+<picture>
   <source media="(max-width: 767px)" srcset="assets/h-what-mobile-light.svg">
-  <source media="(prefers-color-scheme: dark)" srcset="assets/h-what.svg">
-  <img src="assets/h-what-light.svg" width="100%" alt="What you get">
+  <img src="assets/h-what-light.svg#gh-light-mode-only" width="100%" alt="What you get">
 </picture>
 
 <a href="https://amrelsherif-eng.github.io/ats-resume-templates/">
 <picture>
-  <source media="(max-width: 767px) and (prefers-color-scheme: dark)" srcset="assets/cards-mobile.svg">
+  <source media="(max-width: 767px)" srcset="assets/cards-mobile.svg">
+  <img src="assets/cards.svg#gh-dark-mode-only" width="100%" alt="01 Templates: 5 one-page LaTeX CVs for tech and business tracks. 02 Three ways to edit: Overleaf, any AI chat, or your own computer. 03 CV checker: runs in your browser, your PDF is never uploaded. 04 Video tutorials: English and Egyptian Arabic, 5 minutes, with chapters.">
+</picture>
+<picture>
   <source media="(max-width: 767px)" srcset="assets/cards-mobile-light.svg">
-  <source media="(prefers-color-scheme: dark)" srcset="assets/cards.svg">
-  <img src="assets/cards-light.svg" width="100%" alt="01 Templates: 5 one-page LaTeX CVs for tech and business tracks. 02 Three ways to edit: Overleaf, any AI chat, or your own computer. 03 CV checker: runs in your browser, your PDF is never uploaded. 04 Video tutorials: English and Egyptian Arabic, 5 minutes, with chapters.">
+  <img src="assets/cards-light.svg#gh-light-mode-only" width="100%" alt="01 Templates: 5 one-page LaTeX CVs for tech and business tracks. 02 Three ways to edit: Overleaf, any AI chat, or your own computer. 03 CV checker: runs in your browser, your PDF is never uploaded. 04 Video tutorials: English and Egyptian Arabic, 5 minutes, with chapters.">
 </picture>
 </a>
 
@@ -48,10 +52,12 @@
 <a id="-pick-your-template"></a>
 <a id="pick-your-template"></a>
 <picture>
-  <source media="(max-width: 767px) and (prefers-color-scheme: dark)" srcset="assets/h-templates-mobile.svg">
+  <source media="(max-width: 767px)" srcset="assets/h-templates-mobile.svg">
+  <img src="assets/h-templates.svg#gh-dark-mode-only" width="100%" alt="Pick your template">
+</picture>
+<picture>
   <source media="(max-width: 767px)" srcset="assets/h-templates-mobile-light.svg">
-  <source media="(prefers-color-scheme: dark)" srcset="assets/h-templates.svg">
-  <img src="assets/h-templates-light.svg" width="100%" alt="Pick your template">
+  <img src="assets/h-templates-light.svg#gh-light-mode-only" width="100%" alt="Pick your template">
 </picture>
 
 Choose the track closest to the job you want. Every template is one page, uses fictional sample data, and comes as a `.tex` source, a ready PDF, and an Overleaf project.
@@ -124,10 +130,12 @@ Choose the track closest to the job you want. Every template is one page, uses f
 <a id="-start-in-3-steps"></a>
 <a id="start-in-3-steps"></a>
 <picture>
-  <source media="(max-width: 767px) and (prefers-color-scheme: dark)" srcset="assets/h-start-mobile.svg">
+  <source media="(max-width: 767px)" srcset="assets/h-start-mobile.svg">
+  <img src="assets/h-start.svg#gh-dark-mode-only" width="100%" alt="Start in 3 steps">
+</picture>
+<picture>
   <source media="(max-width: 767px)" srcset="assets/h-start-mobile-light.svg">
-  <source media="(prefers-color-scheme: dark)" srcset="assets/h-start.svg">
-  <img src="assets/h-start-light.svg" width="100%" alt="Start in 3 steps">
+  <img src="assets/h-start-light.svg#gh-light-mode-only" width="100%" alt="Start in 3 steps">
 </picture>
 
 No LaTeX knowledge and nothing to install. [Overleaf](https://www.overleaf.com) turns the template into a PDF in your browser.
@@ -143,10 +151,12 @@ No LaTeX knowledge and nothing to install. [Overleaf](https://www.overleaf.com) 
 
 <a id="three-ways-to-edit"></a>
 <picture>
-  <source media="(max-width: 767px) and (prefers-color-scheme: dark)" srcset="assets/h-edit-mobile.svg">
+  <source media="(max-width: 767px)" srcset="assets/h-edit-mobile.svg">
+  <img src="assets/h-edit.svg#gh-dark-mode-only" width="100%" alt="Three ways to edit">
+</picture>
+<picture>
   <source media="(max-width: 767px)" srcset="assets/h-edit-mobile-light.svg">
-  <source media="(prefers-color-scheme: dark)" srcset="assets/h-edit.svg">
-  <img src="assets/h-edit-light.svg" width="100%" alt="Three ways to edit">
+  <img src="assets/h-edit-light.svg#gh-light-mode-only" width="100%" alt="Three ways to edit">
 </picture>
 
 | | Way | Best for | You need |
@@ -174,10 +184,12 @@ My information:
 <a id="check-your-cv"></a>
 <a id="check-your-cv-on-the-website"></a>
 <picture>
-  <source media="(max-width: 767px) and (prefers-color-scheme: dark)" srcset="assets/h-check-mobile.svg">
+  <source media="(max-width: 767px)" srcset="assets/h-check-mobile.svg">
+  <img src="assets/h-check.svg#gh-dark-mode-only" width="100%" alt="Check your CV">
+</picture>
+<picture>
   <source media="(max-width: 767px)" srcset="assets/h-check-mobile-light.svg">
-  <source media="(prefers-color-scheme: dark)" srcset="assets/h-check.svg">
-  <img src="assets/h-check-light.svg" width="100%" alt="Check your CV">
+  <img src="assets/h-check-light.svg#gh-light-mode-only" width="100%" alt="Check your CV">
 </picture>
 
 Drop any PDF into the [**CV checker**](https://amrelsherif-eng.github.io/ats-resume-templates/#check). You get a score out of 100, what passed, what to fix first, and the exact text an ATS would extract. One click turns the report into a fix-it prompt for an AI chat.
@@ -200,10 +212,12 @@ Drop any PDF into the [**CV checker**](https://amrelsherif-eng.github.io/ats-res
 <a id="-video-tutorial-2-min"></a>
 <a id="video-tutorial-2-min"></a>
 <picture>
-  <source media="(max-width: 767px) and (prefers-color-scheme: dark)" srcset="assets/h-video-mobile.svg">
+  <source media="(max-width: 767px)" srcset="assets/h-video-mobile.svg">
+  <img src="assets/h-video.svg#gh-dark-mode-only" width="100%" alt="Video tutorials">
+</picture>
+<picture>
   <source media="(max-width: 767px)" srcset="assets/h-video-mobile-light.svg">
-  <source media="(prefers-color-scheme: dark)" srcset="assets/h-video.svg">
-  <img src="assets/h-video-light.svg" width="100%" alt="Video tutorials">
+  <img src="assets/h-video-light.svg#gh-light-mode-only" width="100%" alt="Video tutorials">
 </picture>
 
 | Video | Length | Language |
@@ -220,10 +234,12 @@ The full tutorial has chapter buttons on the site: **Pick a template · Edit on 
 <a id="is-it-really-ats-friendly"></a>
 <a id="-why-these-templates"></a>
 <picture>
-  <source media="(max-width: 767px) and (prefers-color-scheme: dark)" srcset="assets/h-ats-mobile.svg">
+  <source media="(max-width: 767px)" srcset="assets/h-ats-mobile.svg">
+  <img src="assets/h-ats.svg#gh-dark-mode-only" width="100%" alt="Is it really ATS-friendly?">
+</picture>
+<picture>
   <source media="(max-width: 767px)" srcset="assets/h-ats-mobile-light.svg">
-  <source media="(prefers-color-scheme: dark)" srcset="assets/h-ats.svg">
-  <img src="assets/h-ats-light.svg" width="100%" alt="Is it really ATS-friendly?">
+  <img src="assets/h-ats-light.svg#gh-light-mode-only" width="100%" alt="Is it really ATS-friendly?">
 </picture>
 
 An ATS (applicant tracking system) reads your PDF as text before a person sees it. If it cannot read the text, or the text comes out in the wrong order, your CV can be skipped.
@@ -243,10 +259,12 @@ An ATS (applicant tracking system) reads your PDF as text before a person sees i
 <a id="customize"></a>
 <a id="-customize"></a>
 <picture>
-  <source media="(max-width: 767px) and (prefers-color-scheme: dark)" srcset="assets/h-custom-mobile.svg">
+  <source media="(max-width: 767px)" srcset="assets/h-custom-mobile.svg">
+  <img src="assets/h-custom.svg#gh-dark-mode-only" width="100%" alt="Make it yours">
+</picture>
+<picture>
   <source media="(max-width: 767px)" srcset="assets/h-custom-mobile-light.svg">
-  <source media="(prefers-color-scheme: dark)" srcset="assets/h-custom.svg">
-  <img src="assets/h-custom-light.svg" width="100%" alt="Make it yours">
+  <img src="assets/h-custom-light.svg#gh-light-mode-only" width="100%" alt="Make it yours">
 </picture>
 
 <details>
@@ -299,10 +317,12 @@ An ATS (applicant tracking system) reads your PDF as text before a person sees i
 <a id="-build-locally"></a>
 <a id="build-locally"></a>
 <picture>
-  <source media="(max-width: 767px) and (prefers-color-scheme: dark)" srcset="assets/h-build-mobile.svg">
+  <source media="(max-width: 767px)" srcset="assets/h-build-mobile.svg">
+  <img src="assets/h-build.svg#gh-dark-mode-only" width="100%" alt="Build it locally">
+</picture>
+<picture>
   <source media="(max-width: 767px)" srcset="assets/h-build-mobile-light.svg">
-  <source media="(prefers-color-scheme: dark)" srcset="assets/h-build.svg">
-  <img src="assets/h-build-light.svg" width="100%" alt="Build it locally">
+  <img src="assets/h-build-light.svg#gh-light-mode-only" width="100%" alt="Build it locally">
 </picture>
 
 ```bash
@@ -348,10 +368,12 @@ docker run --rm -v "$PWD":/work -w /work/templates/network-cloud texlive/texlive
 <a id="for-developers"></a>
 <a id="-project-structure"></a>
 <picture>
-  <source media="(max-width: 767px) and (prefers-color-scheme: dark)" srcset="assets/h-dev-mobile.svg">
+  <source media="(max-width: 767px)" srcset="assets/h-dev-mobile.svg">
+  <img src="assets/h-dev.svg#gh-dark-mode-only" width="100%" alt="For developers">
+</picture>
+<picture>
   <source media="(max-width: 767px)" srcset="assets/h-dev-mobile-light.svg">
-  <source media="(prefers-color-scheme: dark)" srcset="assets/h-dev.svg">
-  <img src="assets/h-dev-light.svg" width="100%" alt="For developers">
+  <img src="assets/h-dev-light.svg#gh-light-mode-only" width="100%" alt="For developers">
 </picture>
 
 ```text
@@ -384,10 +406,12 @@ Bash syntax (Linux, macOS, Git Bash). In PowerShell, set each variable first, fo
 <a id="faq"></a>
 <a id="-faq"></a>
 <picture>
-  <source media="(max-width: 767px) and (prefers-color-scheme: dark)" srcset="assets/h-faq-mobile.svg">
+  <source media="(max-width: 767px)" srcset="assets/h-faq-mobile.svg">
+  <img src="assets/h-faq.svg#gh-dark-mode-only" width="100%" alt="Questions and answers">
+</picture>
+<picture>
   <source media="(max-width: 767px)" srcset="assets/h-faq-mobile-light.svg">
-  <source media="(prefers-color-scheme: dark)" srcset="assets/h-faq.svg">
-  <img src="assets/h-faq-light.svg" width="100%" alt="Questions and answers">
+  <img src="assets/h-faq-light.svg#gh-light-mode-only" width="100%" alt="Questions and answers">
 </picture>
 
 <details>
@@ -443,10 +467,12 @@ If you put your CV in a public GitHub repository, replace your phone number and 
 <a id="-license--credits"></a>
 <a id="license--credits"></a>
 <picture>
-  <source media="(max-width: 767px) and (prefers-color-scheme: dark)" srcset="assets/h-more-mobile.svg">
+  <source media="(max-width: 767px)" srcset="assets/h-more-mobile.svg">
+  <img src="assets/h-more.svg#gh-dark-mode-only" width="100%" alt="Changelog and credits">
+</picture>
+<picture>
   <source media="(max-width: 767px)" srcset="assets/h-more-mobile-light.svg">
-  <source media="(prefers-color-scheme: dark)" srcset="assets/h-more.svg">
-  <img src="assets/h-more-light.svg" width="100%" alt="Changelog and credits">
+  <img src="assets/h-more-light.svg#gh-light-mode-only" width="100%" alt="Changelog and credits">
 </picture>
 
 <details>
