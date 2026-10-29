@@ -1,5 +1,6 @@
 import os
 import re
+import shutil
 from pathlib import Path
 from urllib.parse import quote, urlparse
 
@@ -285,12 +286,24 @@ def test_checker_arabic_report(page):
     assert re.search(r"[؀-ۿ]", page.locator("#chk-out .passed .issue-t").first.text_content())
 
 
-def test_checker_ai_prompt(page):
+def test_checker_ai_prompt(page, tmp_path):
     capture_clipboard(page)
-    upload(page, ROOT / "templates/mobile-apps/resume.pdf")
-    score_of(page)
+    # A clean CV has nothing to fix, so there is no fix-it prompt to offer.
+    # (Renamed: "resume.pdf" itself gets a generic-file-name tip.)
+    clean = tmp_path / "Mohamed-Ahmed-CV.pdf"
+    shutil.copy(ROOT / "templates/mobile-apps/resume.pdf", clean)
+    upload(page, clean)
+    assert score_of(page) == 100
+    expect(page.locator("#chk-out .issues-h")).to_have_text("Nothing to fix. Nice work.")
+    expect(page.locator("#chk-out .chk-tools")).to_have_count(0)
+    # A CV with problems gets the button, and the prompt carries its text.
+    lines = ["Sara Hassan", "Experience", "Support Specialist, Example Co"] + [
+        "- Responsible for helping users with computer problems in the office every day" for _ in range(8)
+    ] + ["Education", "BSc, Example University", "Skills", "Windows"]
+    upload(page, make_pdf(tmp_path / "fix.pdf", 1, lines))
+    assert score_of(page) < 100
     page.locator("#chk-out .chk-tools button").click()
-    assert "Your Name" in copied_text(page, "MY RESUME")
+    assert "Responsible for helping users" in copied_text(page, "MY RESUME")
 
 
 def test_checker_not_pdf(page, tmp_path):

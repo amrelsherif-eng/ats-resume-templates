@@ -208,7 +208,9 @@ function render() {
   text.append(el('summary', '', ui('chk.preview')));
   text.append(el('pre', '', doc.streamText.slice(0, 6000)));
 
-  out.replaceChildren(head, list, ok, tools, text, el('p', 'chk-private', ui('chk.private')));
+  // Nothing to fix: no fix-it prompt to offer.
+  const parts = problems.length ? [head, list, ok, tools, text] : [head, list, ok, text];
+  out.replaceChildren(...parts, el('p', 'chk-private', ui('chk.private')));
 }
 
 async function handle(file) {
