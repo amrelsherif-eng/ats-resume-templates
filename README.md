@@ -30,10 +30,10 @@
 <img src="assets/h-what.svg#gh-dark-mode-only" width="100%" alt="What you get">
 <img src="assets/h-what-light.svg#gh-light-mode-only" width="100%" alt="What you get">
 
-<p align="center">
-  <img src="assets/cards-mobile.svg#gh-dark-mode-only" width="760" alt="01 Templates: 5 one-page LaTeX CVs for tech and business tracks. 02 Three ways to edit: Overleaf, any AI chat, or your own computer. 03 CV checker: runs in your browser, your PDF is never uploaded. 04 Video tutorials: English and Egyptian Arabic, 5 minutes, with chapters.">
-  <img src="assets/cards-mobile-light.svg#gh-light-mode-only" width="760" alt="01 Templates: 5 one-page LaTeX CVs for tech and business tracks. 02 Three ways to edit: Overleaf, any AI chat, or your own computer. 03 CV checker: runs in your browser, your PDF is never uploaded. 04 Video tutorials: English and Egyptian Arabic, 5 minutes, with chapters.">
-</p>
+<picture>
+  <source media="(max-width: 767px)" srcset="assets/cards-mobile.svg">
+  <img src="assets/cards.svg" width="100%" alt="01 Templates: 5 one-page LaTeX CVs for tech and business tracks. 02 Three ways to edit: Overleaf, any AI chat, or your own computer. 03 CV checker: runs in your browser, your PDF is never uploaded. 04 Video tutorials: English and Egyptian Arabic, 5 minutes, with chapters.">
+</picture>
 
 **Jump to:** [Templates](#-pick-your-template) · [Start in 3 steps](#-start-in-3-steps) · [Three ways to edit](#three-ways-to-edit) · [Check your CV](#check-your-cv) · [Videos](#-video-tutorials) · [ATS-friendly?](#-is-it-really-ats-friendly) · [Customize](#customize) · [Build locally](#-build-locally) · [Developers](#for-developers) · [FAQ](#faq) · [Changelog](#-changelog)
 
@@ -129,11 +129,11 @@ No LaTeX knowledge and nothing to install. [Overleaf](https://www.overleaf.com) 
 <img src="assets/h-edit.svg#gh-dark-mode-only" width="100%" alt="Three ways to edit">
 <img src="assets/h-edit-light.svg#gh-light-mode-only" width="100%" alt="Three ways to edit">
 
-| | Way | Best for | You need |
-|:---:|:---|:---|:---|
-| ☁️ | **Overleaf** | Most people | A free Overleaf account ([steps above](#-start-in-3-steps)) |
-| 🤖 | **Any AI chat** | Filling the template fast from your old CV | ChatGPT, Gemini or Claude, then Overleaf to compile |
-| 💻 | **Locally** | People who already use LaTeX | A LaTeX install, or Docker ([setup below](#-build-locally)) |
+| Way | Best for | You need |
+|:---|:---|:---|
+| **Overleaf** | Most people | A free Overleaf account ([steps above](#-start-in-3-steps)) |
+| **Any AI chat** | Filling the template fast from your old CV | ChatGPT, Gemini or Claude, then Overleaf to compile |
+| **Locally** | People who already use LaTeX | A LaTeX install, or Docker ([setup below](#-build-locally)) |
 
 <a id="-let-ai-fill-it-in"></a>
 **Let AI fill it in.** Copy the whole `resume.tex`, paste it into the chat with this prompt, then paste the code it returns into Overleaf:
@@ -424,9 +424,8 @@ If you put your CV in a public GitHub repository, replace your phone number and 
 
 **Amr Fathy Elsherif** · Network & Cloud Infrastructure
 
-[![GitHub](https://img.shields.io/badge/GitHub-amrelsherif--eng-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/amrelsherif-eng)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-amrelsherif--eng-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/amrelsherif-eng)
-[![Portfolio](https://img.shields.io/badge/Portfolio-amrelsherif--eng.vercel.app-0e7490?style=for-the-badge&logo=vercel&logoColor=white)](https://amrelsherif-eng.vercel.app)
+<a href="https://amrelsherif-eng.vercel.app"><img src="assets/btn-portfolio.svg" height="40" alt="Portfolio"></a>
+<a href="https://www.linkedin.com/in/amrelsherif-eng"><img src="assets/btn-linkedin.svg" height="40" alt="LinkedIn"></a>
 
 *If these templates helped you, a ⭐ on the repo helps others find them.*
 
