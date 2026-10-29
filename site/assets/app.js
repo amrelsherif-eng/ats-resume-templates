@@ -1,5 +1,6 @@
 /* ATS Resume Templates site: template cards, tabs, copy buttons, language switch. */
 'use strict';
+document.documentElement.classList.add('js');
 
 const REPO = 'https://github.com/amrelsherif-eng/ats-resume-templates';
 const RAW = 'https://raw.githubusercontent.com/amrelsherif-eng/ats-resume-templates/main/templates';
@@ -115,6 +116,16 @@ function flash(btn, ok) {
   setTimeout(() => { btn.textContent = btn.dataset.label; btn.classList.remove('done'); delete btn.dataset.label; }, 1800);
 }
 
+function updateTabIndicator(tab) {
+  const tabs = document.querySelector('.tabs');
+  if (!tabs || !tab) return;
+  const list = [...tabs.querySelectorAll('.tab')];
+  const width = tab.offsetWidth;
+  const x = list.slice(0, list.indexOf(tab)).reduce((sum, item) => sum + item.offsetWidth, 0);
+  tabs.style.setProperty('--tab-width', width + 'px');
+  tabs.style.setProperty('--tab-x', x + 'px');
+}
+
 function selectTab(tab, focus) {
   document.querySelectorAll('.tab').forEach(x => {
     const on = x === tab;
@@ -123,6 +134,7 @@ function selectTab(tab, focus) {
     document.getElementById(x.getAttribute('aria-controls')).hidden = !on;
     document.getElementById(x.getAttribute('aria-controls')).classList.toggle('active', on);
   });
+  updateTabIndicator(tab);
   if (focus) tab.focus();
 }
 
@@ -170,6 +182,13 @@ function init() {
 
   const fan = document.getElementById('fan');
   const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
+  if ('IntersectionObserver' in window && !reduceMotion.matches) {
+    const targets = document.querySelectorAll('main section, .hero .wrap > div, .grid .card');
+    targets.forEach((node, index) => { node.classList.add('reveal'); if (node.matches('.grid .card')) node.style.setProperty('--reveal-index', index % 5); });
+    const observer = new IntersectionObserver(entries => entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('is-visible'); observer.unobserve(entry.target); } }), { rootMargin: '0px 0px -6% 0px' });
+    targets.forEach(node => observer.observe(node));
+  }
+
   if (matchMedia('(hover: hover) and (pointer: fine)').matches && !reduceMotion.matches) {
     let frame = 0;
     fan.addEventListener('pointermove', e => {

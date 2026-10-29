@@ -22,7 +22,7 @@ const EN={'nav.menu':'Menu','nav.star':'Star on GitHub','hero.t1':'Your resume,'
   'faq.kicker':'04 · FAQ','faq.title':'Questions','q1':'Is it really free?','a1':'Yes. MIT license: use it, change it, share it. A star on GitHub helps others find it.','q2':'Do I need to know LaTeX?','a2':'No. Use the AI prompt, or edit the text inside the { } on Overleaf. Every section is labelled.','q3':'Can I add a photo or two columns?','a3':'Not recommended. Photos, columns and text boxes often confuse ATS parsers. These templates stay single-column on purpose.','q4':'My field is not here. What now?','a4':'Pick the closest template and rename the sections, or open an issue on GitHub and tell us which track you need.',
   'foot.made':'Made by <a href="https://www.linkedin.com/in/amrelsherif-eng" target="_blank" rel="noopener">Amr Elsherif</a> · based on sb2nov/resume (MIT)','foot.issue':'Request a template'};
 const AR={
- 'nav.menu':'\\u0627\\u0644\\u0642\\u0627\\u0626\\u0645\\u0629',
+ 'nav.menu':'القائمة',
  "nav.star": "ادعم المشروع بنجمة على GitHub",
  "hero.t1": "سيرتك الذاتية،",
  "hero.t2": "صفحة واحدة تُقرأ بالفعل.",
