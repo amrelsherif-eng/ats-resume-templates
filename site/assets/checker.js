@@ -150,7 +150,11 @@ function render() {
   const head = el('div', 'chk-head');
   const summary = el('div', 'chk-sum');
   summary.append(el('p', 'chk-verdict', ui('chk.band.' + band(overall))));
-  summary.append(el('p', 'chk-file', `${doc.fileName} · ${doc.pages} ${ui('chk.pagesWord')}`));
+  // The file name is user-controlled: isolate it and keep it short so it cannot pose as report text.
+  const name = doc.fileName.length > 60 ? doc.fileName.slice(0, 57) + '…' : doc.fileName;
+  const fileLine = el('p', 'chk-file');
+  fileLine.append(el('bdi', 'chk-name', name), ` · ${doc.pages} ${ui('chk.pagesWord')}`);
+  summary.append(fileLine);
   const bars = el('div', 'bars');
   for (const c of CATS) {
     const row = el('div', 'barrow');
