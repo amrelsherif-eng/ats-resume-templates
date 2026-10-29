@@ -35,6 +35,45 @@ def site_url():
         def log_message(self, *_args):
             pass
 
+        # Byte ranges, like GitHub Pages: browsers need them to seek in a video without downloading all of it.
+        def send_head(self):
+            rng = self.headers.get("Range", "")
+            path = Path(self.translate_path(self.path))
+            if not rng.startswith("bytes=") or not path.is_file():
+                return super().send_head()
+            size = path.stat().st_size
+            first, _, last = rng[6:].split(",")[0].partition("-")
+            try:
+                start = int(first) if first else max(0, size - int(last))
+                end = min(int(last), size - 1) if first and last else size - 1
+            except ValueError:
+                return super().send_head()
+            if start >= size or start > end:
+                self.send_error(416)
+                return None
+            f = path.open("rb")
+            f.seek(start)
+            self.send_response(206)
+            self.send_header("Content-Type", self.guess_type(str(path)))
+            self.send_header("Content-Range", f"bytes {start}-{end}/{size}")
+            self.send_header("Content-Length", str(end - start + 1))
+            self.send_header("Accept-Ranges", "bytes")
+            self.end_headers()
+            self._range_left = end - start + 1
+            return f
+
+        def copyfile(self, source, outputfile):
+            left = getattr(self, "_range_left", None)
+            if left is None:
+                return super().copyfile(source, outputfile)
+            self._range_left = None
+            while left > 0:
+                chunk = source.read(min(64 * 1024, left))
+                if not chunk:
+                    break
+                outputfile.write(chunk)
+                left -= len(chunk)
+
     server = ThreadingHTTPServer(("127.0.0.1", 0), Handler)
     thread = threading.Thread(target=server.serve_forever, daemon=True)
     thread.start()

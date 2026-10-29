@@ -10,8 +10,8 @@ const SUPPORT_URL = 'https://github.com/sponsors/amrelsherif-eng';
 // Optional demo video, self-hosted under site/assets/video/. Leave src empty to hide the section.
 // Full tutorial: one video per site language (subtitles are burned in).
 const TUTORIAL = {
-  en: { src: 'assets/video/tutorial-en.mp4', poster: 'assets/video/tutorial-poster-en.webp' },
-  ar: { src: 'assets/video/tutorial-ar.mp4', poster: 'assets/video/tutorial-poster-ar.webp' }
+  en: { src: 'assets/video/tutorial-en.mp4', poster: 'assets/video/tutorial-poster-en.webp', duration: '5:15', chapters: [21.4, 48.8, 142.6, 215.0, 242.4] },
+  ar: { src: 'assets/video/tutorial-ar.mp4', poster: 'assets/video/tutorial-poster-ar.webp', duration: '5:02', chapters: [23.8, 50.9, 140.9, 207.8, 232.7] }
 };
 const VIDEO = { src: 'assets/video/demo.mp4', poster: 'assets/video/demo-poster.webp',
   captionsEn: 'assets/video/demo.en.vtt', captionsAr: 'assets/video/demo.ar.vtt' };
@@ -312,26 +312,42 @@ function init() {
   // The tutorial follows the site language until the viewer makes a manual choice.
   const tut = document.getElementById('tut-video');
   const tutButtons = [...document.querySelectorAll('.tut-lang')];
-  const tutDuration = document.querySelector('.vid-tut .video-duration');
   const tutVoice = document.querySelector('.vid-tut [data-i^="vid.tut.voice"]');
+  const chapters = [...document.querySelectorAll('.tut-ch')];
   let tutNear = false;
   let tutManual = false;
   let tutLang = lang;
   const setTutorial = () => {
     tutButtons.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.tl === tutLang)));
-    tutDuration.dataset.i = tutLang === 'en' ? 'vid.tut.durEn' : 'vid.tut.durAr';
-    tutDuration.textContent = t(tutDuration.dataset.i);
+    document.querySelectorAll('.tut-len').forEach((label, index) => { label.textContent = TUTORIAL[index === 0 ? 'en' : 'ar'].duration; });
     tutVoice.dataset.i = tutLang === 'en' ? 'vid.tut.voiceEn' : 'vid.tut.voiceAr';
     tutVoice.textContent = t(tutVoice.dataset.i);
+    const config = TUTORIAL[tutLang] || TUTORIAL.en;
+    chapters.forEach((button, i) => { button.querySelector('.tut-ch-time').textContent = `${Math.floor(config.chapters[i] / 60)}:${String(Math.floor(config.chapters[i] % 60)).padStart(2, '0')}`; });
     if (!tutNear) return;
-    const c = TUTORIAL[tutLang] || TUTORIAL.en;
+    const c = config;
     if (tut.dataset.lang === tutLang) return;
     const switching = Boolean(tut.dataset.lang);
+    // Mid-video language switch: carry on from the start of the same chapter in the other language.
+    let resumeAt = null;
+    if (switching && tut.currentTime > 0) {
+      const old = TUTORIAL[tut.dataset.lang].chapters;
+      let ch = -1;
+      old.forEach((time, i) => { if (tut.currentTime >= time) ch = i; });
+      resumeAt = { time: ch >= 0 ? c.chapters[ch] : 0, play: !tut.paused };
+    }
     tut.pause();
     tut.replaceChildren(el('source', { src: c.src, type: 'video/mp4' }));
     tut.dataset.lang = tutLang;
     tut.poster = c.poster;
     if (switching) tut.load();
+    if (resumeAt) {
+      tut.addEventListener('loadedmetadata', () => {
+        tut.currentTime = resumeAt.time;
+        if (resumeAt.play) tut.play().catch(() => {});
+      }, { once: true });
+      if (!resumeAt.play) tut.preload = 'metadata';
+    }
   };
   tutButtons.forEach(button => button.addEventListener('click', () => {
     tutManual = true;
@@ -339,6 +355,21 @@ function init() {
     setTutorial();
     tutButtons.forEach(item => item.setAttribute('aria-pressed', String(item === button)));
   }));
+  chapters.forEach(button => button.addEventListener('click', () => {
+    const start = TUTORIAL[tutLang].chapters[Number(button.dataset.ch)];
+    const seekAndPlay = () => { tut.currentTime = start; tut.play().catch(() => {}); };
+    if (!tut.dataset.lang) { tutNear = true; setTutorial(); }
+    if (tut.readyState >= 1) { seekAndPlay(); return; }
+    // preload="none": nothing loads until playback starts, so start it and seek once the metadata arrives.
+    tut.addEventListener('loadedmetadata', () => { tut.currentTime = start; }, { once: true });
+    tut.play().catch(() => {});
+  }));
+  tut.addEventListener('timeupdate', () => {
+    const times = TUTORIAL[tutLang].chapters;
+    let active = -1;
+    times.forEach((time, i) => { if (tut.currentTime >= time) active = i; });
+    chapters.forEach((button, i) => { if (i === active) button.setAttribute('aria-current', 'step'); else button.removeAttribute('aria-current'); });
+  });
   if ('IntersectionObserver' in window) {
     const io = new IntersectionObserver(entries => {
       if (entries.some(e => e.isIntersecting)) { tutNear = true; setTutorial(); io.disconnect(); }

@@ -137,13 +137,15 @@ def test_checker_framing_and_footer_links(page):
 
 def test_video_cards_are_compact_rows_on_mobile(page):
     page.set_viewport_size({"width": 390, "height": 844})
-    # Both playable videos get the full width on phones: the demo at 4:5, the tutorial at 16:9.
+    # The featured tutorial and promo stack at full width on phones.
     section = page.locator("#video .vid-grid").bounding_box()
     demo = page.locator("#video .vid-new .video-frame").bounding_box()
     tut = page.locator("#video .vid-tut .video-frame").bounding_box()
     assert demo["width"] >= section["width"] - 4 and tut["width"] >= section["width"] - 4
     assert abs(demo["height"] / demo["width"] - 1.25) < 0.02
     assert abs(tut["height"] / tut["width"] - 9 / 16) < 0.02
+    assert page.locator(".vid-grid .vid-card").first.get_attribute("class").endswith("vid-tut")
+    assert page.evaluate("() => document.documentElement.scrollWidth <= innerWidth")
     expect(page.locator(".vid-new .video-duration")).to_have_text("0:41")
     page.locator("#lang").click()
     expect(page.locator(".vid-new .video-duration")).to_have_text("0:41")
@@ -391,7 +393,9 @@ def test_support_link_and_demo_video(page, site_url):
     page.locator('.tut-lang[data-tl="ar"]').click()
     expect(tut.locator("source")).to_have_attribute("src", "assets/video/tutorial-ar.mp4")
     expect(tut).to_have_attribute("poster", re.compile(r"tutorial-poster-ar\.webp$"))
-    expect(page.locator(".vid-tut .video-duration")).to_have_text("5:02")
+    # The site is still English, so the chip describes the Arabic track in English.
+    expect(page.locator(".vid-tut .video-chips li")).to_have_text("Egyptian Arabic voice-over + on-screen subtitles")
+    expect(page.locator(".tut-ch-time")).to_have_text(["0:23", "0:50", "2:20", "3:27", "3:52"])
     expect(page.locator('.tut-lang[data-tl="ar"]')).to_have_attribute("aria-pressed", "true")
     expect(page.locator('.tut-lang[data-tl="en"]')).to_have_attribute("aria-pressed", "false")
     expect(page.locator("html")).to_have_attribute("lang", "en")
@@ -409,6 +413,25 @@ def test_tutorial_language_tracks_site_until_manual_choice(page):
     expect(tut.locator("source")).to_have_attribute("src", "assets/video/tutorial-en.mp4")
     expect(tut).to_have_attribute("poster", re.compile(r"tutorial-poster-en\.webp$"))
     expect(page.locator("html")).to_have_attribute("lang", "en")
+
+
+def test_tutorial_layout_and_chapters(page):
+    page.set_viewport_size({"width": 1280, "height": 900})
+    tut = page.locator(".vid-tut").bounding_box()
+    promo = page.locator(".vid-new").bounding_box()
+    assert tut["x"] < promo["x"] and tut["width"] > promo["width"]
+    page.set_viewport_size({"width": 820, "height": 900})
+    promo_frame = page.locator(".vid-new .video-frame").bounding_box()
+    assert abs(promo_frame["width"] - 220) < 2
+    page.set_viewport_size({"width": 390, "height": 844})
+    assert page.evaluate("() => document.documentElement.scrollWidth <= innerWidth")
+    page.locator("#video").scroll_into_view_if_needed()
+    video = page.locator("#tut-video")
+    video.evaluate("v => { v.muted = true; }")
+    page.locator('.tut-ch[data-ch="2"]').click()
+    page.wait_for_function("() => document.querySelector('#tut-video').currentTime >= 140", timeout=10000)
+    styles = page.locator('.tut-lang[aria-pressed="true"]').evaluate("e => [getComputedStyle(e).backgroundColor, getComputedStyle(e).color]")
+    assert styles == ["rgb(98, 201, 212)", "rgb(6, 16, 21)"]
 
 
 def test_local_link_hides_tab_indicator(page):
