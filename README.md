@@ -517,6 +517,13 @@ Release history and template improvements across versions.
 
 These templates, the website and the ATS checker are free and stay free. If they helped you land an interview, you can support the work on **[GitHub Sponsors](https://github.com/sponsors/amrelsherif-eng)**. A ⭐ on the repo and sharing it with a friend help just as much.
 
+### 🌟 Supporters
+
+Monthly backers ($5+ a month) are thanked here by name.
+
+<!-- When the first $5+ monthly backer joins, replace the next line with their name or @handle. Add more backers comma-separated. -->
+*No supporters yet. [Be the first!](https://github.com/sponsors/amrelsherif-eng)* 💙
+
 ---
 
 <a id="-contributing"></a>
