@@ -13,6 +13,8 @@
  * @param {File|Blob} file PDF bytes and file metadata.
  * @returns {Promise<Doc>}
  */
+import { markHidden, offPageRuns } from './hidden.js';
+
 const MAX_ITEMS_PER_PAGE = 3000;
 
 export async function extract(pdfjs, file) {
@@ -24,6 +26,8 @@ export async function extract(pdfjs, file) {
     const fonts = new Set();
     const links = new Set();
     let images = 0;
+    let hiddenChecked = true;
+    const offPage = [];
     let width = 0;
     let height = 0;
     const pageLimit = Math.min(pdf.numPages, 10);
@@ -57,7 +61,13 @@ export async function extract(pdfjs, file) {
           text: str, x: transform[4], y: viewport.height - transform[5] - h,
           w: item.width, h, font, size,
           baseline: viewport.height - transform[5],
+          em: Math.hypot(transform[2], transform[3]), t: transform,
         });
+      }
+      try {
+        if (!(await markHidden(page, viewport, pageItems))) hiddenChecked = false;
+      } catch {
+        hiddenChecked = false; // a page pdf.js cannot draw: skip the hidden-text check, never the whole file
       }
 
       // Greedily place each text run on the closest compatible baseline.
@@ -105,11 +115,13 @@ export async function extract(pdfjs, file) {
         lines.push({
           page: pageNumber, y: Math.min(...line.items.map(part => part.y)),
           h: Math.max(...line.items.map(part => part.h || 0)),
-          x: line.items[0].x, right, rtl, text, items: line.items.map(({ baseline, ...part }) => part), bullet,
+          x: line.items[0].x, right, rtl, text, items: line.items.map(({ baseline, t, ...part }) => part), bullet,
         });
       }
 
       const operators = await page.getOperatorList();
+      // Skipped on crafted pages over the item cap: their visible text past the cap is not in `content` here.
+      if (pdfjs.OPS.showText !== undefined && content.items.length <= MAX_ITEMS_PER_PAGE) offPage.push(...offPageRuns(operators, pdfjs.OPS, content.items));
       for (const name of ['paintImageXObject', 'paintInlineImageXObject', 'paintImageMaskXObject']) {
         const op = pdfjs.OPS[name];
         if (op !== undefined) images += operators.fnArray.filter(fn => fn === op).length;
@@ -129,7 +141,7 @@ export async function extract(pdfjs, file) {
     }
     return {
       pages: pdf.numPages, width, height, lines, text: linesToText(lines), streamText: stream.join(''),
-      fonts: [...fonts].sort(), images, links: [...links],
+      fonts: [...fonts].sort(), images, links: [...links], hiddenChecked, offPage,
       fileName: file.name || '', fileSize: file.size, meta,
     };
   } finally {
