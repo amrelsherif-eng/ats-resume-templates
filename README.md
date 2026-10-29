@@ -11,7 +11,7 @@
   <a href="#-start-in-3-steps"><img src="assets/btn-overleaf.svg" height="44" alt="Open in Overleaf"></a>
   <a href="https://amrelsherif-eng.github.io/ats-resume-templates/#video"><img src="assets/btn-video.svg" height="44" alt="Video Tutorials"></a>
   <a href="#-pick-your-template"><img src="assets/btn-pdf.svg" height="44" alt="Download PDFs"></a>
-  <a href="https://github.com/amrelsherif-eng/ats-resume-templates"><img src="assets/btn-star.svg" height="44" alt="Star the repo"></a>
+  <a href="https://github.com/sponsors/amrelsherif-eng"><img src="assets/btn-sponsor.svg" height="44" alt="Sponsor on GitHub"></a>
 </p>
 
 [![Build templates](https://github.com/amrelsherif-eng/ats-resume-templates/actions/workflows/build.yml/badge.svg)](https://github.com/amrelsherif-eng/ats-resume-templates/actions/workflows/build.yml)
