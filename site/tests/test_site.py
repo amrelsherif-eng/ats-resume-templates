@@ -154,9 +154,9 @@ def test_video_cards_are_compact_rows_on_mobile(page):
     assert abs(tut["height"] / tut["width"] - 9 / 16) < 0.02
     assert page.locator(".vid-grid .vid-card").first.get_attribute("class").endswith("vid-tut")
     assert page.evaluate("() => document.documentElement.scrollWidth <= innerWidth")
-    expect(page.locator(".vid-new .video-duration")).to_have_text("0:41")
+    expect(page.locator(".vid-new .video-duration")).to_have_text("0:38")
     switch_lang(page)
-    expect(page.locator(".vid-new .video-duration")).to_have_text("0:41")
+    expect(page.locator(".vid-new .video-duration")).to_have_text("0:38")
 
 
 def capture_clipboard(page):
@@ -360,7 +360,8 @@ def test_support_link_and_demo_video(page, site_url):
     expect(page.locator("#support")).to_be_visible()
     expect(page.locator("#support")).to_have_attribute("href", "https://github.com/sponsors/amrelsherif-eng")
     # The demo video is configured in app.js: it replaces the "coming soon" placeholder,
-    # is served from this site (CSP media-src 'self'), never preloads, and has EN + AR captions.
+    # is served from this site (CSP media-src 'self'), never preloads, and has an Arabic subtitle track
+    # (no voice-over and the English text is on screen, so no English track).
     video = page.locator("#demo-video")
     # The poster is lazy: nothing under assets/video/ loads with the first screen.
     assert video.get_attribute("poster") is None
@@ -373,16 +374,17 @@ def test_support_link_and_demo_video(page, site_url):
     src = video.locator("source").get_attribute("src")
     assert src == "assets/video/demo.mp4"
     tracks = video.locator("track")
-    expect(tracks).to_have_count(2)
-    assert sorted(t.get_attribute("srclang") for t in tracks.all()) == ["ar", "en"]
+    expect(tracks).to_have_count(1)
+    expect(tracks).to_have_attribute("srclang", "ar")
+    expect(tracks).to_have_attribute("kind", "subtitles")
     base = site_url.rstrip("/") + "/"
     mp4 = page.request.get(base + src)
     assert mp4.status == 200
     assert mp4.headers["content-type"].startswith("video/mp4")
     assert len(mp4.body()) < 6 * 1024 * 1024, "keep the site video small for performance"
-    for name in ("demo-poster.webp", "demo.en.vtt", "demo.ar.vtt"):
+    for name in ("demo-poster.webp", "demo.ar.vtt"):
         assert page.request.get(base + "assets/video/" + name).status == 200
-    assert page.request.get(base + "assets/video/demo.en.vtt").text().startswith("WEBVTT")
+    assert page.request.get(base + "assets/video/demo.ar.vtt").text().startswith("WEBVTT")
     # The full tutorial follows the site language and is self-hosted too.
     tut = page.locator("#tut-video")
     expect(tut).to_be_visible()
