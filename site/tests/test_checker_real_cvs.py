@@ -129,3 +129,19 @@ def test_weak_cv_is_still_caught(page, browser, tmp_path):
     assert score_of(page) < 80
     for text in ["passive openers", "first-person pronouns", "buzzwords", "begin with an action verb"]:
         expect(issue(page, text).first).to_be_visible()
+
+
+@pytest.mark.parametrize("dates,mixed", [
+    (("Sept 2023 – Present", "Feb 2021 – June 2023"), False),  # AP style: March-July are never shortened
+    (("March 2022 – Present", "2020-01 – 2022-02"), True),     # spelled-out month next to ISO dates
+])
+def test_date_styles(page, browser, tmp_path, dates, mixed):
+    body = (HEADER + "<h2>Experience</h2><p>Sales Representative, Delta Trading</p>" + f"<p>{dates[0]}</p>"
+            + bullets(["Closed 120 new contracts worth 4M EGP in two years",
+                       "Grew the Alexandria territory revenue by 35% within 18 months"])
+            + "<p>Sales Associate, Nile Retail</p>" + f"<p>{dates[1]}</p>"
+            + bullets(["Served 60 customers a day and kept a 4.8 rating"])
+            + "<h2>Education</h2><p>BCom, Cairo University, 2020</p><h2>Skills</h2><p>CRM, Excel, negotiation</p>")
+    upload(page, cv_pdf(browser, tmp_path, "Karim-Mostafa-CV.pdf", body))
+    score_of(page)
+    expect(issue(page, "Mixed date formats")).to_have_count(1 if mixed else 0)

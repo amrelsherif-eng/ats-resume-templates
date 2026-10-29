@@ -442,9 +442,14 @@ export function contentIssues(doc, opts = {}) {
     : { id: 'repeated-verbs', cat: 'content', level: 'ok', key: 'r.repeat-ok', weight: 2 });
 
   // 10. Date formats
+  // AP style mixes "Sept 2020" with "June 2023" (March-July are never shortened), so when short months
+  // are present, March-July spelled out are not a second format. Without short months, every full month counts.
+  const hasShortMonth = /\b(?:Jan|Feb|Mar|Apr|Jun|Jul|Aug|Sep|Sept|Oct|Nov|Dec)\.?\s+(?:19|20)\d{2}\b/i.test(text);
   const datePatterns = [
     /\b(?:Jan|Feb|Mar|Apr|Jun|Jul|Aug|Sep|Sept|Oct|Nov|Dec)\.?\s+(?:19|20)\d{2}\b/gi,
-    /\b(?:January|February|August|September|October|November|December)\s+(?:19|20)\d{2}\b/gi, // March-July have no real short form
+    hasShortMonth
+      ? /\b(?:January|February|August|September|October|November|December)\s+(?:19|20)\d{2}\b/gi
+      : /\b(?:January|February|March|April|May|June|July|August|September|October|November|December)\s+(?:19|20)\d{2}\b/gi,
     /\b(?:0?[1-9]|1[0-2])[\/.](?:19|20)\d{2}\b/g,
     /\b(?:19|20)\d{2}-(?:0[1-9]|1[0-2])\b/g
   ];
