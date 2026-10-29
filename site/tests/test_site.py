@@ -333,3 +333,13 @@ def test_scroll_reveal_never_leaves_content_hidden(browser, site_url):
     assert page.evaluate("document.querySelectorAll('.reveal:not(.is-visible)').length") == 0
     assert page.evaluate("document.querySelectorAll('.reveal').length") > 0
     page.close()
+
+
+def test_english_page_does_not_download_arabic_font(browser, site_url):
+    page = browser.new_page()
+    fonts = []
+    page.on("request", lambda r: fonts.append(r.url) if r.url.endswith(".woff2") else None)
+    page.goto(site_url + "/")
+    page.wait_for_load_state("networkidle")
+    assert fonts and not [u for u in fonts if "arabic" in u], fonts
+    page.close()
