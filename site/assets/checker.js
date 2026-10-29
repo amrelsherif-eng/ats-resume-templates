@@ -6,6 +6,7 @@
 import { extract } from './ats/extract.js';
 import { layoutIssues, I18N_EN as LAYOUT_EN } from './ats/layout.js';
 import { contentIssues, I18N_EN as RULES_EN } from './ats/rules.js';
+import { hiddenIssues, I18N_EN as HIDDEN_EN } from './ats/hidden.js';
 import { CHECK_AR } from './ats/i18n-ar.js';
 
 const MAX_BYTES = 25 * 1024 * 1024;
@@ -15,7 +16,7 @@ const CATS = [
   { id: 'contact', weight: 0.25 }
 ];
 const LEVEL_ORDER = { fail: 0, warn: 1, info: 2, ok: 3 };
-const CHECK_EN = { ...LAYOUT_EN, ...RULES_EN };
+const CHECK_EN = { ...LAYOUT_EN, ...RULES_EN, ...HIDDEN_EN };
 
 const drop = document.getElementById('chk-drop');
 const input = document.getElementById('chk-file');
@@ -72,6 +73,8 @@ function score(issues) {
   // A layout that can scramble the reading order (columns, out-of-order blocks) is never "Excellent".
   if (issues.some(i => (i.id === 'columns' || i.id === 'reading-order') && i.level !== 'ok')) overall = Math.min(overall, 84);
   // A resume an ATS cannot read at all should never look "good".
+  // Hidden text or instructions aimed at AI screeners can get an application rejected outright.
+  if (issues.some(i => (i.id === 'hidden-text' || i.id === 'prompt-injection') && i.level === 'fail')) overall = Math.min(overall, 40);
   const unreadable = issues.some(i => i.id === 'selectable-text' && i.level === 'fail');
   return { per, overall: unreadable ? Math.min(overall, 25) : overall };
 }
@@ -147,7 +150,7 @@ function render() {
   }
   if (!lastDoc) return;
   const doc = lastDoc;
-  const issues = [...layoutIssues(doc, { level }), ...contentIssues(doc, { level })]
+  const issues = [...layoutIssues(doc, { level }), ...contentIssues(doc, { level }), ...hiddenIssues(doc)]
     .sort((a, b) => LEVEL_ORDER[a.level] - LEVEL_ORDER[b.level] || b.weight - a.weight);
   const { per, overall } = score(issues);
 
