@@ -173,7 +173,7 @@ def test_checker_two_columns(page, tmp_path):
     doc.save(path)
     doc.close()
     upload(page, path)
-    score_of(page)
+    assert score_of(page) < 85  # columns can scramble the reading order: never "Excellent"
     expect(page.locator("#chk-out .issue.warn", has_text=re.compile("column", re.I))).to_have_count(1)
 
 
@@ -182,8 +182,9 @@ def test_checker_weak_content(page, tmp_path):
         "- Responsible for helping users with computer problems in the office every day" for _ in range(8)
     ] + ["- I am a hard-working team player", "Education", "BSc, Example University", "Skills", "Windows"]
     upload(page, make_pdf(tmp_path / "weak.pdf", 1, lines))
-    score_of(page)
-    for pattern in ["passive openers", "pronouns", "buzzwords"]:
+    # Clean formatting must not hide weak content (Resume Worded scored a similar CV 20/100).
+    assert score_of(page) < 70
+    for pattern in ["passive openers", "pronouns", "buzzwords", "word for word"]:
         expect(page.locator("#chk-out .issue", has_text=re.compile(pattern, re.I)).first).to_be_visible()
 
 
@@ -269,7 +270,8 @@ def test_unconfigured_features_stay_hidden(page):
     # The demo video shows only when configured in app.js; the support link points at GitHub Sponsors.
     expect(page.locator("#support")).to_be_visible()
     expect(page.locator("#support")).to_have_attribute("href", "https://github.com/sponsors/amrelsherif-eng")
-    expect(page.locator("#video")).to_be_hidden()
+    expect(page.locator("#video-frame")).to_be_hidden()
+    expect(page.locator("#video .li-video")).to_have_attribute("href", re.compile(r"^https://www\.linkedin\.com/"))
     assert page.locator("footer nav").first.evaluate("n => getComputedStyle(n).position") == "static"
 
 
@@ -317,3 +319,17 @@ def test_page_weight_budget(browser, site_url):
     total = sum(sizes)
     assert total < 1_600_000, f"first load is {total / 1e6:.2f} MB"
     assert hosts <= ALLOWED_HOSTS, hosts
+
+
+def test_scroll_reveal_never_leaves_content_hidden(browser, site_url):
+    # Motion on: every section that fades in must end up visible once the user scrolls past it.
+    page = browser.new_page(reduced_motion="no-preference", viewport={"width": 1280, "height": 800})
+    page.goto(site_url + "/")
+    height = page.evaluate("document.documentElement.scrollHeight")
+    for y in range(0, height + 800, 400):
+        page.mouse.wheel(0, 400)
+        page.wait_for_timeout(60)
+    page.wait_for_timeout(900)
+    assert page.evaluate("document.querySelectorAll('.reveal:not(.is-visible)').length") == 0
+    assert page.evaluate("document.querySelectorAll('.reveal').length") > 0
+    page.close()

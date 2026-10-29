@@ -288,42 +288,47 @@ html[dir=rtl] h1{
   position:relative;
   min-width:0;
   height:430px;
-  perspective:1000px;
-  transform-style:preserve-3d;
-  --tilt-x:0deg;
-  --tilt-y:0deg;
-  transition:transform .25s var(--ease);
-  transform:rotateX(var(--tilt-x)) rotateY(var(--tilt-y))}
+  --px:0px;
+  --py:0px}
 .fan .page{
   position:absolute;
-  top:42px;
+  top:46px;
   left:50%;
-  width:clamp(145px,18vw,220px);
-  height:300px;
+  width:clamp(150px,17vw,214px);
+  aspect-ratio:850/1100;
   overflow:hidden;
-  border:1px solid #344351;
-  border-radius:8px;
-  background:#19232d;
-  box-shadow:0 24px 60px #0008}
+  border-radius:10px;
+  background:#fff;
+  box-shadow:0 1px 0 #ffffff26 inset,0 30px 60px -18px #000c,0 0 0 1px #0000004d;
+  --d:1;
+  translate:calc(var(--px) * var(--d)) calc(var(--py) * var(--d));
+  transition:translate .5s var(--ease)}
+.fan .page::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(180deg,#0b1016 0%,#0b1016cc 100%);
+  opacity:var(--shade,0);
+  pointer-events:none}
 .fan .page img{
   width:100%;
   height:auto;
   display:block}
 .fan .page:nth-child(1){
-  transform:translateX(-130%) rotate(-15deg);
-  opacity:.67}
+  transform:translateX(-118%) translateY(26px) rotate(-11deg);
+  --shade:.62;--d:.35;z-index:1}
 .fan .page:nth-child(2){
-  transform:translateX(-91%) rotate(-8deg);
-  opacity:.82}
+  transform:translateX(-86%) translateY(10px) rotate(-5.5deg);
+  --shade:.38;--d:.65;z-index:2}
 .fan .page:nth-child(3){
-  transform:translateX(-50%) rotate(0);
-  z-index:3}
+  transform:translateX(-50%);
+  --d:1.15;z-index:3}
 .fan .page:nth-child(4){
-  transform:translateX(-9%) rotate(8deg);
-  opacity:.82}
+  transform:translateX(-14%) translateY(10px) rotate(5.5deg);
+  --shade:.38;--d:.65;z-index:2}
 .fan .page:nth-child(5){
-  transform:translateX(30%) rotate(15deg);
-  opacity:.67}
+  transform:translateX(18%) translateY(26px) rotate(11deg);
+  --shade:.62;--d:.35;z-index:1}
 .fan .scan{
   position:absolute;
   inset:0 0 auto;
@@ -343,6 +348,9 @@ html[dir=rtl] h1{
   white-space:nowrap;
   box-shadow:0 10px 28px #0006;
   animation:badge-in .6s var(--ease) both}
+.fan .badge{
+  direction:ltr;
+  unicode-bidi:isolate}
 .fan .badge b{
   color:var(--green);
   font-weight:600}
@@ -350,8 +358,8 @@ html[dir=rtl] h1{
   top:10%;
   inset-inline-start:0}
 .fan .b2{
-  top:43%;
-  inset-inline-end:-3%}
+  top:46%;
+  inset-inline-end:0}
 .fan .b3{
   bottom:18%;
   inset-inline-start:4%}
@@ -380,8 +388,7 @@ to{
   margin:4px auto 0}
 .fan .page{
   top:26px;
-  height:280px;
-  width:clamp(145px,22vw,210px)}
+  width:clamp(150px,24vw,214px)}
 }
 @media(max-width:600px){
   .hero{
@@ -389,16 +396,15 @@ to{
 .fan{
   height:285px}
 .fan .page{
-  height:225px;
-  width:145px}
+  width:148px}
 .fan .page:nth-child(1){
-  transform:translateX(-125%) rotate(-15deg)}
+  transform:translateX(-112%) translateY(20px) rotate(-10deg)}
 .fan .page:nth-child(2){
-  transform:translateX(-88%) rotate(-8deg)}
+  transform:translateX(-84%) translateY(8px) rotate(-5deg)}
 .fan .page:nth-child(4){
-  transform:translateX(-12%) rotate(8deg)}
+  transform:translateX(-16%) translateY(8px) rotate(5deg)}
 .fan .page:nth-child(5){
-  transform:translateX(25%) rotate(15deg)}
+  transform:translateX(12%) translateY(20px) rotate(10deg)}
 .fan .badge{
   display:none}
 .stats{
@@ -406,6 +412,13 @@ to{
 .stat{
   max-width:30%}
 }
+
+/* Arabic letters join: letter-spacing breaks them, and mono labels read better in the Arabic face. */
+html[dir=rtl] body *{
+  letter-spacing:0}
+html[dir=rtl] .kicker{
+  font-family:var(--sans);
+  font-size:13px}
 
 /* Sections and gallery */
 section{
@@ -1258,6 +1271,46 @@ footer nav{
   width:100%;
   height:100%;
   display:block}
+.video-frame+.li-video{
+  margin-top:16px}
+.li-video{
+  display:flex;
+  align-items:center;
+  gap:16px;
+  max-width:640px;
+  padding:16px 18px;
+  border:1px solid var(--line);
+  border-radius:var(--r);
+  background:var(--surface);
+  color:var(--text);
+  text-decoration:none;
+  transition:border-color .2s var(--ease),transform .2s var(--ease)}
+.li-video:hover{
+  border-color:var(--accent);
+  transform:translateY(-2px)}
+.li-play{
+  flex:none;
+  display:grid;
+  place-items:center;
+  width:48px;
+  height:48px;
+  border-radius:50%;
+  background:var(--accent);
+  color:#071216}
+.li-text{
+  display:grid;
+  gap:3px;
+  min-width:0}
+.li-text small{
+  color:var(--muted);
+  font-size:13px}
+.li-go{
+  margin-inline-start:auto;
+  color:var(--muted);
+  font-size:20px}
+html[dir=rtl] .li-go{
+  transform:scaleX(-1)}
+@media(prefers-reduced-motion:reduce){.li-video{transition:none}.li-video:hover{transform:none}}
 .notfound{
   display:flex;
   min-height:100vh;
@@ -1287,7 +1340,7 @@ html[dir=rtl] .stat dd{
 /* Phase 2 polish */
 @media(min-width:1080px){.menu-toggle{display:none!important}.navlinks{display:flex!important;position:static}}
 @media(max-width:1079px){nav .wrap{flex-wrap:nowrap}.menu-toggle{display:inline-flex!important}.navlinks{display:none}.navlinks.open{display:flex}}
-.fan{overflow:clip;contain:paint}
+.hero{overflow-x:clip}
 .tabs{position:relative;isolation:isolate;width:max-content;max-width:100%;border:1px solid var(--line);border-radius:999px;background:var(--surface);}
 .tabs:before{content:"";position:absolute;z-index:-1;inset:5px auto 5px 5px;width:var(--tab-width,33.333%);border-radius:999px;background:var(--surface-3);box-shadow:0 0 0 1px var(--line);transform:translateX(var(--tab-x,0));transition:transform .22s var(--ease),width .22s var(--ease)}
 html[dir=rtl] .tabs:before{inset-inline-start:5px;transform:translateX(calc(-1 * var(--tab-x,0)))}

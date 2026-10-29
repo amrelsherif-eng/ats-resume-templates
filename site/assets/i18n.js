@@ -264,13 +264,17 @@ Object.assign(AR, {
 
 Object.assign(EN, {
   'vid.kicker': 'Watch',
-  'vid.title': 'See it in one minute',
-  'vid.sub': 'Pick a template, edit it three ways, and check the result.'
+  'vid.title': 'Watch how it works',
+  'vid.sub': 'Pick a template, edit it three ways, and check the result.',
+  'vid.li.t': 'Watch the 2-minute walkthrough on LinkedIn',
+  'vid.li.s': 'Spoken in Arabic · three ways to edit, step by step · 119 reactions'
 });
 Object.assign(AR, {
   'vid.kicker': 'شاهد',
-  'vid.title': 'شاهدها في دقيقة واحدة',
-  'vid.sub': 'اختر نموذجاً، عدّله بثلاث طرق، وافحص النتيجة.'
+  'vid.title': 'شاهد طريقة الاستخدام',
+  'vid.sub': 'اختر نموذجاً، عدّله بثلاث طرق، وافحص النتيجة.',
+  'vid.li.t': 'شاهد الشرح في دقيقتين على لينكدإن',
+  'vid.li.s': 'بالعربي · ثلاث طرق للتعديل خطوة بخطوة · 119 تفاعل'
 });
 
 Object.assign(EN, { 'chk.toFix1': '1 thing to improve', 'chk.passed1': '1 check passed' });

@@ -20,6 +20,18 @@ BASE_BULLETS = [
     "Mentored 5 analysts and delivered 14 executive reviews on schedule each quarter",
 ]
 
+# Page 2 of multi-page CVs gets its own lines: a real CV never repeats page 1 word for word.
+PROJECT_BULLETS = [
+    "Shipped an open-source log parser that processes 2 GB per minute on a single core",
+    "Cut CI pipeline time from 22 to 9 minutes by caching builds across 40 repositories",
+    "Wrote a capacity model that kept 3 data centers under 70% load through peak season",
+    "Presented 6 internal talks on observability, attended by 300+ engineers in total",
+    "Rebuilt the billing export in Go and lowered memory use by 64% at the same throughput",
+    "Coordinated a 4-team incident review program that reduced repeat outages by 45%",
+    "Designed an on-call handbook adopted by 11 teams within one quarter of release",
+    "Prototyped a search service that answered 95% of queries in under 120 ms",
+]
+
 
 def _html(name="Sara Ahmed", heading="Work Experience", font="Arial", pages=1,
           bullet="•", table=False, photo=False, columns=False, positioned=False,
@@ -90,7 +102,7 @@ def _html(name="Sara Ahmed", heading="Work Experience", font="Arial", pages=1,
 
     extra_pages = "".join(
         '<div style="break-before:page"><h2>Selected Projects</h2>'
-        + "".join(f"<p>{bullet} {line}</p>" for line in BASE_BULLETS)
+        + "".join(f"<p>{bullet} {line}</p>" for line in PROJECT_BULLETS)
         + "</div>"
         for _ in range(max(0, pages - 1))
     )
