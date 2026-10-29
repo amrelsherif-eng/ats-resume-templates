@@ -119,14 +119,18 @@ function issueRow(i) {
   return d;
 }
 
+// Issues an AI can fix by rewriting the text. Not file-level ones (the 'parse' group: file name,
+// size, scan, layout) and not missing contact details (email, phone, links): only you can add those.
+const textIssues = issues => issues.filter(i => i.level !== 'ok' && i.cat !== 'parse' && !i.id.startsWith('contact-'));
+
 function aiPrompt(issues, doc) {
-  const problems = issues.filter(i => i.level === 'fail' || i.level === 'warn')
+  const problems = textIssues(issues)
     .map(i => `- ${CHECK_EN[i.key] ? fill(CHECK_EN[i.key], i.vars) : i.key}${i.examples?.length ? ` (e.g. "${i.examples[0]}")` : ''}`);
   return [
     'Improve my resume text below. Keep it truthful: do not invent numbers, tools or results; ask me for any missing numbers.',
     'Start every bullet with a strong action verb, add measurable results where I can provide them, keep it to the right length for my experience.',
     'An ATS check found these issues:',
-    ...(problems.length ? problems : ['- (no major issues; polish wording only)']),
+    ...problems,
     '',
     'Return the improved bullets section by section.',
     '',
@@ -172,7 +176,11 @@ function render() {
   const problems = issues.filter(i => i.level !== 'ok');
   const passed = issues.filter(i => i.level === 'ok');
   const list = el('div', 'issues');
-  list.append(el('h3', 'issues-h', problems.length ? ui(problems.length === 1 ? 'chk.toFix1' : 'chk.toFix', { n: problems.length }) : ui('chk.allGood')));
+  // Only small tips (info) left: say so, instead of "things to improve" under a top score.
+  const onlyTips = problems.length && problems.every(i => i.level === 'info');
+  const heading = !problems.length ? ui('chk.allGood')
+    : ui((onlyTips ? 'chk.tips' : 'chk.toFix') + (problems.length === 1 ? '1' : ''), { n: problems.length });
+  list.append(el('h3', 'issues-h', heading));
   for (const category of CATS) {
     const group = problems.filter(i => i.cat === category.id);
     if (!group.length) continue;
@@ -208,8 +216,8 @@ function render() {
   text.append(el('summary', '', ui('chk.preview')));
   text.append(el('pre', '', doc.streamText.slice(0, 6000)));
 
-  // Nothing to fix: no fix-it prompt to offer.
-  const parts = problems.length ? [head, list, ok, tools, text] : [head, list, ok, text];
+  // The fix-it prompt only makes sense when there is text for an AI to fix.
+  const parts = textIssues(issues).length ? [head, list, ok, tools, text] : [head, list, ok, text];
   out.replaceChildren(...parts, el('p', 'chk-private', ui('chk.private')));
 }
 
