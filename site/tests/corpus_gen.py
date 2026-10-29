@@ -52,7 +52,8 @@ def _html(name="Sara Ahmed", heading="Work Experience", font="Arial", pages=1,
 
     if icon_font:
         contact_block = (
-            '<p><span style="font-family:\'Segoe MDL2 Assets\'">&#xE700;</span> | '
+            # A Windows icon-font glyph plus common Canva-style symbols that Linux CI fonts can render too.
+            '<p><span style="font-family:\'Segoe MDL2 Assets\'">&#xE700;</span> &#x2709; &#x260E; &#x2605; | '
             f"{contact}</p>"
         )
     elif table:
