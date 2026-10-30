@@ -110,7 +110,7 @@ export function layoutIssues(doc, opts = {}) {
     const items = [...(line.items || [])].sort((a, b) => a.x - b.x);
     for (let i = 1; i < items.length; i += 1) {
       const gap = items[i].x - (items[i - 1].x + items[i - 1].w);
-      if (gap < 0.08 * W || items[i].x < 0.3 * W) continue;
+      if (gap < 0.08 * W || items[i].x < 0.25 * W) continue;
       const rightText = items.slice(i).map(it => it.text).join(' ').trim();
       if (!dateOrPlace(rightText)) return true;
     }
@@ -132,7 +132,16 @@ export function layoutIssues(doc, opts = {}) {
   // Runs of 4+ symbols look like broken text, except divider lines (\u2500\u2500\u2500\u2500 ---- ....) and "://".
   const symbolRuns = (text.match(/(?:[^\p{L}\p{N}\s]){4,}/gu) || [])
     .filter(m => !/^[-_=.\u00B7\u2022*~\u2500\u2501\u2550\u2014\u2013|]+$/u.test(m) && !/^[^:]*:\/\/[^:]*$/u.test(m));
-  const bad = (text.match(/\(cid:/gi) || []).length + (text.match(/\uFFFD/g) || []).length + symbolRuns.length;
+  // A font with no Unicode map (subset font, no ToUnicode) gives shifted letters with no spaces:
+  // "6DOPD$GHO" for "Salma Adel". Real Latin-script text has about 12-20% spaces and few 20+ letter runs.
+  const latin = (text.match(/[A-Za-z]/g) || []).length;
+  const arabic = (text.match(/[\u0600-\u06FF]/g) || []).length;
+  const tokens = text.split(/\s+/).filter(w => /[A-Za-z]/.test(w));
+  const runOn = tokens.filter(w => w.length >= 20 && !/[@/.]/.test(w)).length;
+  const noUnicodeMap = latin >= 150 && latin > 2 * arabic &&
+    ((text.match(/ /g) || []).length / text.length < 0.03 && (text.match(/ /g) || []).length < (text.match(/\n/g) || []).length || runOn / tokens.length > 0.2);
+  const bad = (text.match(/\(cid:/gi) || []).length + (text.match(/\uFFFD/g) || []).length + symbolRuns.length +
+    (noUnicodeMap ? 4 : 0);
   out.push(issue('garbled-text', bad > 3 ? 'fail' : 'ok', bad > 3 ? 'l.garbled' : 'l.garbled-ok', 9));
   out.push(issue('images', doc.images > 0 ? 'info' : 'ok', doc.images > 0 ? 'l.images' : 'l.images-ok', 3, { n: doc.images }));
 
