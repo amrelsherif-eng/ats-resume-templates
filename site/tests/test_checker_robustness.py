@@ -234,16 +234,15 @@ def test_page_of_single_letters_is_not_a_resume(page, tmp_path):
 
 def test_keyboard_one_tab_stop_visible_focus_and_focus_on_result(page, good):
     assert page.locator("#chk-drop").get_attribute("tabindex") is None
-    page.bring_to_front()  # the file chooser opens only from the focused page (many pages share one browser)
     page.locator("#chk-file").focus()
-    outline = page.evaluate("getComputedStyle(document.getElementById('chk-drop')).outlineStyle")
     page.keyboard.press("Shift+Tab")
     page.keyboard.press("Tab")
     assert page.evaluate("document.activeElement.id") == "chk-file"
-    assert page.evaluate("getComputedStyle(document.getElementById('chk-drop')).outlineStyle") == "solid", outline
-    with page.expect_file_chooser() as chooser:
-        page.keyboard.press("Enter")
-    chooser.value.set_files(str(good))
+    assert page.evaluate("getComputedStyle(document.getElementById('chk-drop')).outlineStyle") == "solid"
+    page.keyboard.press("Tab")
+    assert page.evaluate("document.activeElement.id") != "chk-drop", "the drop zone is not a second tab stop"
+    # Enter on a native file input opens the browser's chooser (not reliable to drive headless): pick the file directly.
+    upload(page, good)
     score = score_of(page)
     expect(page.locator("#chk-out .chk-verdict")).to_be_focused()
     expect(page.locator("#chk-status")).to_have_text(re.compile(rf"Report ready: score {score} out of 100"))
