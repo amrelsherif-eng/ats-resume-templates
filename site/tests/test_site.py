@@ -154,7 +154,7 @@ def test_checker_scope_block_renders_in_english_and_arabic(page):
     assert "you may not have noticed" in scope.locator("li").nth(4).inner_text()
     switch_lang(page)
     scope = page.locator("#check .chk-scope")
-    expect(scope.get_by_role("heading")).to_contain_text("ال checker")
+    expect(scope.get_by_role("heading")).to_contain_text("الأداة بتفحص إيه؟")
     assert "ماخدتش بالك" in scope.locator("li").nth(4).inner_text()
     assert page.evaluate("document.documentElement.dir") == "rtl"
 
