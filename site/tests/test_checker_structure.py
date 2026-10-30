@@ -232,6 +232,7 @@ def test_contact_in_a_picture_is_explained(page, browser, tmp_path):
     report(page, browser, tmp_path, head + SUMMARY + experience() + TAIL)
     expect(issue(page, "email address in the text. If it is in a picture")).to_have_count(1)
     expect(issue(page, "phone number in the text. If it is in a picture")).to_have_count(1)
+    assert score_of(page) <= 79  # no email the ATS can read: never "Excellent"
 
 
 def test_a_photo_next_to_text_contact_is_fine(page, browser, tmp_path):
