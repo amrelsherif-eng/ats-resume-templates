@@ -5,19 +5,17 @@
  */
 import { extract } from './ats/extract.js';
 import { layoutIssues, I18N_EN as LAYOUT_EN } from './ats/layout.js';
+import { score, band, CATS } from './ats/score.js';
 import { contentIssues, I18N_EN as RULES_EN } from './ats/rules.js';
 import { hiddenIssues, I18N_EN as HIDDEN_EN } from './ats/hidden.js';
 import { structureIssues, I18N_EN as STRUCTURE_EN } from './ats/structure.js';
+import { robustIssues, I18N_EN as ROBUST_EN } from './ats/robust.js';
 import { CHECK_AR, SECTION_AR } from './ats/i18n-ar.js';
 
 const MAX_BYTES = 25 * 1024 * 1024;
-const CATS = [
-  { id: 'parse', weight: 0.4 },
-  { id: 'content', weight: 0.35 },
-  { id: 'contact', weight: 0.25 }
-];
+const TIMEOUT_MS = 90000;
 const LEVEL_ORDER = { fail: 0, warn: 1, info: 2, ok: 3 };
-const CHECK_EN = { ...LAYOUT_EN, ...RULES_EN, ...HIDDEN_EN, ...STRUCTURE_EN };
+const CHECK_EN = { ...LAYOUT_EN, ...RULES_EN, ...HIDDEN_EN, ...STRUCTURE_EN, ...ROBUST_EN };
 
 const drop = document.getElementById('chk-drop');
 const input = document.getElementById('chk-file');
@@ -26,6 +24,10 @@ const levels = document.getElementById('chk-level');
 const levelHint = document.getElementById('chk-level-hint');
 
 let pdfjs = null;
+let pdfWorker = null; // one pdf.js worker for every file: starting a new one per check is slow on phones
+let status = null;    // short screen-reader status ("Report ready: score 92...") instead of a live report
+let runId = 0;        // a file dropped while another is read wins: late results of the old one are ignored
+let focusNext = false; // move focus to the result once, after a new file (not on level or language change)
 let lastDoc = null;
 let lastError = null;
 let level = 'student';
@@ -60,28 +62,6 @@ async function loadPdfJs() {
   return pdfjs;
 }
 
-/** 100 minus weighted penalties, per category, then a weighted overall score. */
-function score(issues) {
-  const per = {};
-  for (const c of CATS) {
-    const list = issues.filter(i => i.cat === c.id);
-    const max = list.reduce((s, i) => s + i.weight, 0) || 1;
-    const lost = list.reduce((s, i) => s + i.weight * (i.level === 'fail' ? 1 : i.level === 'warn' ? 0.5 : 0), 0);
-    per[c.id] = Math.round(100 * (1 - lost / max));
-  }
-  let overall = Math.round(CATS.reduce((s, c) => s + per[c.id] * c.weight, 0));
-  // Clean formatting cannot make weak content look "excellent": keep the total near the content score.
-  if (per.content < 70) overall = Math.min(overall, per.content + 10);
-  // A layout that can scramble the reading order (columns, out-of-order blocks) is never "Excellent".
-  if (issues.some(i => (i.id === 'columns' || i.id === 'reading-order' || i.id === 'side-box') && i.level !== 'ok')) overall = Math.min(overall, 84);
-  // A resume an ATS cannot read at all should never look "good".
-  // Hidden text or instructions aimed at AI screeners can get an application rejected outright.
-  if (issues.some(i => (i.id === 'hidden-text' || i.id === 'prompt-injection') && i.level === 'fail')) overall = Math.min(overall, 40);
-  const unreadable = issues.some(i => i.id === 'selectable-text' && i.level === 'fail');
-  return { per, overall: unreadable ? Math.min(overall, 25) : overall };
-}
-
-function band(n) { return n >= 85 ? 'great' : n >= 70 ? 'good' : n >= 50 ? 'fair' : 'poor'; }
 
 function ring(value) {
   const NS = 'http://www.w3.org/2000/svg';
@@ -110,7 +90,10 @@ function ring(value) {
 function issueRow(i) {
   const d = el('details', 'issue ' + i.level);
   const s = el('summary');
-  s.append(el('span', 'dot'), el('span', 'issue-t', msg(i.key, i.vars)));
+  const dot = el('span', 'dot');
+  dot.setAttribute('aria-hidden', 'true');
+  // The coloured icon shows the level to sighted users; screen readers hear it as words.
+  s.append(dot, el('span', 'sr-only', ui('chk.sev.' + i.level) + ' '), el('span', 'issue-t', msg(i.key, i.vars)));
   d.append(s);
   const body = el('div', 'issue-b');
   if (i.fix) body.append(el('p', 'issue-fix', msg(i.fix, i.vars)));
@@ -170,20 +153,28 @@ function hiddenAlert(issues) {
 }
 
 function render() {
+  out.removeAttribute('aria-busy');
   if (lastError) {
     const p = el('p', 'chk-error', ui(lastError));
+    p.setAttribute('role', 'alert');
+    p.tabIndex = -1;
     out.replaceChildren(p);
+    if (status) status.textContent = '';
+    showResult(p);
     return;
   }
   if (!lastDoc) return;
   const doc = lastDoc;
-  const issues = [...layoutIssues(doc, { level }), ...contentIssues(doc, { level }), ...hiddenIssues(doc), ...structureIssues(doc)]
+  const issues = [...layoutIssues(doc, { level }), ...contentIssues(doc, { level }), ...hiddenIssues(doc), ...structureIssues(doc),
+    ...robustIssues(doc)]
     .sort((a, b) => LEVEL_ORDER[a.level] - LEVEL_ORDER[b.level] || b.weight - a.weight);
-  const { per, overall } = score(issues);
+  const { per, overall } = score(issues, doc, level);
 
   const head = el('div', 'chk-head');
   const summary = el('div', 'chk-sum');
-  summary.append(el('p', 'chk-verdict', ui('chk.band.' + band(overall))));
+  const verdict = el('h3', 'chk-verdict', ui('chk.band.' + band(overall)));
+  verdict.tabIndex = -1; // focus target after a check
+  summary.append(verdict);
   // The file name is user-controlled: isolate it and keep it short so it cannot pose as report text.
   const name = doc.fileName.length > 60 ? doc.fileName.slice(0, 57) + '…' : doc.fileName;
   const fileLine = el('p', 'chk-file');
@@ -256,25 +247,86 @@ function render() {
   const alert = hiddenAlert(issues);
   const parts = [head, ...(alert ? [alert] : []), list, ok, ...(textIssues(issues).length ? [tools] : []), text];
   out.replaceChildren(...parts, el('p', 'chk-private', ui('chk.private')));
+  if (status) status.textContent = ui('chk.status', { n: overall, k: problems.filter(i => i.level !== 'info').length });
+  showResult(verdict);
+}
+
+/** After a new file: focus the result (keyboard and screen-reader users land on it) and bring it into view. */
+function showResult(target) {
+  if (!focusNext) return;
+  focusNext = false;
+  target.focus({ preventScroll: true });
+  const top = out.getBoundingClientRect().top;
+  if (top < 0 || top > innerHeight * 0.75) {
+    out.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'nearest' });
+  }
+}
+
+/** Let the browser paint and handle input between steps (slow phones). */
+const nextTask = () => (globalThis.scheduler?.yield ? globalThis.scheduler.yield() : new Promise(r => setTimeout(r, 0)));
+
+/** What a file that is not a PDF most likely is, from its first bytes, so the message can say what to do. */
+async function sniff(file) {
+  const b = new Uint8Array(await file.slice(0, 1024).arrayBuffer());
+  const head = String.fromCharCode(...b);
+  if (head.includes('%PDF-')) return null;
+  const hex = [...b.slice(0, 4)].map(x => x.toString(16).padStart(2, '0')).join('');
+  if (hex === '89504e47' || hex.startsWith('ffd8ff') || head.startsWith('GIF8') || hex === '49492a00' || hex === '4d4d002a' ||
+      (head.startsWith('RIFF') && head.slice(8, 12) === 'WEBP') || /^[\s\S]{4}ftyp(?:hei|hev|mif|avi)/.test(head)) return 'chk.err.image';
+  if (hex === '504b0304' || hex === 'd0cf11e0' || head.startsWith('{\\rtf')) return 'chk.err.doc';
+  if (!b.some(x => x < 9 || (x > 13 && x < 32))) return 'chk.err.text';
+  return 'chk.err.notpdf';
 }
 
 async function handle(file) {
   if (!file) return;
   lastError = null;
-  if (file.size > MAX_BYTES) { lastError = 'chk.tooBig'; lastDoc = null; render(); return; }
+  const run = ++runId;
+  focusNext = true;
+  const fail = key => { lastError = key; lastDoc = null; input.disabled = false; input.value = ''; render(); };
+  if (file.size > MAX_BYTES) return fail('chk.tooBig');
+  if (file.size === 0) return fail('chk.err.empty');
   input.disabled = true;
-  out.replaceChildren(el('p', 'chk-reading', ui('chk.reading')));
+  const reading = el('p', 'chk-reading', ui('chk.reading'));
+  out.replaceChildren(reading);
+  out.setAttribute('aria-busy', 'true');
+  if (status) status.textContent = ui('chk.reading');
   try {
-    lastDoc = await extract(await loadPdfJs(), file);
-  } catch {
+    const notPdf = await sniff(file);
+    if (notPdf) throw Object.assign(new Error(notPdf), { key: notPdf });
+    const lib = await loadPdfJs();
+    if (!pdfWorker || pdfWorker.destroyed) pdfWorker = new lib.PDFWorker();
+    // A file that never finishes (a stuck worker, a crafted PDF) ends with a message, not an endless spinner.
+    let timer, doc;
+    const timeout = new Promise((_, reject) => { timer = setTimeout(() => reject(new Error('timeout')), TIMEOUT_MS); });
+    try {
+      doc = await Promise.race([timeout, extract(lib, file, {
+        worker: pdfWorker,
+        yieldFn: nextTask,
+        // Long files: show which page is being read (visual only; the status says when the report is ready).
+        onProgress: (n, total) => { if (total > 2) reading.textContent = ui('chk.progress', { n, t: total }); },
+      })]);
+    } finally {
+      clearTimeout(timer);
+    }
+    await nextTask();
+    if (run !== runId) return;
+    lastDoc = doc;
+  } catch (e) {
+    if (run !== runId) return;
     lastDoc = null;
-    lastError = 'chk.error';
+    const known = e?.key || (e?.name === 'PasswordException' ? 'chk.err.password'
+      : e?.name === 'InvalidPDFException' ? 'chk.err.damaged' : null);
+    lastError = known || 'chk.error';
+    // An unexpected failure may have broken the worker: start a fresh one next time.
+    if (!known) {
+      try { pdfWorker?.destroy(); } catch { /* ignore */ }
+      pdfWorker = null;
+    }
   } finally {
-    input.disabled = false;
-    input.value = '';
+    if (run === runId) { input.disabled = false; input.value = ''; }
   }
   render();
-  out.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'nearest' });
 }
 
 function init() {
@@ -291,10 +343,11 @@ function init() {
     });
   }
   updateLevelHint();
+  status = el('p', 'sr-only');
+  status.id = 'chk-status';
+  status.setAttribute('role', 'status');
+  out.after(status);
   input.addEventListener('change', () => handle(input.files?.[0]));
-  drop.addEventListener('keydown', e => {
-    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); input.click(); }
-  });
   let depth = 0;
   drop.addEventListener('dragenter', e => { e.preventDefault(); depth += 1; drop.classList.add('drag'); });
   drop.addEventListener('dragover', e => e.preventDefault());

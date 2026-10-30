@@ -234,7 +234,7 @@ docker run --rm -v "$PWD":/work -w /work texlive/texlive:latest latexmk -pdf res
         <label><input type="radio" name="lvl" value="academic"><span data-i="chk.level.academic">Academic CV</span></label>
       </fieldset>
       <p class="level-hint" id="chk-level-hint" aria-live="polite" data-i="chk.hint.student">One page is expected.</p>
-      <label class="drop" id="chk-drop" for="chk-file" tabindex="0">
+      <label class="drop" id="chk-drop" for="chk-file">
         <input type="file" id="chk-file" accept="application/pdf,.pdf">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4m0 0-4 4m4-4 4 4M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
         <span class="drop-t" data-i="chk.drop">Drop your PDF here or click to choose</span>
@@ -249,7 +249,7 @@ docker run --rm -v "$PWD":/work -w /work texlive/texlive:latest latexmk -pdf res
             <p class="chk-file" data-i="chk.empty.p">ATS readability score out of 100, what to fix first, and the exact text an ATS reads.</p>
           </div>
         </div>
-        <div id="chk-out" class="chk-out" aria-live="polite"></div>
+        <div id="chk-out" class="chk-out"></div>
       </div>
     </div>
 

@@ -94,12 +94,12 @@ def test_readable_edge_cases_report_expected_issue(
     assert_checker_did_not_crash(page)
 
 
-@pytest.mark.parametrize("case", ["bad_encrypted", "bad_truncated"])
-def test_unreadable_pdf_has_clear_error_and_does_not_crash(page, corpus, case):
+@pytest.mark.parametrize("case,message", [("bad_encrypted", "password-protected"), ("bad_truncated", "damaged or incomplete")])
+def test_unreadable_pdf_has_clear_error_and_does_not_crash(page, corpus, case, message):
     upload(page, corpus[case])
     error = page.locator("#chk-out .chk-error")
     expect(error).to_be_visible(timeout=CHECK_TIMEOUT)
-    expect(error).to_contain_text("Could not read this file")
+    expect(error).to_contain_text(message)
     assert_checker_did_not_crash(page)
 
 

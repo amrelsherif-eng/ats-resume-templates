@@ -128,7 +128,7 @@ Object.assign(EN, {
   'chk.drop': 'Drop your PDF here or click to choose',
   'chk.private': 'Your file stays on your device. Nothing is uploaded.',
   'chk.reading': 'Reading your PDF…',
-  'chk.error': 'Could not read this file. Make sure it is a PDF that is not password-protected.',
+  'chk.error': 'Could not read this PDF. Export it again from your editor and try once more.',
   'chk.tooBig': 'This file is larger than 25 MB. Export a smaller PDF and try again.',
   'chk.score': '{n} / {t} checks passed',
   'chk.pages.ok': 'One page. Recruiters and ATS handle it best.',
@@ -176,7 +176,7 @@ Object.assign(AR, {
   'chk.drop': 'اسحب ملف الـ PDF هنا أو اضغط للاختيار',
   'chk.private': 'ملفك يبقى على جهازك، ولا يتم رفع أي شيء.',
   'chk.reading': 'جارٍ قراءة الملف…',
-  'chk.error': 'تعذّرت قراءة الملف. تأكد أنه PDF وغير محمي بكلمة مرور.',
+  'chk.error': 'تعذّرت قراءة ملف الـ PDF هذا. صدّره من جديد من البرنامج الذي كتبته به وحاول مرة أخرى.',
   'chk.tooBig': 'حجم الملف أكبر من 25 ميجابايت. صدّر نسخة أصغر وحاول مرة أخرى.',
   'chk.score': 'اجتزت {n} من أصل {t} فحوصات',
   'chk.pages.ok': 'صفحة واحدة. الأنسب لمسؤولي التوظيف وأنظمة الـ ATS.',
@@ -434,4 +434,34 @@ Object.assign(AR, {
   'chk.alert.why': 'يحدث هذا غالباً بسبب قالب منسوخ أو تعديلات قديمة. بعض أنظمة الـ ATS ومسؤولي التوظيف يعتبرون النص المخفي أو التعليمات الموجّهة للذكاء الاصطناعي محاولة للتلاعب، وقد يؤدي ذلك إلى رفض الـ CV.',
   'chk.alert.found': 'هذا هو النص الذي وجدناه:',
   'chk.alert.fix': 'احذفه، ثم صدّر ملف الـ PDF من جديد وافحصه مرة أخرى.'
+});
+Object.assign(EN, {
+  'chk.err.empty': 'This file is empty (0 bytes). Export your resume as a PDF again and choose the new file.',
+  'chk.err.image': 'This is an image, not a PDF. An ATS cannot read text in a picture. Export your resume as a PDF from Word or Google Docs.',
+  'chk.err.doc': 'This looks like a Word or other document renamed to .pdf. Open it and use File > Save As > PDF.',
+  'chk.err.text': 'This is a web page or text file, not a PDF. Open it and use Print > Save as PDF.',
+  'chk.err.notpdf': 'This file is not a PDF. Export your resume as a PDF and try again.',
+  'chk.err.password': 'This PDF is password-protected, so an ATS cannot open it either. Save a copy without a password and check it again.',
+  'chk.err.damaged': 'This PDF looks damaged or incomplete (the download or export may have stopped early). Export it again and try once more.',
+  'chk.progress': 'Reading page {n} of {t}…',
+  'chk.status': 'Report ready: score {n} out of 100, {k} things to improve.',
+  'chk.sev.fail': 'Must fix:',
+  'chk.sev.warn': 'Worth fixing:',
+  'chk.sev.info': 'Tip:',
+  'chk.sev.ok': 'Passed:'
+});
+Object.assign(AR, {
+  'chk.err.empty': 'هذا الملف فارغ (0 بايت). صدّر سيرتك الذاتية بصيغة PDF من جديد واختر الملف الجديد.',
+  'chk.err.image': 'هذا الملف صورة وليس PDF، ولا تستطيع أنظمة ATS قراءة النص داخل الصور. صدّر سيرتك الذاتية بصيغة PDF من Word أو Google Docs.',
+  'chk.err.doc': 'يبدو أن هذا ملف Word أو مستند آخر تمت إعادة تسميته إلى ‎.pdf. افتحه واختر ملف > حفظ باسم > PDF.',
+  'chk.err.text': 'هذا ملف صفحة ويب أو ملف نصي وليس PDF. افتحه واختر طباعة > حفظ كملف PDF.',
+  'chk.err.notpdf': 'هذا الملف ليس PDF. صدّر سيرتك الذاتية بصيغة PDF وحاول مرة أخرى.',
+  'chk.err.password': 'ملف الـ PDF هذا محمي بكلمة مرور، ولن تستطيع أنظمة ATS فتحه أيضاً. احفظ نسخة بدون كلمة مرور وافحصها مرة أخرى.',
+  'chk.err.damaged': 'يبدو أن ملف الـ PDF تالف أو غير مكتمل (ربما توقف التنزيل أو التصدير قبل نهايته). صدّره من جديد وحاول مرة أخرى.',
+  'chk.progress': 'جارٍ قراءة الصفحة {n} من {t}…',
+  'chk.status': 'التقرير جاهز: الدرجة {n} من 100، ونقاط للتحسين: {k}.',
+  'chk.sev.fail': 'يجب إصلاحه:',
+  'chk.sev.warn': 'يُفضّل إصلاحه:',
+  'chk.sev.info': 'نصيحة:',
+  'chk.sev.ok': 'سليم:'
 });
