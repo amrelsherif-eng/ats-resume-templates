@@ -7,7 +7,7 @@ import { extract } from './ats/extract.js';
 import { layoutIssues, I18N_EN as LAYOUT_EN } from './ats/layout.js';
 import { contentIssues, I18N_EN as RULES_EN } from './ats/rules.js';
 import { hiddenIssues, I18N_EN as HIDDEN_EN } from './ats/hidden.js';
-import { CHECK_AR } from './ats/i18n-ar.js';
+import { CHECK_AR, SECTION_AR } from './ats/i18n-ar.js';
 
 const MAX_BYTES = 25 * 1024 * 1024;
 const CATS = [
@@ -37,6 +37,7 @@ function updateLevelHint() {
 }
 function msg(key, vars) {
   const ar = document.documentElement.lang === 'ar';
+  if (ar && vars?.sections) vars = { ...vars, list: vars.sections.map(s => SECTION_AR[s] || s).join('، ') };
   return fill((ar && CHECK_AR[key]) || CHECK_EN[key] || key, vars);
 }
 function fill(s, vars = {}) {

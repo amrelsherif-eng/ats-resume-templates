@@ -80,18 +80,22 @@ const BUZZWORDS = [
 // "Licenses & Certifications", "Military Status". A line is a heading when it is short and every
 // word comes from this vocabulary, with at least one core word that names the section.
 const HEADING_CORE = {
-  exp: ['experience', 'employment', 'internships', 'internship'],
-  proj: ['projects', 'project'],
-  edu: ['education', 'academic', 'academics', 'degrees'],
-  skills: ['skills', 'competencies', 'expertise', 'proficiencies', 'technologies', 'tools'],
-  leadership: ['leadership', 'activities', 'volunteer', 'volunteering', 'community', 'extracurricular'],
+  exp: ['experience', 'employment', 'internships', 'internship', 'experiences', 'stages', 'parcours'],
+  proj: ['projects', 'project', 'projets'],
+  edu: ['education', 'academic', 'academics', 'degrees', 'formation', 'formations', 'diplomes', 'etudes'],
+  skills: ['skills', 'competencies', 'expertise', 'proficiencies', 'technologies', 'tools', 'competences'],
+  leadership: ['leadership', 'activities', 'volunteer', 'volunteering', 'community', 'extracurricular', 'benevolat'],
   other: ['summary', 'profile', 'objective', 'certifications', 'certificates', 'licenses', 'licences', 'courses',
     'training', 'trainings', 'languages', 'awards', 'honors', 'honours', 'publications', 'references', 'interests',
-    'hobbies', 'military', 'achievements', 'qualifications', 'details', 'information']
+    'hobbies', 'military', 'achievements', 'qualifications', 'details', 'information',
+    'profil', 'langues', 'loisirs', 'interet', 'interets']
 };
 const HEADING_FILLER = new Set(('and of the relevant professional technical core key selected personal clinical teaching ' +
   'research industry work other additional soft hard computer it related career background recent areas ' +
-  'status service history graduation capstone final senior year university').split(' '));
+  'status service history graduation capstone final senior year university ' +
+  // French: "Expériences professionnelles", "Compétences techniques", "Centres d'intérêt"
+  'professionnelle professionnelles professionnel professionnels techniques cles d de des et en ' +
+  'linguistiques informatiques academique academiques personnels centres vie associative').split(' '));
 const HEADING_ORDER = ['exp', 'proj', 'edu', 'skills', 'leadership', 'other'];
 
 // Arabic headings: the first word (or two) names the section; a few describing words may follow.
@@ -105,16 +109,28 @@ const AR_HEADINGS = {
     'الخدمة العسكرية', 'الاهتمامات', 'معلومات']
 };
 const AR_EXTRA = new Set(['العملية', 'المهنية', 'التدريبية', 'الدراسية', 'الشخصية', 'الفنية', 'التقنية', 'الأكاديمية',
-  'الوظيفي', 'المهني', 'عني', 'السابقة', 'التواصل', 'و']);
+  'الوظيفي', 'المهني', 'عني', 'السابقة', 'التواصل', 'و', 'العلمية', 'العلمي', 'الدراسي', 'الأكاديمي', 'اللغوية',
+  'الحاسب', 'الآلي', 'الذاتية'].map(w => arKey(w)));
+// A heading word may also follow another one: "الدورات والشهادات", "التعليم والمؤهلات".
+const AR_STARTS = new Set(Object.values(AR_HEADINGS).flat().filter(w => !w.includes(' ')).map(w => arKey(w)));
+
+/** Arabic for comparisons: no tatweel or diacritics, and "لا" read either way round (Word's lam-alef ligature
+ * comes out of pdf.js reversed: "المؤهلات" reads "المؤهالت"). */
+export function arKey(s) {
+  return s.replace(/[\u0640\u064B-\u0652]/g, '').replace(/ل([اأإآ])|([اأإآ])ل/g, (m, a, b) => 'ل' + (a || b));
+}
 
 function arabicHeading(clean) {
-  const words = clean.replace(/ـ/g, '').replace(/[:：]+$/, '').trim().split(/\s+/);
+  const words = arKey(clean).replace(/[:：]+$/, '').trim().split(/\s+/);
   if (words.length > 4) return null;
+  const extra = w => AR_EXTRA.has(w) || AR_EXTRA.has(w.replace(/^و/, '')) || AR_STARTS.has(w.replace(/^و/, ''));
   for (const cat of HEADING_ORDER) {
     for (const start of AR_HEADINGS[cat]) {
-      const n = start.split(' ').length;
-      const rest = words.slice(n);
-      if (words.slice(0, n).join(' ') === start && rest.every(w => AR_EXTRA.has(w) || AR_EXTRA.has(w.replace(/^و/, '')))) return cat;
+      const key = arKey(start), n = key.split(' ').length;
+      if (words.slice(0, n).join(' ') === key && words.slice(n).every(extra)) return cat;
+      // Words written without spaces (some PDF makers): "الخبراتالعملية".
+      if (words.length === 1 && words[0].startsWith(key.replace(/ /g, '')) && words[0].length > key.length + 2 &&
+          [...AR_EXTRA].some(e => words[0] === key.replace(/ /g, '') + e)) return cat;
     }
   }
   return null;
@@ -122,7 +138,8 @@ function arabicHeading(clean) {
 
 function vocabularyHeading(clean) {
   if (/[؀-ۿ]/.test(clean)) return arabicHeading(clean);
-  const words = clean.toLowerCase().replace(/&/g, ' and ').replace(/[^a-z\s]/g, ' ').split(/\s+/).filter(Boolean);
+  const words = clean.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase().replace(/&/g, ' and ').replace(/[^a-z\s]/g, ' ')
+    .split(/\s+/).filter(Boolean);
   if (!words.length || words.length > 6) return null;
   const isCore = w => HEADING_ORDER.some(cat => HEADING_CORE[cat].includes(w));
   if (!words.every(w => HEADING_FILLER.has(w) || isCore(w))) return null;
@@ -145,6 +162,25 @@ function detectHeading(text) {
 }
 
 const asciiDigits = s => s.replace(/[٠-٩]/g, d => String(d.charCodeAt(0) - 0x660)).replace(/[۰-۹]/g, d => String(d.charCodeAt(0) - 0x6F0));
+
+const PHONE_LABEL = /جوال|هاتف|موبايل|محمول|تليفون|تلفون|\b(?:T[ée]l|Tel|Phone|Mobile|Mob|GSM|Cell)\b/i;
+
+// Short words that are frequent in one language and rare in the others.
+const STOPWORDS = {
+  en: new Set('the and of to in for with on by at from as an'.split(' ')),
+  fr: new Set('le la les des du de et en pour avec dans une un au aux sur par est sont chez'.split(' ')),
+  es: new Set('el la los las del de y en para con por una un al su como'.split(' ')),
+  de: new Set('und der die das mit für von im bei zu den dem des ein eine auf'.split(' '))
+};
+/** 'fr' | 'es' | 'de' when a Latin-script resume is clearly not in English, else null. */
+export function otherLanguage(text) {
+  const words = text.toLowerCase().split(/[^\p{L}]+/u).filter(Boolean);
+  if (words.length < 60) return null;
+  const share = lang => words.filter(w => STOPWORDS[lang].has(w)).length / words.length;
+  if (share('en') >= 0.04) return null;
+  const best = ['fr', 'es', 'de'].map(l => [l, share(l)]).sort((a, b) => b[1] - a[1])[0];
+  return best[1] >= 0.1 ? best[0] : null;
+}
 
 function trimEx(str) {
   const s = String(str || '').trim().replace(/\s+/g, ' ');
@@ -179,10 +215,10 @@ export function contentIssues(doc, opts = {}) {
   if (!sectionsSeen.has('skills')) missingSec.push('Skills');
 
   if (missingSec.length > 0) {
-    issues.push({ id: 'sections', cat: 'contact', level: 'warn', key: 'r.sec-missing', vars: { list: missingSec.join(', ') }, fix: 'r.sec-missing.fix', weight: 6 });
+    issues.push({ id: 'sections', cat: 'contact', level: 'warn', key: 'r.sec-missing', vars: { list: missingSec.join(', '), sections: missingSec }, fix: 'r.sec-missing.fix', weight: 6 });
   } else {
     const foundSec = ['Education', sectionsSeen.has('exp') ? 'Experience' : 'Projects', 'Skills'];
-    issues.push({ id: 'sections', cat: 'contact', level: 'ok', key: 'r.sec-ok', vars: { list: foundSec.join(', ') }, weight: 6 });
+    issues.push({ id: 'sections', cat: 'contact', level: 'ok', key: 'r.sec-ok', vars: { list: foundSec.join(', '), sections: foundSec }, weight: 6 });
   }
 
   // 2. Contact info (Arabic-Indic digits read as ASCII digits: ٠١٠٠ is 0100)
@@ -193,7 +229,16 @@ export function contentIssues(doc, opts = {}) {
     : { id: 'contact-email', cat: 'contact', level: 'warn', key: 'r.email-miss', fix: 'r.email-miss.fix', weight: 5 });
 
   const phoneMatch = contactText.match(/(?:\(\+20\)|\+20)\s*1[0125](?:[\s.-]?\d){8}(?!\d)|\b01[0125](?:[\s.-]?\d){8}\b|(?:\+\d{1,3}[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}\b|\b(?:\+\d{1,3}[-.\s]?)?\d{2,4}[-.\s]?\d{3,4}[-.\s]?\d{3,5}\b/);
-  issues.push(phoneMatch
+  const digitCount = m => (m.match(/\d/g) || []).length;
+  const shortGroups = (contactText.match(/\+\d{1,3}(?:[\s.-]?\d{1,4}){2,6}(?!\d)/g) || [])
+    .some(m => digitCount(m) >= 8 && digitCount(m) <= 15) || /\b0[1-9](?:[\s.]\d{2}){4}\b/.test(contactText);
+  const labelled = asciiDigits(lines.slice(0, 25).map(l => l.text).join('\n')).split('\n').some(l => {
+    if (!PHONE_LABEL.test(l) && !/\+\s*\d|\d\s*\+/.test(l)) return false;
+    const rest = l.replace(/\S+@\S+|\S*(?:https?:|www\.|linkedin|github|\.com|\.net|\.org)\S*/gi, ' ')
+      .replace(/\d+\s*[/.]\s*\d+(?:\s*[/.]\s*\d+)?/g, ' ').replace(/\d+\s*(?:هـ|ه|م)(?![؀-ۿ])/g, ' ').replace(/\d+\s*%/g, ' ').replace(/\b(?:19|20)\d{2}\b/g, ' ');
+    return digitCount(rest) >= 8 && digitCount(rest) <= 15;
+  });
+  issues.push(phoneMatch || shortGroups || labelled
     ? { id: 'contact-phone', cat: 'contact', level: 'ok', key: 'r.phone-ok', weight: 4 }
     : { id: 'contact-phone', cat: 'contact', level: 'warn', key: 'r.phone-miss', fix: 'r.phone-miss.fix', weight: 4 });
 
@@ -204,9 +249,9 @@ export function contentIssues(doc, opts = {}) {
 
   // 25 lines: a sidebar with the contact details can come after the first block of text.
   const topText = lines.slice(0, 25).map(l => l.text).join('\n');
-  const locRe = /\b(?:[A-Z][a-zA-Z]+(?:\s+[A-Z][a-zA-Z]+)?),\s*(?:[A-Z]{2}\b|[A-Z][a-zA-Z]+(?:\s+[A-Z][a-zA-Z]+)?)|(?:[A-Z][a-zA-Z]+,\s*(?:USA|UK|UAE|Canada|Germany|France|India|Australia|Singapore|Netherlands|Egypt|KSA|Saudi Arabia|Qatar|Kuwait|Jordan|Oman|Bahrain|Morocco|Tunisia|Lebanon|Country))\b|\b(?:New York|San Francisco|London|Seattle|Austin|Boston|Chicago|Toronto|Vancouver|Berlin|Paris|Amsterdam|Singapore|Sydney|Melbourne|Remote|Cairo|Giza|Alexandria|Mansoura|Tanta|Zagazig|Assiut|Aswan|Luxor|Ismailia|Suez|Port Said|Damanhour|Minya|Sohag|Hurghada|6th of October|Riyadh|Jeddah|Dammam|Dubai|Abu Dhabi|Sharjah|Doha|Amman|Muscat|Manama|Casablanca|Tunis|Beirut|Egypt|Nasr City|New Cairo|Maadi|Heliopolis|Sheikh Zayed|10th of Ramadan|Kuwait City|Al Khobar|Medina|Mecca|Ras Al Khaimah|Ajman|Istanbul|Munich|Dublin|Madrid|Milan|Warsaw)\b/i;
+  const locRe = /(?<!\p{L})(?:\p{Lu}\p{L}+(?:\s+\p{Lu}\p{L}+)?),\s*(?:[A-Z]{2}\b|\p{Lu}\p{L}+(?:\s+\p{Lu}\p{L}+)?)|(?:\p{Lu}\p{L}+,\s*(?:USA|UK|UAE|Canada|Germany|France|India|Australia|Singapore|Netherlands|Egypt|KSA|Saudi Arabia|Qatar|Kuwait|Jordan|Oman|Bahrain|Morocco|Tunisia|Lebanon|Country))\b|\b(?:New York|San Francisco|London|Seattle|Austin|Boston|Chicago|Toronto|Vancouver|Berlin|Paris|Amsterdam|Singapore|Sydney|Melbourne|Remote|Cairo|Giza|Alexandria|Mansoura|Tanta|Zagazig|Assiut|Aswan|Luxor|Ismailia|Suez|Port Said|Damanhour|Minya|Sohag|Hurghada|6th of October|Riyadh|Jeddah|Dammam|Dubai|Abu Dhabi|Sharjah|Doha|Amman|Muscat|Manama|Casablanca|Tunis|Beirut|Egypt|Nasr City|New Cairo|Maadi|Heliopolis|Sheikh Zayed|10th of Ramadan|Kuwait City|Al Khobar|Medina|Mecca|Ras Al Khaimah|Ajman|Rabat|Fes|Fès|Marrakech|Marrakesh|Tangier|Tanger|Agadir|Algiers|Alger|Oran|Constantine|Sfax|Sousse|Tripoli|Benghazi|Khartoum|Baghdad|Erbil|Damascus|Aleppo|Nouakchott|Istanbul|Munich|Dublin|Madrid|Milan|Warsaw)\b/iu;
   // Arabic place names (\b does not work next to Arabic letters, so no word boundaries here).
-  const arLocRe = /القاهرة|الجيزة|الإسكندرية|الاسكندرية|المنصورة|طنطا|الزقازيق|أسيوط|أسوان|الأقصر|الإسماعيلية|السويس|بورسعيد|دمنهور|المنيا|سوهاج|الغردقة|مصر|الرياض|جدة|الدمام|دبي|أبوظبي|أبو ظبي|الشارقة|الدوحة|عمّان|عمان|مسقط|المنامة|الكويت|السعودية|الإمارات|قطر/;
+  const arLocRe = /القاهرة|الجيزة|الإسكندرية|الاسكندرية|المنصورة|طنطا|الزقازيق|أسيوط|أسوان|الأقصر|الإسماعيلية|السويس|بورسعيد|دمنهور|المنيا|سوهاج|الغردقة|مصر|الرياض|جدة|الدمام|دبي|أبوظبي|أبو ظبي|الشارقة|الدوحة|عمّان|عمان|مسقط|المنامة|الكويت|السعودية|الإمارات|قطر|الرباط|الدار البيضاء|مراكش|فاس|طنجة|أكادير|المغرب|الجزائر|وهران|تونس|صفاقس|سوسة|طرابلس|بنغازي|ليبيا|الخرطوم|السودان|بغداد|العراق|دمشق|سوريا|بيروت|لبنان|الأردن|فلسطين|نواكشوط/;
   issues.push(locRe.test(topText) || arLocRe.test(topText)
     ? { id: 'contact-location', cat: 'contact', level: 'ok', key: 'r.location-ok', weight: 2 }
     : { id: 'contact-location', cat: 'contact', level: 'warn', key: 'r.location-miss', fix: 'r.location-miss.fix', weight: 2 });
@@ -222,8 +267,12 @@ export function contentIssues(doc, opts = {}) {
     /\b(?:marital\s+status|civil\s+status)\b/i, // bare "single" would flag "single page"
     /\b(?:religion|religious\s+affiliation)\b/i,
     /\b(?:nationality|citizenship)\b/i,
-    /\b(?:national\s+id|ssn|social\s+security|passport\s*(?:no|number)?)\b/i
+    /\b(?:national\s+id|ssn|social\s+security|passport\s*(?:no|number)?)\b/i,
+    /\b(?:date\s+de\s+naissance|situation\s+familiale|nationalit[ée])/i
   ];
+  // Arabic: compared with arKey, so a reversed lam-alef ("تاريخ الميالد") still matches.
+  const arPersonal = ['تاريخ الميلاد', 'محل الميلاد', 'الحالة الاجتماعية', 'الديانة', 'الجنسية', 'الرقم القومي', 'رقم الهوية',
+    'رقم جواز السفر'].map(w => arKey(w));
   const personalEx = [];
   for (const re of personalRules) {
     for (const l of lines) {
@@ -233,6 +282,8 @@ export function contentIssues(doc, opts = {}) {
       }
     }
   }
+  const arLine = lines.find(l => /[؀-ۿ]/.test(l.text) && arPersonal.some(w => arKey(l.text).includes(w)));
+  if (arLine && !personalEx.includes(arLine.text)) personalEx.push(arLine.text);
   const personalIssue = personalEx.length > 0
     ? { id: 'personal-data', cat: 'contact', level: 'info', key: 'r.personal', fix: 'r.personal.fix', examples: personalEx.slice(0, 3).map(trimEx), weight: 2 }
     : { id: 'personal-data', cat: 'contact', level: 'ok', key: 'r.personal-ok', weight: 2 };
@@ -240,6 +291,15 @@ export function contentIssues(doc, opts = {}) {
   if (isArabic) {
     return [
       { id: 'arabic-lang', cat: 'content', level: 'info', key: 'r.arabic', fix: 'r.arabic.fix', weight: 0 },
+      ...issues,
+      personalIssue
+    ];
+  }
+
+  const otherLang = otherLanguage(text);
+  if (otherLang) {
+    return [
+      { id: 'other-lang', cat: 'content', level: 'info', key: `r.lang-${otherLang}`, fix: 'r.lang-other.fix', weight: 0 },
       ...issues,
       personalIssue
     ];
@@ -364,7 +424,8 @@ export function contentIssues(doc, opts = {}) {
     if (numRe.test(b)) numCount++;
     else nonNumEx.push(b);
   }
-  const numPct = achievementBullets.length ? Math.round((numCount / achievementBullets.length) * 100) : 0;
+  // No bullets found: nothing to measure (like the action-verb check).
+  const numPct = achievementBullets.length ? Math.round((numCount / achievementBullets.length) * 100) : 100;
   issues.push(numPct < 40
     ? { id: 'quantified-impact', cat: 'content', level: 'warn', key: 'r.numbers', vars: { pct: numPct }, fix: 'r.numbers.fix', examples: nonNumEx.slice(0, 3).map(trimEx), weight: 7 }
     : { id: 'quantified-impact', cat: 'content', level: 'ok', key: 'r.numbers-ok', vars: { pct: numPct }, weight: 7 });
@@ -485,6 +546,10 @@ export function contentIssues(doc, opts = {}) {
 export const I18N_EN = {
   'r.arabic': 'Resume appears to be primarily in Arabic.',
   'r.arabic.fix': 'Content quality checks are optimized for English. Section and contact checks are still applied.',
+  'r.lang-fr': 'Resume appears to be in French.',
+  'r.lang-es': 'Resume appears to be in Spanish.',
+  'r.lang-de': 'Resume appears to be in German.',
+  'r.lang-other.fix': 'The wording checks (action verbs, metrics, pronouns) are tuned for English, so they are skipped. Sections and contact details are still checked.',
   'r.sec-missing': 'Missing standard sections: {list}.',
   'r.sec-missing.fix': 'Add standard headings for Education, Experience, and Skills so ATS parsers can categorize your background.',
   'r.sec-ok': 'Standard sections present ({list}).',
