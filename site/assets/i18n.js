@@ -210,7 +210,7 @@ Object.assign(EN, {
   'chk.scope.languages': 'Languages: Arabic and English text, plus some French and mixed-language CVs.'
 });
 Object.assign(AR, {
-  'chk.scope.title': 'ال checker بيبص على إيه؟',
+  'chk.scope.title': 'الأداة بتفحص إيه؟',
   'chk.scope.reading': 'القراءة والاستخراج: هل النص بيتقري، وترتيب الكلام، وعدد الصفحات.',
   'chk.scope.content': 'المحتوى: الأقسام المعتادة في الـ CV وطريقة الكتابة زي أفعال الإنجاز.',
   'chk.scope.contact': 'بيانات التواصل: الإيميل والتليفون وروابط الحسابات اللي نظام ATS يقدر يقراها.',

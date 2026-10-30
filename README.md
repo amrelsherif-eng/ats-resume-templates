@@ -21,7 +21,7 @@
 
 **Free one-page LaTeX resumes for students and early-career candidates,<br>plus a website to edit them three ways and check your CV in the browser.**
 
-[**Website**](https://amrelsherif-eng.github.io/ats-resume-templates/) · [**بالعربي**](https://amrelsherif-eng.github.io/ats-resume-templates/ar.html) · [**Video tutorials**](https://amrelsherif-eng.github.io/ats-resume-templates/#video) · [**CV checker**](https://amrelsherif-eng.github.io/ats-resume-templates/#check)
+[**Website**](https://amrelsherif-eng.github.io/ats-resume-templates/) · [**Arabic version**](https://amrelsherif-eng.github.io/ats-resume-templates/ar.html) · [**Video tutorials**](https://amrelsherif-eng.github.io/ats-resume-templates/#video) · [**CV checker**](https://amrelsherif-eng.github.io/ats-resume-templates/#check)
 
 </div>
 
@@ -159,7 +159,7 @@ My information:
 
 ## The ATS checker
 
-Drop a PDF into the [**CV checker**](https://amrelsherif-eng.github.io/ats-resume-templates/#check). It reads the PDF in your browser and shows a score, findings, and the text it extracted.
+Drop a PDF into the [**CV checker**](https://amrelsherif-eng.github.io/ats-resume-templates/#check). It reads the PDF in your browser and shows a score, what to fix first, and the text it extracted. One click turns the report into a fix-it prompt for an AI chat.
 
 It checks:
 
@@ -171,7 +171,7 @@ It checks:
 - **Languages:** Arabic and English, some French, and some mixed-language CVs.
 
 > [!NOTE]
-> **Privacy:** The PDF is read inside your browser. The file and its text are not uploaded.
+> **Private by design.** The PDF is read inside your browser and never uploaded. No accounts, no trackers, no third-party requests.
 
 The score is an estimate of how readable and complete the PDF looks to this checker. Weak content below 70 caps the overall score at the content score, except when a hidden-text or prompt-injection finding applies; those keep their separate 40-point cap. A missing readable email caps the score at 79. The score is not an official ATS rating, a hiring prediction, or a measure of how well you match a job description. The checker does not compare your CV with a job post.
 
@@ -187,7 +187,7 @@ The checker handles PDFs only. ATS products use different parsers, so another sy
 | Video | Length | Language |
 |:---|:---:|:---|
 | [**Full tutorial**](https://amrelsherif-eng.github.io/ats-resume-templates/#video) | 5:15 | English voice-over + on-screen subtitles |
-| [**الشرح الكامل**](https://amrelsherif-eng.github.io/ats-resume-templates/ar.html#video) | 5:02 | Egyptian Arabic voice-over + subtitles |
+| [**Full tutorial (Arabic)**](https://amrelsherif-eng.github.io/ats-resume-templates/ar.html#video) | 5:02 | Egyptian Arabic voice-over + subtitles |
 | [**Quick demo**](https://amrelsherif-eng.github.io/ats-resume-templates/#video) | 0:38 | No voice-over, Arabic subtitles |
 
 The full tutorial has chapter buttons on the site: **Pick a template · Edit on Overleaf · Edit with AI · Build it locally · Check your CV**.
