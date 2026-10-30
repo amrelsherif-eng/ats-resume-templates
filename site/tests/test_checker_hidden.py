@@ -29,7 +29,7 @@ STUFFING = "Python Java Kubernetes Leadership Agile Scrum AWS Azure Machine Lear
 
 
 def hidden_issue(page):
-    return page.locator("#chk-out .issue:not(.ok)", has_text=re.compile(r"^Hidden text:"))
+    return page.locator("#chk-out .issue:not(.ok)", has_text=re.compile(r"Hidden text:"))
 
 
 def inject_issue(page):

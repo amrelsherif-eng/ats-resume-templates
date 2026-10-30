@@ -773,7 +773,7 @@ html[dir=rtl] h2{
   text-align:center;
   cursor:pointer;
   transition:border-color .2s,background .2s}
-.drop:hover,.drop:focus-visible,.drop.drag{
+.drop:hover,.drop:focus-within,.drop.drag{
   border-color:var(--accent);
   background:rgba(98,201,212,.06)}
 .drop input{
@@ -871,6 +871,7 @@ html[dir=rtl] h2{
   fill:var(--muted)}
 .chk-verdict{
   margin:0;
+  line-height:1.3;
   font-size:19px;
   font-weight:700}
 .chk-file{
@@ -972,7 +973,7 @@ html[dir=rtl] h2{
   background:#173323;
   color:var(--green)}
 .issue.ok .dot:before{
-  content:"?"}
+  content:"\2713"}
 .issue.info .dot{
   background:#1b2d40;
   color:var(--blue)}
@@ -987,7 +988,7 @@ html[dir=rtl] h2{
   background:#3b2024;
   color:var(--red)}
 .issue.fail .dot:before{
-  content:"�"}
+  content:"\2715"}
 .issue-b{
   padding:0 14px 14px 42px;
   color:var(--muted);
@@ -1050,6 +1051,16 @@ html[dir=rtl] .issue-b{
 .chk-error{
   margin:0;
   color:var(--red)}
+/* The file input is the one tab stop of the drop zone; it is invisible, so the zone shows its focus. */
+.drop:has(input:focus-visible){
+  outline:2px solid var(--accent);
+  outline-offset:3px}
+.chk-verdict:focus-visible,.chk-error:focus-visible{
+  outline:2px solid var(--accent);
+  outline-offset:4px;
+  border-radius:4px}
+.chk-verdict:focus:not(:focus-visible),.chk-error:focus:not(:focus-visible){
+  outline:none}
 .panel-bar{
   display:flex;
   align-items:center;
