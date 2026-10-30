@@ -6,7 +6,7 @@
 
 const HEADINGS_RE = /^(?:education|academic background|academics|experience|work experience|professional experience|employment history|work history|projects|personal projects|academic projects|key projects|skills|technical skills|core competencies|skills & expertise|certifications|certificates|licenses|certifications & licenses|summary|profile|professional summary|executive summary|leadership|leadership experience|activities|extracurricular activities|volunteer|volunteering|volunteer experience|community involvement|languages|language skills|awards|honors|interests|hobbies)$/i;
 
-const ACTION_VERBS = new Set(
+export const ACTION_VERBS = new Set(
   ("accelerate accelerated achieve achieved acquire acquired adapt adapted administer administered advance advanced " +
   "advise advised align aligned allocate allocated analyze analyzed apply applied appraise appraised approve approved " +
   "arrange arranged assemble assembled assess assessed audit audited author authored automate automated balance balanced " +
@@ -46,7 +46,7 @@ const ACTION_VERBS = new Set(
 );
 
 // "-ed" words that usually describe a person rather than start an achievement.
-const NOT_VERBS = new Set(('experienced skilled dedicated motivated talented certified licensed qualified interested ' +
+export const NOT_VERBS = new Set(('experienced skilled dedicated motivated talented certified licensed qualified interested ' +
   'based related required expected seasoned accomplished focused oriented versed advanced limited united detailed ' +
   'distinguished respected registered worked helped assisted participated involved tasked used utilized').split(' '));
 
@@ -146,7 +146,25 @@ function vocabularyHeading(clean) {
   return HEADING_ORDER.find(cat => words.some(w => HEADING_CORE[cat].includes(w))) || null;
 }
 
-function detectHeading(text) {
+/** "E X P E R I E N C E" or "W O R K E X P E R I E N C E" (letter-spaced headings) back to words, so the
+ * section is still found; the letter spacing itself is reported by structure.js. */
+const SPACED = /^(?:\p{L}\s+){3,}\p{L}$/u;
+function unspace(text) {
+  const joined = text.replace(/\s+/g, '');
+  const lower = joined.toLowerCase();
+  const vocab = new Set([...Object.values(HEADING_CORE).flat(), ...HEADING_FILLER, 'work', 'history', 'summary', 'profile']);
+  // Split into vocabulary words (shortest list wins); keep the letters joined when no split exists.
+  const best = [[]];
+  for (let i = 1; i <= lower.length; i += 1) {
+    for (let j = Math.max(0, i - 16); j < i; j += 1) {
+      if (best[j] && vocab.has(lower.slice(j, i)) && (!best[i] || best[j].length + 1 < best[i].length)) best[i] = [...best[j], joined.slice(j, i)];
+    }
+  }
+  return best[lower.length] ? best[lower.length].join(' ') : joined;
+}
+
+export function detectHeading(text) {
+  if (SPACED.test(text.trim())) text = unspace(text.trim());
   const clean = text.trim().replace(/^[\d.\s•–—\-\*|:-]+/, '').replace(/[:\-_—|]+$/, '').trim();
   if (!clean || clean.length > 45) return null;
   if (!HEADINGS_RE.test(clean)) return clean.split(/\s+/).length <= 6 ? vocabularyHeading(clean) : null;
@@ -223,10 +241,12 @@ export function contentIssues(doc, opts = {}) {
 
   // 2. Contact info (Arabic-Indic digits read as ASCII digits: ٠١٠٠ is 0100)
   const contactText = asciiDigits(text);
+  // Pictures in a readable file: missing details may be inside one (a contact banner exported as an image).
+  const inPicture = (doc.images || 0) > 0 && (text.match(/[\p{L}\p{N}]+/gu) || []).length >= 80;
   const emailMatch = contactText.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/);
   issues.push(emailMatch
     ? { id: 'contact-email', cat: 'contact', level: 'ok', key: 'r.email-ok', weight: 5 }
-    : { id: 'contact-email', cat: 'contact', level: 'warn', key: 'r.email-miss', fix: 'r.email-miss.fix', weight: 5 });
+    : { id: 'contact-email', cat: 'contact', level: 'warn', key: inPicture ? 'r.email-img' : 'r.email-miss', fix: inPicture ? 'r.contact-img.fix' : 'r.email-miss.fix', weight: 5 });
 
   const phoneMatch = contactText.match(/(?:\(\+20\)|\+20)\s*1[0125](?:[\s.-]?\d){8}(?!\d)|\b01[0125](?:[\s.-]?\d){8}\b|(?:\+\d{1,3}[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}\b|\b(?:\+\d{1,3}[-.\s]?)?\d{2,4}[-.\s]?\d{3,4}[-.\s]?\d{3,5}\b/);
   const digitCount = m => (m.match(/\d/g) || []).length;
@@ -240,7 +260,7 @@ export function contentIssues(doc, opts = {}) {
   });
   issues.push(phoneMatch || shortGroups || labelled
     ? { id: 'contact-phone', cat: 'contact', level: 'ok', key: 'r.phone-ok', weight: 4 }
-    : { id: 'contact-phone', cat: 'contact', level: 'warn', key: 'r.phone-miss', fix: 'r.phone-miss.fix', weight: 4 });
+    : { id: 'contact-phone', cat: 'contact', level: 'warn', key: inPicture ? 'r.phone-img' : 'r.phone-miss', fix: inPicture ? 'r.contact-img.fix' : 'r.phone-miss.fix', weight: 4 });
 
   const linkedInMatch = /linkedin\.com\/in\/[a-zA-Z0-9_-]+/i.test(text) || links.some(l => /linkedin\.com\/in\//i.test(l));
   issues.push(linkedInMatch
@@ -555,6 +575,9 @@ export const I18N_EN = {
   'r.sec-ok': 'Standard sections present ({list}).',
   'r.email-miss': 'No email address detected.',
   'r.email-miss.fix': 'Add a professional email address near the top of your resume.',
+  'r.email-img': 'No email address in the text. If it is in a picture or a logo, an ATS cannot read it.',
+  'r.phone-img': 'No phone number in the text. If it is in a picture or a logo, an ATS cannot read it.',
+  'r.contact-img.fix': 'Type your email and phone as plain text near your name, then export the PDF again.',
   'r.email-ok': 'Email address detected.',
   'r.phone-miss': 'No phone number detected.',
   'r.phone-miss.fix': 'Include a reachable phone number with country/area code in your header.',

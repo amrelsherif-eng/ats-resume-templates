@@ -2,7 +2,7 @@
  * Drafted by Codex from a written spec; reviewed and extended with streamText. */
 
 /** @typedef {{text:string,x:number,y:number,w:number,h:number,font:string,size:number}} Item */
-/** @typedef {{page:number,y:number,x:number,text:string,items:Item[],bullet:boolean}} Line */
+/** @typedef {{page:number,y:number,x:number,text:string,items:Item[],bullet:boolean,rotated?:boolean}} Line */
 /** @typedef {{pages:number,width:number,height:number,lines:Line[],text:string,fonts:string[],images:number,links:string[],fileName:string,fileSize:number,meta:{title?:string,author?:string,producer?:string,creator?:string}}} Doc */
 
 /**
@@ -43,6 +43,8 @@ export async function extract(pdfjs, file) {
       for (const item of content.items.slice(0, MAX_ITEMS_PER_PAGE)) {
         if (typeof item.str !== 'string') continue; // marked-content items carry no text
         const str = cleanText(item.str);
+        // Fake bold: some PDF makers draw a heading twice, a fraction of a point apart. Read it once.
+        if (str.trim() && overprinted(pageItems, str, item.transform, viewport.height)) continue;
         if (str) stream.push(str + (item.hasEOL ? '\n' : ''));
         if (!str || !str.trim()) {
           if (str) spaces.push({ x: item.transform[4], w: item.width || 0, baseline: viewport.height - item.transform[5] });
@@ -64,6 +66,7 @@ export async function extract(pdfjs, file) {
           w: item.width, h, font, size,
           baseline: viewport.height - transform[5],
           em: Math.hypot(transform[2], transform[3]), t: transform,
+          ...((Math.abs(transform[1]) > 1e-3 || Math.abs(transform[2]) > 1e-3) && { rotated: true }),
         });
       }
       try {
@@ -116,6 +119,7 @@ export async function extract(pdfjs, file) {
           (first.text.length === 1 && !/[\p{L}\p{N}\s]/u.test(first.text));
         const right = Math.max(...line.items.map(part => part.x + part.w));
         lines.push({
+          ...(line.items.every(part => part.rotated) && { rotated: true }),
           page: pageNumber, y: Math.min(...line.items.map(part => part.y)),
           h: Math.max(...line.items.map(part => part.h || 0)),
           x: line.items[0].x, right, rtl, text, items: line.items.map(({ baseline, t, ...part }) => part), bullet,
@@ -150,6 +154,16 @@ export async function extract(pdfjs, file) {
   } finally {
     await pdf.destroy();
   }
+}
+
+/** True when the same text was already drawn on this baseline within a fifth of a letter (an overprinted copy). */
+function overprinted(pageItems, str, t, pageHeight) {
+  const em = Math.hypot(t[2], t[3]) || 1, baseline = pageHeight - t[5];
+  for (let i = pageItems.length - 1; i >= Math.max(0, pageItems.length - 4); i -= 1) {
+    const p = pageItems[i];
+    if (p.text.trim() === str.trim() && Math.abs(p.baseline - baseline) < 0.2 * em && Math.abs(p.x - t[4]) < 0.2 * em) return true;
+  }
+  return false;
 }
 
 // A whitespace run drawn between two Arabic neighbours: some PDF makers (Chrome with a fallback Arabic
