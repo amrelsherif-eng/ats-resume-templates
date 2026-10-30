@@ -754,6 +754,16 @@ html[dir=rtl] h2{
   grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);
   gap:24px;
   align-items:start}
+.chk-scope{
+  margin:20px 0;
+  padding:16px 18px;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:var(--surface-2)}
+.chk-scope h3{margin:0 0 10px;font-size:16px}
+.chk-scope ul{margin:0;padding-inline-start:22px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 24px}
+.chk-scope li{min-width:0;color:var(--muted);line-height:1.5}
+@media(max-width:600px){.chk-scope ul{grid-template-columns:1fr}}
 @media(max-width:900px){
   .checker,.checks{
   grid-template-columns:1fr}

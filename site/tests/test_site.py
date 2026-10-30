@@ -144,6 +144,21 @@ def test_checker_framing_and_footer_links(page):
     expect(links.nth(1)).to_have_attribute("href", "https://resumeworded.com/")
 
 
+def test_checker_scope_block_renders_in_english_and_arabic(page):
+    keys = ["chk.scope.title", "chk.scope.reading", "chk.scope.content", "chk.scope.contact",
+            "chk.scope.layout", "chk.scope.hidden", "chk.scope.languages"]
+    assert page.evaluate("keys => keys.every(k => EN[k] && AR[k])", keys)
+    scope = page.locator("#check .chk-scope")
+    expect(scope.get_by_role("heading", name="What the checker looks at")).to_be_visible()
+    expect(scope.locator("li")).to_have_count(6)
+    assert "you may not have noticed" in scope.locator("li").nth(4).inner_text()
+    switch_lang(page)
+    scope = page.locator("#check .chk-scope")
+    expect(scope.get_by_role("heading")).to_contain_text("ال checker")
+    assert "ماخدتش بالك" in scope.locator("li").nth(4).inner_text()
+    assert page.evaluate("document.documentElement.dir") == "rtl"
+
+
 def test_video_cards_are_compact_rows_on_mobile(page):
     page.set_viewport_size({"width": 390, "height": 844})
     # The featured tutorial and promo stack at full width on phones.

@@ -157,20 +157,25 @@ My information:
 <img src="assets/h-check.svg#gh-dark-mode-only" width="100%" alt="Check your CV">
 <img src="assets/h-check-light.svg#gh-light-mode-only" width="100%" alt="Check your CV">
 
-Drop any PDF into the [**CV checker**](https://amrelsherif-eng.github.io/ats-resume-templates/#check). You get a score out of 100, what passed, what to fix first, and the exact text an ATS would extract. One click turns the report into a fix-it prompt for an AI chat.
+## The ATS checker
 
-| It checks | For example |
-|:---|:---|
-| **Text** | Can the text be extracted at all, and in a sensible reading order? |
-| **Length** | Page count against the experience level you choose |
-| **Layout** | Columns, table-like layouts, images, icons, contact details hidden in headers or footers |
-| **File** | Font variety, file name, file size |
-| **Content** | Standard sections, email, phone, LinkedIn, location |
-| **Bullets** | Action verbs, weak openings, length, measurable results |
+Drop a PDF into the [**CV checker**](https://amrelsherif-eng.github.io/ats-resume-templates/#check). It reads the PDF in your browser and shows a score, findings, and the text it extracted.
+
+It checks:
+
+- **Reading and parsing:** selectable text, reading order, page count, and text that extracts as garbled characters.
+- **Content:** common CV sections, bullet openings, writing patterns, and whether results include measurable details.
+- **Contact:** readable email, phone, profile links, and location. An email missing from the text caps the score at 79.
+- **Layout:** columns, side boxes, tables, and contact details in headers or footers.
+- **Hidden text:** tiny or hard-to-see text and instruction-like text. A notice assumes you may not have noticed it.
+- **Languages:** Arabic and English, some French, and some mixed-language CVs.
 
 > [!NOTE]
-> **Private by design.** The PDF is read inside your browser and never uploaded. No accounts, no trackers, no third-party requests.
-> It checks how readable your PDF is. It does **not** match you to a job post; for that, try [Jobscan](https://www.jobscan.co/) or [Resume Worded](https://resumeworded.com/) (they upload your file).
+> **Privacy:** The PDF is read inside your browser. The file and its text are not uploaded.
+
+The score is an estimate of how readable and complete the PDF looks to this checker. Weak content below 70 caps the overall score at the content score, except when a hidden-text or prompt-injection finding applies; those keep their separate 40-point cap. A missing readable email caps the score at 79. The score is not an official ATS rating, a hiring prediction, or a measure of how well you match a job description. The checker does not compare your CV with a job post.
+
+The checker handles PDFs only. ATS products use different parsers, so another system may read the same file differently. These checks are rules and heuristics: they can miss a problem or flag something that is acceptable in your case. They do not verify whether your claims are true, and writing-style findings cannot judge the full quality of your experience.
 
 <a id="-video-tutorials"></a>
 <a id="video-tutorials"></a>

@@ -201,6 +201,25 @@ Object.assign(AR, {
 });
 
 Object.assign(EN, {
+  'chk.scope.title': 'What the checker looks at',
+  'chk.scope.reading': 'Reading and parsing: selectable text, reading order, and page count.',
+  'chk.scope.content': 'Content: common CV sections and writing signals such as action verbs.',
+  'chk.scope.contact': 'Contact: email, phone, and profile details the ATS can read.',
+  'chk.scope.layout': 'Layout: columns, side boxes, and text in headers or footers.',
+  'chk.scope.hidden': 'Hidden text: text that may be hard to see, which you may not have noticed.',
+  'chk.scope.languages': 'Languages: Arabic and English text, plus some French and mixed-language CVs.'
+});
+Object.assign(AR, {
+  'chk.scope.title': 'ال checker بيبص على إيه؟',
+  'chk.scope.reading': 'القراءة والاستخراج: هل النص بيتقري، وترتيب الكلام، وعدد الصفحات.',
+  'chk.scope.content': 'المحتوى: الأقسام المعتادة في الـ CV وطريقة الكتابة زي أفعال الإنجاز.',
+  'chk.scope.contact': 'بيانات التواصل: الإيميل والتليفون وروابط الحسابات اللي نظام ATS يقدر يقراها.',
+  'chk.scope.layout': 'التنسيق: الأعمدة والمربعات الجانبية والكلام في رأس أو ذيل الصفحة.',
+  'chk.scope.hidden': 'الكلام المخفي: كلام ممكن مايبانش بوضوح، وممكن تكون ماخدتش بالك إنه موجود.',
+  'chk.scope.languages': 'اللغات: العربي والإنجليزي، وبعض ملفات CV بالفرنساوي أو بأكتر من لغة.'
+});
+
+Object.assign(EN, {
   'ext.title': 'Want a match score against a job post?',
   'ext.sub': 'These outside tools compare your CV with a job description. Scores differ between tools: there is no official ATS score.',
   'ext.jobscan': 'Match rate against a job post, keyword gaps, ATS formatting tips.',
