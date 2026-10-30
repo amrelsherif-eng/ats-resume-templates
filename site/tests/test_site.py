@@ -286,8 +286,11 @@ def test_checker_weak_content(page, tmp_path):
         "- Responsible for helping users with computer problems in the office every day" for _ in range(8)
     ] + ["- I am a hard-working team player", "Education", "BSc, Example University", "Skills", "Windows"]
     upload(page, make_pdf(tmp_path / "weak.pdf", 1, lines))
-    # Clean formatting must not hide weak content (Resume Worded scored a similar CV 20/100).
-    assert score_of(page) < 70
+    # Clean formatting must not hide weak content (Resume Worded 20/100, AutoApplyMax 25/100):
+    # the total is never above the content score.
+    content = int(page.locator("#chk-out .bar-n").nth(1).text_content())
+    assert content < 70
+    assert score_of(page) <= content
     for pattern in ["passive openers", "pronouns", "buzzwords", "word for word"]:
         expect(page.locator("#chk-out .issue", has_text=re.compile(pattern, re.I)).first).to_be_visible()
 
@@ -679,3 +682,33 @@ def test_prerendered_arabic_layout_shift(browser, site_url):
     })""")
     assert shift < 0.05, shift
     context.close()
+
+
+def test_score_caps_weak_content_and_missing_email(page):
+    """score() rules from the calibration round, called directly with made-up issue lists."""
+    result = page.evaluate("""async () => {
+        const { score } = await import('./assets/ats/score.js');
+        const ok = (id, cat, weight) => ({ id, cat, level: 'ok', weight });
+        const base = [ok('selectable-text', 'parse', 10), ok('columns', 'parse', 8), ok('contact-email', 'contact', 5),
+                      ok('contact-phone', 'contact', 4), ok('action-verbs', 'content', 7), ok('quantified-impact', 'content', 7)];
+        const swap = (list, id, level) => list.map(i => i.id === id ? { ...i, level } : i);
+        const weak = swap(swap(base, 'action-verbs', 'fail'), 'quantified-impact', 'warn');
+        const injected = [...base.filter(i => i.cat !== 'content'),
+                          { id: 'prompt-injection', cat: 'content', level: 'fail', weight: 10 }];
+        const fair = swap(base, 'quantified-impact', 'warn');  // writing score 75: above the cap line
+        const weakInjected = [...weak, { id: 'prompt-injection', cat: 'content', level: 'fail', weight: 10 }];
+        return {
+            weakInjected: score(weakInjected).overall,
+            clean: score(base).overall, fair: score(fair),
+            weak: score(weak), noEmail: score(swap(base, 'contact-email', 'warn')).overall,
+            injected: score(injected).overall,
+        };
+    }""")
+    assert result["clean"] == 100
+    assert result["weak"]["per"]["content"] < 70
+    assert result["weak"]["overall"] == result["weak"]["per"]["content"]
+    assert result["fair"]["per"]["content"] == 75
+    assert result["fair"]["overall"] > 75  # 70 or more: no writing cap
+    assert result["noEmail"] == 79
+    assert result["injected"] == 40  # a lone injection finding: its own cap, not a content score of 0
+    assert result["weakInjected"] <= result["weak"]["overall"]  # adding a problem never raises the score
