@@ -61,9 +61,22 @@ export async function markHidden(page, viewport, items) {
     for (let seen = 0; median < 256; median += 1) { seen += hist[median]; if (seen * 2 >= area) break; }
     let ink = 0;
     for (let v = 0; v < 256; v += 1) if (Math.abs(v - median) > INK) ink += hist[v];
-    if (ink < Math.max(2, 0.004 * area)) it.hidden = 'invisible';
+    if (ink < Math.max(2, 0.004 * area)) { it.hidden = 'invisible'; continue; }
+    // Contrast of the glyph cores (the 2% of pixels farthest from the background, not anti-aliased edges).
+    let need = Math.max(2, 0.02 * area), core = median;
+    for (let d = 255; d > INK && need > 0; d -= 1) {
+      for (const v of [median - d, median + d]) if (v >= 0 && v < 256 && hist[v] && need > 0) { core = v; need -= hist[v]; }
+    }
+    it.contrast = Math.round(contrastRatio(core, median) * 10) / 10;
   }
   return true;
+}
+
+/** WCAG contrast ratio of two grey levels (0-255). */
+function contrastRatio(a, b) {
+  const lum = v => { const c = v / 255; return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4; };
+  const [hi, lo] = [lum(a), lum(b)].sort((x, y) => y - x);
+  return (hi + 0.05) / (lo + 0.05);
 }
 
 const lettersOnly = s => (s.normalize('NFKC').match(/\p{L}/gu) || []).join('').toLowerCase();
