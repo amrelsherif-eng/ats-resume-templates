@@ -21,7 +21,7 @@
 
 **Free one-page LaTeX resumes for students and early-career candidates,<br>plus a website to edit them three ways and check your CV in the browser.**
 
-[**Website**](https://amrelsherif-eng.github.io/ats-resume-templates/) · [**بالعربي**](https://amrelsherif-eng.github.io/ats-resume-templates/ar.html) · [**Video tutorials**](https://amrelsherif-eng.github.io/ats-resume-templates/#video) · [**CV checker**](https://amrelsherif-eng.github.io/ats-resume-templates/#check)
+[**Website**](https://amrelsherif-eng.github.io/ats-resume-templates/) · [**Arabic version**](https://amrelsherif-eng.github.io/ats-resume-templates/ar.html) · [**Video tutorials**](https://amrelsherif-eng.github.io/ats-resume-templates/#video) · [**CV checker**](https://amrelsherif-eng.github.io/ats-resume-templates/#check)
 
 </div>
 
@@ -172,6 +172,21 @@ Drop any PDF into the [**CV checker**](https://amrelsherif-eng.github.io/ats-res
 > **Private by design.** The PDF is read inside your browser and never uploaded. No accounts, no trackers, no third-party requests.
 > It checks how readable your PDF is. It does **not** match you to a job post; for that, try [Jobscan](https://www.jobscan.co/) or [Resume Worded](https://resumeworded.com/) (they upload your file).
 
+#### What the checker looks at
+
+- **Reading and parsing:** selectable text, reading order, page count, and text that extracts as garbled characters.
+- **Content:** common CV sections, bullet openings, writing patterns, and whether results include measurable details.
+- **Contact:** readable email, phone, profile links, and location.
+- **Layout:** columns, side boxes, tables, and contact details in headers or footers.
+- **Hidden text:** tiny or hard-to-see text, and hidden instructions aimed at AI screeners. The report points it out politely, in case you did not notice it.
+- **Languages:** Arabic and English, some French, and some mixed-language CVs.
+
+#### About the score
+
+The score is an estimate of how readable and complete the PDF looks to this checker. If the content sub-score is below 70, the overall score cannot be higher than that sub-score. CVs with hidden text or hidden instructions have their own cap of 40 instead. A missing readable email caps the score at 79. The score is not an official ATS rating, a hiring prediction, or a measure of how well you match a job description. The checker does not compare your CV with a job post.
+
+The checker handles PDFs only. ATS products use different parsers, so another system may read the same file differently. These checks are rules and heuristics: they can miss a problem or flag something that is acceptable in your case. They do not verify whether your claims are true, and writing-style findings cannot judge the full quality of your experience.
+
 <a id="-video-tutorials"></a>
 <a id="video-tutorials"></a>
 <a id="-video-tutorial-2-min"></a>
@@ -182,7 +197,7 @@ Drop any PDF into the [**CV checker**](https://amrelsherif-eng.github.io/ats-res
 | Video | Length | Language |
 |:---|:---:|:---|
 | [**Full tutorial**](https://amrelsherif-eng.github.io/ats-resume-templates/#video) | 5:15 | English voice-over + on-screen subtitles |
-| [**الشرح الكامل**](https://amrelsherif-eng.github.io/ats-resume-templates/ar.html#video) | 5:02 | Egyptian Arabic voice-over + subtitles |
+| [**Full tutorial (Arabic)**](https://amrelsherif-eng.github.io/ats-resume-templates/ar.html#video) | 5:02 | Egyptian Arabic voice-over + subtitles |
 | [**Quick demo**](https://amrelsherif-eng.github.io/ats-resume-templates/#video) | 0:38 | No voice-over, Arabic subtitles |
 
 The full tutorial has chapter buttons on the site: **Pick a template · Edit on Overleaf · Edit with AI · Build it locally · Check your CV**.
