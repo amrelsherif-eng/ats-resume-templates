@@ -420,3 +420,18 @@ Object.assign(AR, {
   'foot.made': '© 2026 Amr Elsherif · مبني على <a href="https://github.com/sb2nov/resume" target="_blank" rel="noopener">sb2nov/resume</a> (MIT)',
   'foot.checked': 'مفحوص مع كل تعديل'
 });
+
+Object.assign(EN, {
+  'chk.alert.hidden': "We found text in your CV that people can't see",
+  'chk.alert.inject': 'We found text in your CV that reads like instructions to an AI tool',
+  'chk.alert.why': 'This often comes from a copied template or old edits. Some ATS tools and recruiters treat hidden text, or instructions aimed at AI, as manipulation, which can get a CV rejected.',
+  'chk.alert.found': 'Here is the text we found:',
+  'chk.alert.fix': 'Remove it, export the PDF again, and check once more.'
+});
+Object.assign(AR, {
+  'chk.alert.hidden': 'وجدنا في سيرتك الذاتية نصاً لا يراه القارئ',
+  'chk.alert.inject': 'وجدنا في سيرتك الذاتية نصاً يبدو كأنه تعليمات موجّهة لأداة ذكاء اصطناعي',
+  'chk.alert.why': 'يحدث هذا غالباً بسبب قالب منسوخ أو تعديلات قديمة. بعض أنظمة الـ ATS ومسؤولي التوظيف يعتبرون النص المخفي أو التعليمات الموجّهة للذكاء الاصطناعي محاولة للتلاعب، وقد يؤدي ذلك إلى رفض الـ CV.',
+  'chk.alert.found': 'هذا هو النص الذي وجدناه:',
+  'chk.alert.fix': 'احذفه، ثم صدّر ملف الـ PDF من جديد وافحصه مرة أخرى.'
+});

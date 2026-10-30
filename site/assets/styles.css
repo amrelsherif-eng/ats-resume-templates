@@ -1366,3 +1366,56 @@ html:not([dir=rtl]) .tut-lang [lang=ar]{
 
 /* Arabic visitors: hidden for the moment between first paint and app.js applying the Arabic text (see lang-boot.js). */
 html.i18n-wait body{visibility:hidden}
+
+.chk-alert{
+  margin:18px 0 4px;
+  padding:16px 18px;
+  border:1px solid #7a5a22;
+  border-inline-start:4px solid var(--amber);
+  border-radius:12px;
+  background:#1d1810;
+  color:var(--text);
+  font-size:14px}
+.chk-alert-h{
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+  margin:0 0 8px;
+  color:var(--amber);
+  font-size:16px;
+  line-height:1.4}
+.chk-alert-h:before{
+  content:"!";
+  flex:none;
+  display:grid;
+  place-items:center;
+  width:22px;
+  height:22px;
+  border-radius:50%;
+  background:#392d17;
+  font:700 13px/1 var(--sans)}
+.chk-alert p{
+  margin:0 0 8px}
+.chk-alert-why{
+  color:#d5dee7}
+.chk-alert-found{
+  font-weight:600}
+.chk-alert-q{
+  margin:0 0 10px;
+  padding:0;
+  list-style:none}
+.chk-alert-q li{
+  margin:0 0 6px;
+  padding:8px 12px;
+  border-radius:8px;
+  background:#0b0f14;
+  font:13px/1.6 var(--mono);
+  unicode-bidi:plaintext;
+  text-align:start;
+  overflow-wrap:anywhere}
+.chk-alert-fix{
+  margin-bottom:0;
+  font-weight:600}
+@media (forced-colors:active){
+  .chk-alert{border:2px solid CanvasText}
+  .chk-alert-h:before{border:1px solid CanvasText}}
