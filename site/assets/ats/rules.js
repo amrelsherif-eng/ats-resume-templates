@@ -92,7 +92,7 @@ const HEADING_CORE = {
 };
 const HEADING_FILLER = new Set(('and of the relevant professional technical core key selected personal clinical teaching ' +
   'research industry work other additional soft hard computer it related career background recent areas ' +
-  'status service history graduation capstone final senior year university ' +
+  'status service history graduation capstone final senior year university top ' +
   // French: "Expériences professionnelles", "Compétences techniques", "Centres d'intérêt"
   'professionnelle professionnelles professionnel professionnels techniques cles d de des et en ' +
   'linguistiques informatiques academique academiques personnels centres vie associative').split(' '));
@@ -179,6 +179,21 @@ export function detectHeading(text) {
   return 'other';
 }
 
+// Side-by-side columns are merged into one line ("Power BI     Experience"): read each part
+// between wide gaps on its own, so a heading in one column is still found.
+function lineSegments(line) {
+  const items = [...(line.items || [])].sort((a, b) => a.x - b.x);
+  if (items.length < 2 || line.rtl) return [];
+  const parts = [[items[0]]];
+  for (let i = 1; i < items.length; i += 1) {
+    const prev = items[i - 1];
+    if (items[i].x - (prev.x + prev.w) > 1.5 * (items[i].size || 10)) parts.push([]);
+    parts[parts.length - 1].push(items[i]);
+  }
+  return parts.length > 1 ? parts.map(p => ({ text: p.map(i => i.text).join(' '), x: p[0].x, items: p })) : [];
+}
+export const lineParts = line => lineSegments(line).map(p => p.text);
+
 const asciiDigits = s => s.replace(/[٠-٩]/g, d => String(d.charCodeAt(0) - 0x660)).replace(/[۰-۹]/g, d => String(d.charCodeAt(0) - 0x6F0));
 
 const PHONE_LABEL = /جوال|هاتف|موبايل|محمول|تليفون|تلفون|\b(?:T[ée]l|Tel|Phone|Mobile|Mob|GSM|Cell)\b/i;
@@ -224,8 +239,10 @@ export function contentIssues(doc, opts = {}) {
   // 1. Sections
   const sectionsSeen = new Set();
   for (const l of lines) {
-    const h = detectHeading(l.text);
-    if (h) sectionsSeen.add(h);
+    for (const part of [l.text, ...lineParts(l)]) {
+      const h = detectHeading(part);
+      if (h) sectionsSeen.add(h);
+    }
   }
   const missingSec = [];
   if (!sectionsSeen.has('edu')) missingSec.push('Education');
@@ -327,7 +344,8 @@ export function contentIssues(doc, opts = {}) {
 
   // Extract bullets for content checks
   const cleanBullet = b => b.replace(/^[\s•–—\-\*\u2022\u2212\u25E6\u2023\u25AA\u25BA\u27A4\u2713\u2714\u00B7\u25A0\u25CF\u25CB\u25C6\u2756\u27A2\u25B6\uE000-\uF8FF]+/, '').replace(/^\d+[.)]\s*/, '').trim();
-  const hasGlyphs = lines.some(l => l.bullet);
+  const BULLET_START = /^[\u2022\u25E6\u2023\u25AA\u25BA\u27A4\u2713\u2714\u00B7\u25A0\u25CF\u25CB\u25C6\u2756\u27A2\u25B6\-\u2013*]\s/u;
+  const hasGlyphs = lines.some(l => l.bullet || lineSegments(l).some(p => BULLET_START.test(p.text.trim())));
   let bullets = [];
   const achievementBullets = [];
   const dateToken = String.raw`(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:t(?:ember)?)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?\.?)\s+(?:19|20)\d{2}|\d{1,2}[/.]\d{2,4}|(?:19|20)\d{2}[-/.]\d{1,2}`;
@@ -344,12 +362,28 @@ export function contentIssues(doc, opts = {}) {
     if (last.inAll) bullets[bullets.length - 1] += ' ' + add;
     if (last.inAchievement) achievementBullets[achievementBullets.length - 1] += ' ' + add;
   };
-  for (const line of lines) {
-    const heading = detectHeading(line.text);
+  let mainX = null; // left edge of the main column, when its Experience heading was merged with a sidebar
+  for (const raw of lines) {
+    // In merged side-by-side columns, an Experience/Projects heading in one part starts that section
+    // (a sidebar heading like "Skills" next to it does not end it).
+    const segs = lineSegments(raw);
+    const headPart = detectHeading(raw.text) ? null : segs.find(p => ['exp', 'proj'].includes(detectHeading(p.text)));
+    const heading = detectHeading(raw.text) || (headPart && detectHeading(headPart.text));
     if (heading) {
       section = heading;
+      mainX = headPart ? headPart.x - 4 : null;
       last = null;
       continue;
+    }
+    // Under such a heading, read only the main-column part of each line; sidebar-only lines are skipped.
+    let line = raw;
+    if (mainX !== null) {
+      const main = segs.length ? segs.filter(p => p.x >= mainX) : (raw.x >= mainX ? null : []);
+      if (main && !main.length) continue;
+      if (main) {
+        const text = main.map(p => p.text).join(' ');
+        line = { ...raw, text, x: main[0].x, items: main.flatMap(p => p.items), bullet: raw.bullet || BULLET_START.test(text.trim()) };
+      }
     }
     const achievementSection = section === 'exp' || section === 'proj' || section === 'leadership';
     const clean = cleanBullet(line.text);
