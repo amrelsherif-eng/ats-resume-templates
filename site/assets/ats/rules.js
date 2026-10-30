@@ -371,7 +371,7 @@ export function contentIssues(doc, opts = {}) {
     const heading = detectHeading(raw.text) || (headPart && detectHeading(headPart.text));
     if (heading) {
       section = heading;
-      mainX = headPart ? headPart.x - 4 : null;
+      mainX = headPart ? headPart.x - 12 : null; // slack for hanging bullets; the column gap is wider
       last = null;
       continue;
     }

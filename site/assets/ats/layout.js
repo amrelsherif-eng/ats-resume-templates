@@ -139,7 +139,7 @@ export function layoutIssues(doc, opts = {}) {
   const tokens = text.split(/\s+/).filter(w => /[A-Za-z]/.test(w));
   const runOn = tokens.filter(w => w.length >= 20 && !/[@/.]/.test(w)).length;
   const noUnicodeMap = latin >= 150 && latin > 2 * arabic &&
-    ((text.match(/ /g) || []).length / text.length < 0.03 || runOn / tokens.length > 0.2);
+    ((text.match(/ /g) || []).length / text.length < 0.03 && (text.match(/ /g) || []).length < (text.match(/\n/g) || []).length || runOn / tokens.length > 0.2);
   const bad = (text.match(/\(cid:/gi) || []).length + (text.match(/\uFFFD/g) || []).length + symbolRuns.length +
     (noUnicodeMap ? 4 : 0);
   out.push(issue('garbled-text', bad > 3 ? 'fail' : 'ok', bad > 3 ? 'l.garbled' : 'l.garbled-ok', 9));
