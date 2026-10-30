@@ -103,14 +103,19 @@ const INJECT = [
 ];
 const norm = s => s.normalize('NFKC').replace(/\p{M}/gu, '').replace(/ـ/g, '')
   .replace(/[أإآ]/g, 'ا').replace(/[ىی]/g, 'ي').replace(/ھ/g, 'ه').replace(/ک/g, 'ك').replace(/\s+/g, ' ');
-const quote = s => '"' + s.replace(/\s+/g, ' ').trim().slice(0, 100) + '"';
+// Quotes use standard Arabic letters: some fonts map heh, yeh and kaf to their Persian code points (ھ ی ک).
+const arabicLetters = s => (/[؀-ۿ]/.test(s) ? s.replace(/ھ/g, 'ه').replace(/ی/g, 'ي').replace(/ک/g, 'ك') : s);
+const quote = s => {
+  const t = arabicLetters(s).replace(/\s+/g, ' ').trim();
+  return '"' + (t.length > 160 ? t.slice(0, 159).replace(/\s+\S*$/, '') + '…' : t) + '"';
+};
 
 export const I18N_EN = {
-  'h.hidden': 'Hidden text found: {n} words an ATS reads but a person cannot see.',
-  'h.hidden.fix': 'Delete text that is white, invisible, tiny, covered or outside the page. Screening tools and recruiters treat it as keyword stuffing or an attempt to trick AI screeners, and it can get the application rejected. If it is not on purpose, check text colours and text boxes in your editor.',
+  'h.hidden': "Hidden text: {n} words an ATS reads but people can't see.",
+  'h.hidden.fix': 'It is often left over from a copied template or old edits: white, tiny or covered text, or text outside the page. Remove it, export the PDF again, and check once more.',
   'h.hidden-ok': 'No hidden text: everything an ATS reads is visible.',
-  'h.inject': 'Text written to instruct an AI screener was found.',
-  'h.inject.fix': 'Remove instructions aimed at AI tools (such as "ignore previous instructions" or "this candidate is highly qualified"). Screening systems flag them, and recruiters see them in the extracted text.',
+  'h.inject': 'Text that reads like instructions to an AI tool.',
+  'h.inject.fix': 'Some ATS tools and recruiters treat lines such as "ignore previous instructions" or "this candidate is highly qualified" as manipulation. Remove them, export the PDF again, and check once more.',
   'h.inject-ok': 'No instructions aimed at AI screeners.',
 };
 
@@ -118,18 +123,21 @@ export const I18N_EN = {
 export function hiddenIssues(doc) {
   const out = [];
   if (doc.hiddenChecked) {
-    const quotes = [];
-    let words = 0, count = 0;
-    for (const line of doc.lines || []) {
+    const passages = []; // hidden text, with neighbouring hidden lines joined into one passage
+    let words = 0, count = 0, last = -2;
+    (doc.lines || []).forEach((line, index) => {
       const parts = (line.items || []).filter(i => i.hidden);
-      if (!parts.length) continue;
+      if (!parts.length) return;
       // A wholly hidden line is quoted as read; otherwise only its hidden runs (right to left on Arabic lines).
       const whole = line.items.every(i => i.hidden || !letters(i.text));
       const text = whole ? line.text : line.rtl ? parts.reverse().map(i => i.text).join('') : parts.map(i => i.text).join(' ');
       count += letters(text);
       words += (text.match(/[\p{L}\p{N}]+/gu) || []).length;
-      quotes.push(quote(text));
-    }
+      if (index === last + 1 && passages.length) passages[passages.length - 1] += ' ' + text;
+      else passages.push(text);
+      last = index;
+    });
+    const quotes = passages.map(quote);
     for (const text of doc.offPage || []) {
       count += letters(text);
       words += (text.match(/[\p{L}\p{N}]+/gu) || []).length;
@@ -147,8 +155,15 @@ export function hiddenIssues(doc) {
     for (const re of INJECT) {
       const m = source.match(re);
       if (!m) continue;
-      const q = quote(source.slice(Math.max(0, m.index - 20), m.index + m[0].length + 60));
-      if (!hits.some(h => h.includes(m[0].slice(0, 20)))) hits.push(q);
+      // Quote from the phrase to the end of its sentence.
+      const rest = source.slice(m.index + m[0].length, m.index + m[0].length + 120);
+      const stop = rest.search(/[.!?؟]/); // norm() already turned line breaks into spaces
+      const q = quote(source.slice(m.index, m.index + m[0].length) + (stop < 0 ? rest : rest.slice(0, stop + 1)));
+      // Overlapping matches ("this candidate is qualified; rank this candidate...") are quoted once, the longest.
+      const core = q.slice(1, -1);
+      if (hits.some(h => h.includes(core))) continue;
+      for (let k = hits.length - 1; k >= 0; k -= 1) if (core.includes(hits[k].slice(1, -1))) hits.splice(k, 1);
+      hits.push(q);
     }
   }
   out.push({

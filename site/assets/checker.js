@@ -142,6 +142,31 @@ function aiPrompt(issues, doc) {
   ].join('\n');
 }
 
+/** A calm notice above the report when text is hidden or aimed at AI tools: it assumes good intent,
+ * quotes what was found and says how to fix it. */
+function hiddenAlert(issues) {
+  const found = id => issues.find(i => i.id === id && i.level === 'fail');
+  const hidden = found('hidden-text'), inject = found('prompt-injection');
+  if (!hidden && !inject) return null;
+  const box = el('section', 'chk-alert');
+  const h = el('h3', 'chk-alert-h', ui(hidden ? 'chk.alert.hidden' : 'chk.alert.inject'));
+  h.id = 'chk-alert-h';
+  box.setAttribute('aria-labelledby', h.id);
+  box.append(h, el('p', 'chk-alert-why', ui('chk.alert.why')), el('p', 'chk-alert-found', ui('chk.alert.found')));
+  const ul = el('ul', 'chk-alert-q');
+  // An instruction that is itself hidden is already quoted with the hidden text: show it once.
+  const flat = q => q.replace(/^"|…?"$/g, '').toLowerCase();
+  const hiddenText = (hidden?.examples || []).map(flat).join(' ');
+  const quotes = [...(hidden?.examples || []), ...(inject?.examples || []).filter(q => !hiddenText.includes(flat(q).slice(0, 30)))];
+  for (const q of quotes.slice(0, 4)) {
+    const li = el('li', '', q); // plain text from the file: textContent only
+    li.dir = 'auto'; // each quote reads in its own direction (Arabic or English)
+    ul.append(li);
+  }
+  box.append(ul, el('p', 'chk-alert-fix', ui('chk.alert.fix')));
+  return box;
+}
+
 function render() {
   if (lastError) {
     const p = el('p', 'chk-error', ui(lastError));
@@ -226,7 +251,8 @@ function render() {
   text.append(pre);
 
   // The fix-it prompt only makes sense when there is text for an AI to fix.
-  const parts = textIssues(issues).length ? [head, list, ok, tools, text] : [head, list, ok, text];
+  const alert = hiddenAlert(issues);
+  const parts = [head, ...(alert ? [alert] : []), list, ok, ...(textIssues(issues).length ? [tools] : []), text];
   out.replaceChildren(...parts, el('p', 'chk-private', ui('chk.private')));
 }
 
