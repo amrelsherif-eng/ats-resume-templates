@@ -38,12 +38,14 @@ export async function extract(pdfjs, file) {
       if (pageNumber === 1) ({ width, height } = viewport);
       const content = await page.getTextContent();
       const pageItems = [];
+      const spaces = []; // whitespace runs: { x, w, baseline }
       // A real resume page has a few hundred text runs; cap crafted PDFs so the tab never freezes.
       for (const item of content.items.slice(0, MAX_ITEMS_PER_PAGE)) {
         if (typeof item.str !== 'string') continue; // marked-content items carry no text
         const str = cleanText(item.str);
         if (str) stream.push(str + (item.hasEOL ? '\n' : ''));
         if (!str || !str.trim()) {
+          if (str) spaces.push({ x: item.transform[4], w: item.width || 0, baseline: viewport.height - item.transform[5] });
           // Word writes some spaces as their own runs ("Mar 2022", " ", "–", " ", "Present"): keep the
           // space on the run before it, on the same baseline (left-to-right text; Arabic gaps are measured).
           const prev = pageItems[pageItems.length - 1];
@@ -105,7 +107,8 @@ export async function extract(pdfjs, file) {
           // Gap between neighbours on the page (right-to-left runs read from the right).
           const gap = previous && (previous.x > item.x ? previous.x - (item.x + item.w) : item.x - (previous.x + previous.w));
           // Never put a space before a diacritic (shadda, tanween) that some PDF makers write as its own run.
-          if (previous && gap > 0.25 * item.size && !/\s$/.test(text) && !/^[\s\p{M}]/u.test(item.text)) text += ' ';
+          if (previous && !/\s$/.test(text) && !/^[\s\p{M}]/u.test(item.text) &&
+              (gap > 0.25 * item.size || spaceBetween(spaces, previous, item, line.baseline, 0.45 * item.size))) text += ' ';
           text += item.text;
         });
         const first = ordered[0];
@@ -149,6 +152,15 @@ export async function extract(pdfjs, file) {
   }
 }
 
+// A whitespace run drawn between two Arabic neighbours: some PDF makers (Chrome with a fallback Arabic
+// font, Word) write word spaces as their own runs, which are dropped above.
+function spaceBetween(spaces, a, b, baseline, tolerance) {
+  if (!hasArabic(a.text) && !hasArabic(b.text)) return false;
+  const [left, right] = a.x <= b.x ? [a, b] : [b, a];
+  const from = left.x + left.w, to = right.x;
+  return spaces.some(s => Math.abs(s.baseline - baseline) <= tolerance && s.x <= to + 0.5 && s.x + s.w >= from - 0.5);
+}
+
 // Word exports list bullets from the Symbol/Wingdings fonts as Private Use Area characters.
 // These are bullets, not icons: map them to "•". Other PUA characters (icon fonts) stay as they are.
 const PUA_BULLETS = /[]/g;
@@ -156,12 +168,16 @@ const PUA_BULLETS = /[]/g;
 /** Typographic ligatures (ﬁ, ﬂ) and Arabic presentation forms (the joined letter shapes some
  * PDF makers write) become plain letters, so words read as words. */
 export function cleanText(s) {
-  let t = s.replace(PUA_BULLETS, '•');
+  // Control characters (Chrome writes "\x00" for glyphs it cannot map) are not text.
+  let t = s.replace(/[\x00-\x08\x0B-\x1F\x7F]/g, '').replace(PUA_BULLETS, '•');
   if (/[ﬀ-﷿ﹰ-﻿]/.test(t)) {
     // Some fonts map Arabic yeh, heh and kaf shapes to their Persian code points (ی ھ ک): use the Arabic letters.
     t = t.normalize('NFKC').replace(/ی/g, 'ي').replace(/ھ/g, 'ه').replace(/ک/g, 'ك');
   }
-  return t;
+  // Word maps the lam-alef ligature to "لا" but pdf.js reverses it with the line: "الأرقام" reads "األرقام".
+  // An alef followed by another alef never happens in Arabic, so this repair is safe (mid-word "خالل" is left).
+  // Arial maps the Arabic heh to the Persian/Urdu heh (ھ), even without presentation forms.
+  return t.replace(/ا([اأإآ])ل/g, 'ال$1').replace(/ھ/g, 'ه');
 }
 
 const ARABIC = /[؀-ۿݐ-ݿࢠ-ࣿ]/g; // global: used with match() only

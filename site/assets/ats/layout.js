@@ -51,6 +51,15 @@ const asciiDigits = s => s.replace(/[٠-٩]/g, d => String(d.charCodeAt(0) - 0x6
 const mirror = (line, W) => !line.rtl ? line : {
   ...line, x: W - (line.right ?? line.x), items: (line.items || []).map(it => ({ ...it, x: W - it.x - it.w }))
 };
+/** Arabic in a right-to-left document lines up on the right; Arabic typed into a left-to-right document
+ * (Word or DesignCraft without RTL paragraphs) lines up on the left. Mirror only right-aligned Arabic. */
+function rtlRightAligned(lines) {
+  const rtl = lines.filter(l => l.rtl && Number.isFinite(l.right) && Number.isFinite(l.x));
+  if (rtl.length < 3) return true;
+  const maxRight = Math.max(...rtl.map(l => l.right)), minX = Math.min(...rtl.map(l => l.x));
+  const onRight = rtl.filter(l => maxRight - l.right <= 3).length, onLeft = rtl.filter(l => l.x - minX <= 3).length;
+  return onRight >= onLeft;
+}
 // Arabic dates (months, "حتى الآن") and short Arabic place names on the far side of a line are fine.
 const AR_DATE = /(?:يناير|فبراير|مارس|أبريل|ابريل|مايو|يونيو|يوليو|أغسطس|اغسطس|سبتمبر|أكتوبر|اكتوبر|نوفمبر|ديسمبر|الآن|حاليا|حالياً)/;
 function arabicDateOrPlace(s) {
@@ -86,11 +95,14 @@ export function layoutIssues(doc, opts = {}) {
     pagesLevel === 'ok' ? 'l.pages-ok' : pagesLevel === 'warn' ? 'l.pages-2' : 'l.pages-many', 8,
     { n: doc.pages, max: norm.ok }));
   const wc = words(text);
-  out.push(issue('selectable-text', wc < 80 ? 'fail' : 'ok', wc < 80 ? 'l.no-text' : 'l.text-ok', 10, { n: wc }));
+  // Some PDF makers write Arabic without space characters, so the words run together: count letters too.
+  const noText = wc < 80 && (text.match(/\p{L}/gu) || []).length < 400;
+  out.push(issue('selectable-text', noText ? 'fail' : 'ok', noText ? 'l.no-text' : 'l.text-ok', 10, { n: wc }));
 
   // Columns: the extractor merges side-by-side text into one line, so look for a wide gap inside
   // a line (or a line that starts mid-page) whose right part is real content, not a date or place.
-  const body = first.filter(l => l.text?.trim()).map(l => mirror(l, doc.width || 612));
+  const mirrorRtl = rtlRightAligned(first);
+  const body = first.filter(l => l.text?.trim()).map(l => (mirrorRtl ? mirror(l, doc.width || 612) : l));
   const W = doc.width || 612;
   const dateOrPlace = s => arabicDateOrPlace(s) || /\b(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:t(?:ember)?)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?|Present|Remote|Expected)\b|\b(?:19|20)\d{2}\b|\b(?:0?[1-9]|1[0-2])[/.](?:\d{2}|(?:19|20)\d{2})\b|\b(?:19|20)\d{2}[-/.](?:0?[1-9]|1[0-2])\b/i.test(s) ||
     (s.length < 32 && /^[A-Z][\w.'-]*(?:\s+[A-Z][\w.'-]*)*(?:,\s*[A-Z][\w.'-]*(?:\s+[A-Z][\w.'-]*)*)?$/.test(s));
