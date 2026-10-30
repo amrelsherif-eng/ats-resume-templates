@@ -17,7 +17,7 @@ const letters = s => (s.match(/\p{L}/gu) || []).length;
  * Items need {text, w, em, t} (t = pdf.js transform, em = font size in points).
  * @returns {Promise<boolean>} true when the page could be checked.
  */
-export async function markHidden(page, viewport, items) {
+export async function markHidden(page, viewport, items, opts = {}) {
   if (typeof document === 'undefined' || viewport.rotation % 360 !== 0) return false;
   const W = viewport.width, H = viewport.height;
   const todo = [];
@@ -39,12 +39,17 @@ export async function markHidden(page, viewport, items) {
   const canvas = document.createElement('canvas');
   canvas.width = cw; canvas.height = ch;
   const ctx = canvas.getContext('2d', { willReadFrequently: true });
-  await page.render({ canvasContext: ctx, viewport: vp }).promise;
+  // Same annotation mode as the operator list in extract(), so pdf.js parses the page once. Comments and
+  // form fields are not page text: they are never compared with the text runs.
+  await page.render({ canvasContext: ctx, viewport: vp, ...(opts.annotationMode !== undefined && { annotationMode: opts.annotationMode }) }).promise;
   const { data } = ctx.getImageData(0, 0, cw, ch);
   canvas.width = canvas.height = 0; // free the bitmap now on low-memory phones
 
   const hist = new Uint32Array(256);
+  let done = 0;
   for (const it of todo) {
+    // Crafted pages can have thousands of runs: let the browser breathe between chunks.
+    if (++done % 400 === 0 && opts.yieldFn) await opts.yieldFn();
     // The glyph band: from just under the baseline (Arabic letters sit low) up to about the cap height.
     const [x0, yb] = vp.convertToViewportPoint(it.t[4], it.t[5]);
     const left = Math.max(0, Math.floor(x0)), right = Math.min(cw, Math.ceil(x0 + it.w * scale));

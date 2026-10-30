@@ -16,11 +16,25 @@
 import { markHidden, offPageRuns } from './hidden.js';
 
 const MAX_ITEMS_PER_PAGE = 3000;
+const MAX_PAGES = 10;
+const PIXEL_PAGES = 4; // on longer files the pixel check covers the first pages only (it is the slow part)
 
-export async function extract(pdfjs, file) {
+/**
+ * @param {{worker?: object, onProgress?: (page:number, total:number) => void, yieldFn?: () => Promise<void>}} [opts]
+ *   worker: a pdf.js PDFWorker reused across files; onProgress: called before each page; yieldFn: lets the
+ *   browser paint and handle input between pages on slow phones.
+ */
+export async function extract(pdfjs, file, opts = {}) {
   const data = await file.arrayBuffer();
-  const pdf = await pdfjs.getDocument({ data, isEvalSupported: false }).promise;
+  const pdf = await pdfjs.getDocument({ data, isEvalSupported: false, ...(opts.worker && { worker: opts.worker }) }).promise;
+  const pause = opts.yieldFn || (() => Promise.resolve());
+  // Comments and form fields are not page text: keep them out of the operator list and the render.
+  const annotationMode = pdfjs.AnnotationMode?.DISABLE;
   try {
+    let secured = false, attachments = [];
+    try { secured = (await pdf.getPermissions()) !== null; } catch { /* unknown: not reported */ }
+    try { attachments = Object.keys((await pdf.getAttachments()) || {}); } catch { /* none */ }
+    let formWords = 0, noteWords = 0;
     const lines = [];
     const stream = []; // text in content-stream order: roughly the order an ATS parser reads
     const fonts = new Set();
@@ -30,9 +44,11 @@ export async function extract(pdfjs, file) {
     const offPage = [];
     let width = 0;
     let height = 0;
-    const pageLimit = Math.min(pdf.numPages, 10);
+    const pageLimit = Math.min(pdf.numPages, MAX_PAGES);
 
     for (let pageNumber = 1; pageNumber <= pageLimit; pageNumber += 1) {
+      if (opts.onProgress) opts.onProgress(pageNumber, pageLimit);
+      if (pageNumber > 1) await pause();
       const page = await pdf.getPage(pageNumber);
       const viewport = page.getViewport({ scale: 1 });
       if (pageNumber === 1) ({ width, height } = viewport);
@@ -70,7 +86,8 @@ export async function extract(pdfjs, file) {
         });
       }
       try {
-        if (!(await markHidden(page, viewport, pageItems))) hiddenChecked = false;
+        if ((pdf.numPages <= PIXEL_PAGES || pageNumber <= PIXEL_PAGES) &&
+            !(await markHidden(page, viewport, pageItems, { annotationMode, yieldFn: opts.yieldFn }))) hiddenChecked = false;
       } catch {
         hiddenChecked = false; // a page pdf.js cannot draw: skip the hidden-text check, never the whole file
       }
@@ -126,7 +143,7 @@ export async function extract(pdfjs, file) {
         });
       }
 
-      const operators = await page.getOperatorList();
+      const operators = await page.getOperatorList(annotationMode !== undefined ? { annotationMode } : undefined);
       // Skipped on crafted pages over the item cap: their visible text past the cap is not in `content` here.
       if (pdfjs.OPS.showText !== undefined && content.items.length <= MAX_ITEMS_PER_PAGE) offPage.push(...offPageRuns(operators, pdfjs.OPS, content.items));
       for (const name of ['paintImageXObject', 'paintInlineImageXObject', 'paintImageMaskXObject']) {
@@ -135,6 +152,13 @@ export async function extract(pdfjs, file) {
       }
       for (const annotation of await page.getAnnotations()) {
         if (annotation.url) links.add(annotation.url);
+        // Text that lives only in form fields or comments: most ATS skip it.
+        const value = annotation.subtype === 'Widget' ? annotation.fieldValue
+          : /^(?:FreeText|Text)$/.test(annotation.subtype || '') ? annotation.contentsObj?.str : '';
+        if (typeof value === 'string' && value) {
+          const n = (value.match(/[\p{L}\p{N}]+/gu) || []).length;
+          if (annotation.subtype === 'Widget') formWords += n; else noteWords += n;
+        }
       }
     }
 
@@ -149,6 +173,7 @@ export async function extract(pdfjs, file) {
     return {
       pages: pdf.numPages, width, height, lines, text: linesToText(lines), streamText: stream.join(''),
       fonts: [...fonts].sort(), images, links: [...links], hiddenChecked, offPage,
+      secured, attachments, formWords, noteWords,
       fileName: file.name || '', fileSize: file.size, meta,
     };
   } finally {

@@ -9,7 +9,7 @@ from conftest import score_of, upload
 from test_checker_real_cvs import bullets, cv_pdf, issue
 from test_site import switch_lang
 
-RAW_KEY = re.compile(r"^(?:[a-z]+\.)+[a-z-]+$|\b[lrh]\.[a-z]+(?:-[a-z]+)*\b")
+RAW_KEY = re.compile(r"^(?:[a-z]+\.)+[a-z-]+$|\b[lrhsx]\.[a-z]+(?:-[a-z]+)*\b")
 ARABIC = re.compile(r"[؀-ۿ]")
 
 
@@ -19,7 +19,7 @@ def modules(page):
       window.M = {
         rules: await import('./assets/ats/rules.js'), layout: await import('./assets/ats/layout.js'),
         extract: await import('./assets/ats/extract.js'), hidden: await import('./assets/ats/hidden.js'),
-        structure: await import('./assets/ats/structure.js'),
+        structure: await import('./assets/ats/structure.js'), robust: await import('./assets/ats/robust.js'),
         ar: await import('./assets/ats/i18n-ar.js') };
     }""")
 
@@ -257,7 +257,7 @@ def test_arabic_two_column_cv_is_still_flagged(page, browser, tmp_path):
 def test_message_dictionaries_match(page):
     modules(page)
     report = page.evaluate("""() => {
-      const EN = { ...M.layout.I18N_EN, ...M.rules.I18N_EN, ...M.hidden.I18N_EN, ...M.structure.I18N_EN }, AR = M.ar.CHECK_AR;
+      const EN = { ...M.layout.I18N_EN, ...M.rules.I18N_EN, ...M.hidden.I18N_EN, ...M.structure.I18N_EN, ...M.robust.I18N_EN }, AR = M.ar.CHECK_AR;
       const vars = s => (s.match(/\\{\\w+\\}/g) || []).sort().join();
       return { missing: Object.keys(EN).filter(k => !String(AR[k] || '').trim()),
                extra: Object.keys(AR).filter(k => !(k in EN)),
